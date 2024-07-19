@@ -1,0 +1,9 @@
+
+directory=<path>
+caseSensitive=<bool>
+fileNames=<bool>
+recursive=<boll>
+extension=<string>
+printLine=<bool>
+
+target=<string>
