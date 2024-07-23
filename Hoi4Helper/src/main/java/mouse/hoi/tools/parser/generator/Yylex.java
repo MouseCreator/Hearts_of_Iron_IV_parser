@@ -64,11 +64,11 @@ public class Yylex {
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
     "\10\0\2\1\1\2\2\3\1\4\22\0\1\1\1\0"+
-    "\1\5\1\6\1\0\1\7\12\0\12\10\1\11\1\0"+
-    "\3\12\2\0\32\13\4\0\1\13\1\0\1\14\3\13"+
-    "\1\15\1\16\5\13\1\17\2\13\1\20\6\13\1\21"+
-    "\4\13\1\12\1\0\1\12\7\0\1\3\u01a2\0\2\3"+
-    "\326\0\u0100\3";
+    "\1\5\1\6\1\0\1\7\10\0\1\10\1\0\12\11"+
+    "\1\12\1\0\3\10\2\0\32\13\4\0\1\13\1\0"+
+    "\1\14\3\13\1\15\1\16\5\13\1\17\2\13\1\20"+
+    "\6\13\1\21\4\13\1\10\1\0\1\10\7\0\1\3"+
+    "\u01a2\0\2\3\326\0\u0100\3";
 
   private static int [] zzUnpackcmap_blocks() {
     int [] result = new int[1024];
@@ -126,7 +126,7 @@ public class Yylex {
 
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\22\0\44\0\66\0\110\0\132\0\66\0\66"+
-    "\0\154\0\66\0\176\0\66\0\66\0\220\0\66\0\66"+
+    "\0\66\0\154\0\176\0\66\0\66\0\220\0\66\0\66"+
     "\0\242\0\66\0\264\0\306\0\330\0\306\0\352\0\374"+
     "\0\u010e\0\u0120\0\66";
 
@@ -155,13 +155,12 @@ public class Yylex {
 
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\4\2\5\1\0\1\6\1\7\1\10\1\4\1\11"+
-    "\1\4\1\12\7\13\2\14\1\15\1\0\1\16\15\14"+
+    "\1\12\1\4\7\13\2\14\1\15\1\0\1\16\15\14"+
     "\2\17\1\20\1\0\1\21\1\22\1\17\1\23\12\17"+
-    "\23\0\2\5\21\0\1\14\17\0\2\24\3\0\3\24"+
-    "\1\11\11\24\10\0\2\13\1\0\7\13\2\0\1\15"+
-    "\21\0\1\20\34\0\1\25\14\0\1\26\31\0\1\27"+
-    "\17\0\1\30\24\0\1\31\14\0\1\32\24\0\1\33"+
-    "\2\0";
+    "\23\0\2\5\21\0\1\14\17\0\2\24\3\0\4\24"+
+    "\1\12\10\24\11\0\11\13\2\0\1\15\21\0\1\20"+
+    "\34\0\1\25\15\0\1\26\30\0\1\27\17\0\1\30"+
+    "\24\0\1\31\14\0\1\32\24\0\1\33\2\0";
 
   private static int [] zzUnpacktrans() {
     int [] result = new int[306];
@@ -207,9 +206,8 @@ public class Yylex {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\3\0\1\11\2\1\2\11\1\1\1\11\1\1\2\11"+
-    "\1\1\2\11\1\1\1\11\1\1\2\0\1\1\4\0"+
-    "\1\11";
+    "\3\0\1\11\2\1\3\11\2\1\2\11\1\1\2\11"+
+    "\1\1\1\11\1\1\2\0\1\1\4\0\1\11";
 
   private static int [] zzUnpackAttribute() {
     int [] result = new int[27];
@@ -726,12 +724,12 @@ public class Yylex {
           // fall through
           case 17: break;
           case 5:
-            { return new Yytoken(TokenType.INT, yytext(), yyline, yycolumn);
+            { return new Yytoken(TokenType.SPECIAL, yytext(), yyline, yycolumn);
             }
           // fall through
           case 18: break;
           case 6:
-            { return new Yytoken(TokenType.SPECIAL, yytext(), yyline, yycolumn);
+            { return new Yytoken(TokenType.INT, yytext(), yyline, yycolumn);
             }
           // fall through
           case 19: break;

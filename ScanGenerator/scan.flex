@@ -25,9 +25,10 @@ IDENTIFIER = ({ALPHA}|_)({ALPHA}|{DIGIT}|:|_)*
 <YYINITIAL> {
   "=" { return new Yytoken(TokenType.SPECIAL, yytext(), yyline, yycolumn);  }
   "<" { return new Yytoken(TokenType.SPECIAL, yytext(), yyline, yycolumn);  }
-  ">" { return new Yytoken(TokenType.SPECIAL, yytext(), yyline, yycolumn); }
-  "{" { return new Yytoken(TokenType.SPECIAL, yytext(), yyline, yycolumn); }
-  "}" { return new Yytoken(TokenType.SPECIAL, yytext(), yyline, yycolumn); }
+  ">" { return new Yytoken(TokenType.SPECIAL, yytext(), yyline, yycolumn);  }
+  "{" { return new Yytoken(TokenType.SPECIAL, yytext(), yyline, yycolumn);  }
+  "}" { return new Yytoken(TokenType.SPECIAL, yytext(), yyline, yycolumn);  }
+  "." { return new Yytoken(TokenType.SPECIAL, yytext(), yyline, yycolumn);  }
 
   {SPACE}+ { }
   {NEWLINE} {

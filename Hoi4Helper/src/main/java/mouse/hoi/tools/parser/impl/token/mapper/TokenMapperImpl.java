@@ -10,7 +10,6 @@ import mouse.hoi.tools.parser.impl.token.mapper.creator.TokenCreator;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
