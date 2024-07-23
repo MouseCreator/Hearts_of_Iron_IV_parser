@@ -82,7 +82,12 @@ public class LeftRecursiveParser implements GameFileParser {
         if (lookahead.is("=")) {
             return createKeyValue(tokenStream, leftCreated);
         }
+        if (lookahead.is("}")) {
+            tokenStream.next();
+            return leftCreated;
+        }
         if (isInfoToken(lookahead)) {
+            tokenStream.next();
             return leftCreated;
         }
         throw unexpected(lookahead);

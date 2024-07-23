@@ -41,8 +41,8 @@ IDENTIFIER = ({ALPHA}|_)({ALPHA}|{DIGIT}|:|_)*
     yybegin(STRING);
   }
 
-  {DIGIT}+ { return new Yytoken(TokenType.INT, yytext(), yyline, yycolumn); }
-  {DIGIT}+.{DIGIT}+ { return new Yytoken(TokenType.DOUBLE, yytext(), yyline, yycolumn); }
+  -?{DIGIT}+ { return new Yytoken(TokenType.INT, yytext(), yyline, yycolumn); }
+  -?{DIGIT}+\.{DIGIT}+ { return new Yytoken(TokenType.DOUBLE, yytext(), yyline, yycolumn); }
   {IDENTIFIER} { return new Yytoken(TokenType.ID, yytext(), yyline, yycolumn); }
 }
 

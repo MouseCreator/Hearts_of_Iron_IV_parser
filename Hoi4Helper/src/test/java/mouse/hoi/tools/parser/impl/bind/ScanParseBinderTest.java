@@ -36,6 +36,26 @@ class ScanParseBinderTest {
         Assertions.assertEquals(adjusted, s);
     }
 
+    @Test
+    void createTree_List() {
+        String listedContent = """
+                a = {
+                    1
+                    2
+                    3
+                    4
+                    5
+                    6
+                }
+                """;
+        String adjusted = adjust(listedContent);
+        AbstractSyntaxTree tree = binder.createTreeFromContent(listedContent);
+        Assertions.assertNotNull(tree);
+        Assertions.assertEquals(1, tree.root().getChildren().size());
+        String s = treePrinter.printTree(tree);
+        Assertions.assertEquals(adjusted, s);
+    }
+
     private String adjust(String content) {
         StringBuilder builder = new StringBuilder();
         String[] split = content.split("\n");
