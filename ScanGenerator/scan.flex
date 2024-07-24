@@ -40,6 +40,13 @@ IDENTIFIER = ({ALPHA}|_)({ALPHA}|{DIGIT}|:|_)*
     currentString = new StringBuilder();
     yybegin(STRING);
   }
+  
+  "yes" {
+	return new Yytoken(TokenType.BOOLEAN, yytext(), yyline, yycolumn);
+  }
+  "no" {
+	return new Yytoken(TokenType.BOOLEAN, yytext(), yyline, yycolumn);
+  }
 
   -?{DIGIT}+ { return new Yytoken(TokenType.INT, yytext(), yyline, yycolumn); }
   -?{DIGIT}+\.{DIGIT}+ { return new Yytoken(TokenType.DOUBLE, yytext(), yyline, yycolumn); }
@@ -62,7 +69,6 @@ IDENTIFIER = ({ALPHA}|_)({ALPHA}|{DIGIT}|:|_)*
   }
   \" {
     yybegin(YYINITIAL);
-    currentString.append("\"");
     return new Yytoken(TokenType.STRING, currentString.toString(), yyline, yycolumn);
   }
   . { currentString.append(yytext()); }

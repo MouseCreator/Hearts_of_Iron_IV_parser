@@ -66,9 +66,10 @@ public class Yylex {
     "\10\0\2\1\1\2\2\3\1\4\22\0\1\1\1\0"+
     "\1\5\1\6\1\0\1\7\7\0\1\10\1\11\1\0"+
     "\12\12\1\13\1\0\3\14\2\0\32\15\4\0\1\15"+
-    "\1\0\1\16\3\15\1\17\1\20\5\15\1\21\2\15"+
-    "\1\22\6\15\1\23\4\15\1\14\1\0\1\14\7\0"+
-    "\1\3\u01a2\0\2\3\326\0\u0100\3";
+    "\1\0\1\16\3\15\1\17\1\20\5\15\1\21\1\15"+
+    "\1\22\1\23\3\15\1\24\2\15\1\25\2\15\1\26"+
+    "\1\15\1\14\1\0\1\14\7\0\1\3\u01a2\0\2\3"+
+    "\326\0\u0100\3";
 
   private static int [] zzUnpackcmap_blocks() {
     int [] result = new int[1024];
@@ -96,11 +97,11 @@ public class Yylex {
 
   private static final String ZZ_ACTION_PACKED_0 =
     "\3\0\1\1\2\2\1\3\1\4\1\1\1\5\1\6"+
-    "\1\7\1\2\2\10\1\11\2\12\1\13\1\11\2\0"+
-    "\1\14\4\0\1\15";
+    "\3\7\1\2\2\10\1\11\2\12\1\13\1\11\1\0"+
+    "\1\14\1\7\1\0\1\15\4\0\1\16";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[28];
+    int [] result = new int[32];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -125,13 +126,13 @@ public class Yylex {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\24\0\50\0\74\0\120\0\144\0\74\0\74"+
-    "\0\170\0\74\0\214\0\240\0\74\0\74\0\264\0\74"+
-    "\0\74\0\310\0\74\0\334\0\360\0\u0104\0\360\0\u0118"+
-    "\0\u012c\0\u0140\0\u0154\0\74";
+    "\0\0\0\27\0\56\0\105\0\134\0\163\0\105\0\105"+
+    "\0\212\0\105\0\241\0\270\0\317\0\346\0\105\0\105"+
+    "\0\375\0\105\0\105\0\u0114\0\105\0\u012b\0\u0142\0\270"+
+    "\0\u0159\0\u0170\0\u0142\0\u0187\0\u019e\0\u01b5\0\u01cc\0\105";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[28];
+    int [] result = new int[32];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -155,16 +156,18 @@ public class Yylex {
 
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\4\2\5\1\0\1\6\1\7\1\10\1\4\1\11"+
-    "\1\12\1\13\1\4\1\12\7\14\2\15\1\16\1\0"+
-    "\1\17\17\15\2\20\1\21\1\0\1\22\1\23\1\20"+
-    "\1\24\14\20\25\0\2\5\23\0\1\15\33\0\1\13"+
-    "\22\0\1\25\1\13\23\0\2\14\1\0\7\14\2\0"+
-    "\1\16\23\0\1\21\40\0\1\26\16\0\1\27\33\0"+
-    "\1\30\21\0\1\31\26\0\1\32\16\0\1\33\26\0"+
-    "\1\34\2\0";
+    "\1\12\1\13\1\4\1\12\5\14\1\15\3\14\1\16"+
+    "\2\17\1\20\1\0\1\21\22\17\2\22\1\23\1\0"+
+    "\1\24\1\25\1\22\1\26\17\22\30\0\2\5\26\0"+
+    "\1\17\36\0\1\13\25\0\1\27\1\13\26\0\2\14"+
+    "\1\0\12\14\12\0\2\14\1\0\6\14\1\30\3\14"+
+    "\12\0\2\14\1\0\2\14\1\31\7\14\2\0\1\20"+
+    "\26\0\1\23\43\0\1\32\21\0\1\33\26\0\2\14"+
+    "\1\0\7\14\1\30\2\14\23\0\1\34\23\0\1\35"+
+    "\33\0\1\36\17\0\1\37\31\0\1\40\5\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[360];
+    int [] result = new int[483];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -207,12 +210,12 @@ public class Yylex {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\3\0\1\11\2\1\2\11\1\1\1\11\2\1\2\11"+
-    "\1\1\2\11\1\1\1\11\1\1\2\0\1\1\4\0"+
-    "\1\11";
+    "\3\0\1\11\2\1\2\11\1\1\1\11\4\1\2\11"+
+    "\1\1\2\11\1\1\1\11\1\1\1\0\2\1\1\0"+
+    "\1\1\4\0\1\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[28];
+    int [] result = new int[32];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -708,70 +711,74 @@ public class Yylex {
             { Errors.report("Unexpected symbol: <" + yytext() + ">", yyline, yycolumn);
             }
           // fall through
-          case 14: break;
+          case 15: break;
           case 2:
             { 
             }
           // fall through
-          case 15: break;
+          case 16: break;
           case 3:
             { currentString = new StringBuilder();
     yybegin(STRING);
             }
           // fall through
-          case 16: break;
+          case 17: break;
           case 4:
             { yybegin(COMMENT);
             }
           // fall through
-          case 17: break;
+          case 18: break;
           case 5:
             { return new Yytoken(TokenType.SPECIAL, yytext(), yyline, yycolumn);
             }
           // fall through
-          case 18: break;
+          case 19: break;
           case 6:
             { return new Yytoken(TokenType.INT, yytext(), yyline, yycolumn);
             }
           // fall through
-          case 19: break;
+          case 20: break;
           case 7:
             { return new Yytoken(TokenType.ID, yytext(), yyline, yycolumn);
             }
           // fall through
-          case 20: break;
+          case 21: break;
           case 8:
             { yybegin(YYINITIAL);
             }
           // fall through
-          case 21: break;
+          case 22: break;
           case 9:
             { currentString.append(yytext());
             }
           // fall through
-          case 22: break;
+          case 23: break;
           case 10:
             { Errors.report("Unmatched end of string: newline", yyline, yycolumn);
             }
           // fall through
-          case 23: break;
+          case 24: break;
           case 11:
             { yybegin(YYINITIAL);
-    currentString.append("\"");
     return new Yytoken(TokenType.STRING, currentString.toString(), yyline, yycolumn);
             }
           // fall through
-          case 24: break;
-          case 12:
-            { return new Yytoken(TokenType.DOUBLE, yytext(), yyline, yycolumn);
-            }
-          // fall through
           case 25: break;
-          case 13:
-            { Errors.report("Unmatched end of string: end of file", yyline, yycolumn);
+          case 12:
+            { return new Yytoken(TokenType.BOOLEAN, yytext(), yyline, yycolumn);
             }
           // fall through
           case 26: break;
+          case 13:
+            { return new Yytoken(TokenType.DOUBLE, yytext(), yyline, yycolumn);
+            }
+          // fall through
+          case 27: break;
+          case 14:
+            { Errors.report("Unmatched end of string: end of file", yyline, yycolumn);
+            }
+          // fall through
+          case 28: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

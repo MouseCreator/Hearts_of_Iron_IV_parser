@@ -7,14 +7,15 @@ import mouse.hoi.tools.parser.impl.interpreter.simple.Inits;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Data
 @GameObj
-public class SpriteTypes implements Inits {
-    @WriteAs("SpriteType")
-    private List<SpriteType> spriteTypeList;
+public class SpriteTypesWrapper implements Inits {
+    @WriteAs("spriteTypes")
+    private List<SpriteTypes> typesList;
 
     @Override
     public void initialize() {
-        spriteTypeList = new ArrayList<>();
+        typesList = new ArrayList<>();
     }
 }

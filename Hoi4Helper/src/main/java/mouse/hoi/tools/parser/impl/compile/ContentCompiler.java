@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class GameCompilerImpl implements GameCompiler {
+public class ContentCompiler {
 
     private final ScanParseBinder binder;
     private final TreeInterpreter treeInterpreter;
-    public <T> T compile(String f, Class<T> baseClass) {
-        AbstractSyntaxTree treeFromContent = binder.createTreeFromFile(f);
+    public <T> T compile(String content, Class<T> baseClass) {
+        AbstractSyntaxTree treeFromContent = binder.createTreeFromContent(content);
         return treeInterpreter.mapToObject(treeFromContent, baseClass);
     }
 }

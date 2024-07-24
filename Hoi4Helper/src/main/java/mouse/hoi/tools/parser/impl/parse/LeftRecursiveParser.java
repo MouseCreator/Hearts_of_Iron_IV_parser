@@ -7,24 +7,7 @@ import mouse.hoi.tools.parser.impl.token.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-// FOR INTERPRETER:
-// if field is primitive or string -- init with key=val
-// if field is an object -- init with key= { val } (recursive)
-// if field is an object and its type is defaultable, init with default key=value
-// if field is an object and its type is initialized, call initialize() method
 
-// use expect() to validate syntax;
-// interpreter will be used in order to assign types and scopes (mio, var, country)
-// probably, it is better to create the AST first (!)
-
-// elements:
-// K=V
-// K = { block }
-
-/*
-    A class may implement different interfaces, which can help with parsing (for example, Defaultable);
-    Also we can use annotations to assign some properties
- */
 @AllArgsConstructor
 @Service
 public class LeftRecursiveParser implements GameFileParser {
@@ -111,7 +94,7 @@ public class LeftRecursiveParser implements GameFileParser {
         return simpleNode;
     }
 
-    private Node createBlock(TokenStream tokenStream) {
+    private BlockNode createBlock(TokenStream tokenStream) {
         tokenStream.nowExpect("{");
         tokenStream.next();
         BlockNode blockNode = new BlockNode();
@@ -135,6 +118,16 @@ public class LeftRecursiveParser implements GameFileParser {
 
         Node rightValue = onRightValueExpected(tokenStream);
         keyValueNode.setValue(rightValue);
+
+        Optional<Token> lookahead = tokenStream.lookahead();
+        if (lookahead.isEmpty()) {
+            return keyValueNode;
+        }
+        Token tokenLookahead = lookahead.get();
+        if (tokenLookahead.is("{")){
+            BlockNode block = createBlock(tokenStream);
+            return new ComplexNode(keyValueNode, block);
+        }
         return keyValueNode;
     }
 
@@ -182,6 +175,9 @@ public class LeftRecursiveParser implements GameFileParser {
         }
         if (token instanceof IdToken idToken) {
             return Optional.of(new IdNode(idToken.location(), idToken.id()));
+        }
+        if (token instanceof BooleanToken b) {
+            return Optional.of(new BooleanNode(b.location(), b.value()));
         }
         return Optional.empty();
     }

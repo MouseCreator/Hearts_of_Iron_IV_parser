@@ -1,12 +1,32 @@
 package mouse.hoi.main.gfx.data;
 
 import lombok.Data;
-import mouse.hoi.tools.parser.annotation.WriteAs;
+import mouse.hoi.tools.parser.annotation.*;
+import mouse.hoi.tools.parser.impl.interpreter.simple.Inits;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
-public class SpriteType {
+@GameObj
+public class SpriteType implements Inits {
     @WriteAs
+    @Quoted
     private String name;
     @WriteAs("texturefile")
-    private String path;
+    @Quoted
+    private String textureFile;
+    @WriteAs("effectFile")
+    @Quoted
+    private String effectFile;
+    @WriteAs("animation")
+    @SkipIfEmpty
+    private List<Animation> animationList;
+    @WriteAs("legacy_lazy_load")
+    @SkipIf("yes")
+    private boolean legacyLazyLoad;
+    @Override
+    public void initialize() {
+        animationList = new ArrayList<>();
+    }
 }
