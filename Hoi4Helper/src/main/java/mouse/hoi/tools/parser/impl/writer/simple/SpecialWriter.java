@@ -1,9 +1,13 @@
 package mouse.hoi.tools.parser.impl.writer.simple;
 
-import mouse.hoi.tools.parser.impl.printer.TreePrintBuilder;
-import mouse.hoi.tools.parser.impl.printer.nodes.PrinterDistributor;
+import lombok.Getter;
+import lombok.Setter;
+import mouse.hoi.tools.parser.impl.writer.WriteStyle;
 
 public class SpecialWriter {
+    @Setter
+    @Getter
+    private WriteStyle writeStyle = WriteStyle.DEFAULT;
     public SpecialWriter() {
         stringBuilder = new StringBuilder();
         tabLevel = 0;
@@ -24,8 +28,14 @@ public class SpecialWriter {
         return this;
     }
     public SpecialWriter tln() {
-        stringBuilder.append("\n");
-        return tabs();
+        if (writeStyle == WriteStyle.DEFAULT) {
+            stringBuilder.append("\n");
+            return tabs();
+        } else if (writeStyle == WriteStyle.SIMPLE) {
+            stringBuilder.append(" ");
+            return this;
+        }
+        throw new RuntimeException("Unknown style: " + writeStyle);
     }
     public SpecialWriter ln() {
         stringBuilder.append("\n");
@@ -49,4 +59,6 @@ public class SpecialWriter {
     public boolean isEmpty() {
         return stringBuilder.isEmpty();
     }
+
+
 }

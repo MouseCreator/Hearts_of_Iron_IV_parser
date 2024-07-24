@@ -4,6 +4,7 @@ import mouse.hoi.exception.InterpretationException;
 import mouse.hoi.exception.PrinterException;
 import mouse.hoi.tools.parser.annotation.*;
 import mouse.hoi.tools.parser.impl.writer.ObjectWriter;
+import mouse.hoi.tools.parser.impl.writer.WriteStyle;
 import mouse.hoi.tools.utils.Numbers;
 import mouse.hoi.tools.utils.Types;
 import org.springframework.stereotype.Service;
@@ -56,9 +57,19 @@ public class SimplestObjectWriter implements ObjectWriter {
             }
             throw new PrinterException("Unexpected null object: " + field);
         }
+        StyleHint styleHint = field.getAnnotation(StyleHint.class);
+        WriteStyle prevStyle = specialWriter.getWriteStyle();
+        boolean hasStyleHint = styleHint != null;
+        if (styleHint != null) {
+            WriteStyle value = styleHint.value();
+            specialWriter.setWriteStyle(value);
+        }
         specialWriter.append(name).append(" = {").incrementTab();
         writeObj(specialWriter, object);
         specialWriter.decrementTab().tln().append("}");
+        if (hasStyleHint) {
+            specialWriter.setWriteStyle(prevStyle);
+        }
     }
 
     private void writePrimitive(String name, SpecialWriter specialWriter, Field field, Object primObj) {
