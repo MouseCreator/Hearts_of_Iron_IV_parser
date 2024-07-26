@@ -2,6 +2,7 @@ package mouse.hoi.tools.parser.impl.reader.lr;
 
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import mouse.hoi.exception.ReaderException;
 import mouse.hoi.tools.parser.impl.ast.BlockNode;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,7 @@ public class LRValues {
 
         public void orElseThrow() {
             if (!consumed) {
-                throw new InterpretationException("Cannot consume left value: " + leftValue);
+                throw new ReaderException("Cannot consume left value: " + leftValue);
             }
         }
 

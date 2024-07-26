@@ -28,7 +28,5 @@ public class AnimationWriter implements DataWriter<Animation> {
                 .key("animationtype").value(object::getType, StringStyle.QUOTED).ln()
                 .key("animationrotationoffset").object(object::getRotationOffset, CommonStyles.SIMPLE).ln()
                 .key("animationtexturescale").object(object::getTextureScale, CommonStyles.SIMPLE).ln();
-
-        ;
     }
 }

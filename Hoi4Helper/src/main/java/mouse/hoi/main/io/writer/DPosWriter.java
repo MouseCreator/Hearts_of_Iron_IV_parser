@@ -1,7 +1,6 @@
 package mouse.hoi.main.io.writer;
 
 import mouse.hoi.tools.parser.data.DPos;
-import mouse.hoi.tools.parser.impl.writer.DataWriter;
 import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
 import mouse.hoi.tools.parser.impl.writer.StyledDataWriter;
 import mouse.hoi.tools.parser.impl.writer.annotation.DefaultWriter;
