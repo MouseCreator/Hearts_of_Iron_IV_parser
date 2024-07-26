@@ -2,7 +2,6 @@ package mouse.hoi.tools.parser.impl.reader.lr;
 
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import mouse.hoi.exception.InterpretationException;
 import mouse.hoi.tools.parser.impl.ast.BlockNode;
 import org.springframework.stereotype.Service;
 
