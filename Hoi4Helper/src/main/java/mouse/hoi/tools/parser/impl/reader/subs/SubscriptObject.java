@@ -4,4 +4,5 @@ public interface SubscriptObject {
     String key();
     boolean isFinal();
     SubscriptObject child();
+    String print();
 }
