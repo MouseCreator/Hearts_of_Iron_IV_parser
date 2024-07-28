@@ -10,4 +10,9 @@ public record SubscriptObjectFinal(String key) implements SubscriptObject {
     public SubscriptObject child() {
         throw new UnsupportedOperationException("Cannot get a child node from subscript object with key: " + key);
     }
+
+    @Override
+    public String print() {
+        return key;
+    }
 }

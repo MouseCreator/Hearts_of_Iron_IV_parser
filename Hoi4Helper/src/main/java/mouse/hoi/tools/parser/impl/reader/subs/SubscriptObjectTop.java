@@ -5,4 +5,9 @@ public record SubscriptObjectTop(String key, SubscriptObject child) implements S
     public boolean isFinal() {
         return false;
     }
+
+    @Override
+    public String print() {
+        return key + "." + child.print();
+    }
 }

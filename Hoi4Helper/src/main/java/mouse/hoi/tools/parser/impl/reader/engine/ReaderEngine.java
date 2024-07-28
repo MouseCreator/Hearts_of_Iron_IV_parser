@@ -1,8 +1,11 @@
 package mouse.hoi.tools.parser.impl.reader.engine;
 
+import jakarta.annotation.PostConstruct;
 import mouse.hoi.exception.ReaderException;
 import mouse.hoi.tools.parser.impl.ast.*;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
+import mouse.hoi.tools.parser.impl.reader.helper.Interpreters;
+import mouse.hoi.tools.parser.impl.reader.helper.Readers;
 import mouse.hoi.tools.parser.impl.reader.lr.*;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +16,20 @@ import java.util.Map;
 @Service
 public class ReaderEngine {
     private final Map<Class<?>, DataReader<?>> readersMap;
-    public ReaderEngine(List<DataReader<?>> readers) {
+    private final Interpreters interpreters;
+    public ReaderEngine(List<DataReader<?>> readersList, Interpreters i) {
         this.readersMap = new HashMap<>();
-        for (DataReader<?> reader : readers) {
+        for (DataReader<?> reader : readersList) {
             readersMap.put(reader.forType(), reader);
         }
+        this.interpreters = i;
     }
+
+    @PostConstruct
+    void init() {
+        interpreters.setEngine(this);
+    }
+
 
     public <T> T read(Node node, Class<T> classToRead) {
         DataReader<?> reader = readersMap.get(classToRead);
@@ -102,6 +113,7 @@ public class ReaderEngine {
     }
 
 
-
-
+    public <T> T read(AbstractSyntaxTree ast, Class<T> baseClass) {
+        return read(ast.root(), baseClass);
+    }
 }
