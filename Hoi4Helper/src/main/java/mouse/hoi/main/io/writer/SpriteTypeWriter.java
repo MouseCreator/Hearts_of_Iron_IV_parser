@@ -19,7 +19,7 @@ public class SpriteTypeWriter implements DataWriter<SpriteType> {
         writer.key("name").value(object::getName, StringStyle.QUOTED).ln()
                 .key("texturefile").value(object::getTextureFile, StringStyle.QUOTED).ln()
                 .key("effectFile").value(object::getEffectFile, StringStyle.QUOTED).ln()
-                .list().block("animation", object::getAnimationList).ln()
-                .key("legacy_lazy_load").testValue(object::isLegacyLazyLoad).printIf("no", Types::mapBoolean).ln();
+                .list().block("animation", object::getAnimationList)
+                .key("legacy_lazy_load").testValue(object::isLegacyLazyLoad).printIfLn("no", Types::mapBoolean);
     }
 }

@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class DPosStyledWriter implements StyledDataWriter<DPos, CommonStyles> {
-
-    private final DPosWriter dPosWriter;
     @Override
     public Class<DPos> forType() {
         return DPos.class;
@@ -19,7 +17,7 @@ public class DPosStyledWriter implements StyledDataWriter<DPos, CommonStyles> {
 
     @Override
     public void write(SpecialWriter writer, DPos object) {
-        writer.key("x").value(object::getX).space().key("y").value(object::getY);
+        writer.space().key("x").value(object::getX).space().key("y").value(object::getY).space();
     }
 
     @Override

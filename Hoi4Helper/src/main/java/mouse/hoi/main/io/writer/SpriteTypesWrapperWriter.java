@@ -14,6 +14,6 @@ public class SpriteTypesWrapperWriter implements DataWriter<SpriteTypesWrapper> 
 
     @Override
     public void write(SpecialWriter writer, SpriteTypesWrapper object) {
-        writer.list().block("spriteTypes", object::getList);
+        writer.list().block("spriteTypes", object::getList).ln();
     }
 }

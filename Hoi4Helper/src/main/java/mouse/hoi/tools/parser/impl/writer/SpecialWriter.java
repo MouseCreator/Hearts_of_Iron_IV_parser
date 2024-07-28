@@ -150,7 +150,16 @@ public class SpecialWriter {
     }
 
     private SpecialWriter writeObject(Object object, Object style) {
+        startBlockSimple();
         helper.writeWithStyle(this, object, style);
+        endBlock();
+        return this;
+    }
+
+    private SpecialWriter startBlockSimple() {
+        onBegin();
+        stringBuilder.append("{");
+        incrementTabs();
         return this;
     }
 
@@ -174,9 +183,17 @@ public class SpecialWriter {
             return parent.parent;
         }
         public SpecialWriter printIf(String eqTo, Function<T, String> mapper) {
-            String str = toTest.toString();
+            String str = mapper.apply(toTest);
             if (str.equals(eqTo)) {
                 return parent.keq().write(str);
+            }
+            return parent.parent;
+        }
+
+        public SpecialWriter printIfLn(String eqTo, Function<T, String> mapper) {
+            String str = mapper.apply(toTest);
+            if (str.equals(eqTo)) {
+                return parent.keq().write(str).ln();
             }
             return parent.parent;
         }
@@ -193,7 +210,7 @@ public class SpecialWriter {
                 parent.write(title).startBlockLn();
             }
             for (Object obj : objects) {
-                parent.write(blockName).startBlockLn().writeObject(obj).endBlock();
+                parent.write(blockName).startBlockLn().writeObject(obj).endBlockLn();
             }
             if (hasTitle(title)) {
                 parent.endBlock();
