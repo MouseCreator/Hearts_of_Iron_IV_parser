@@ -66,6 +66,11 @@ public class SpecialWriter {
     public KeyValueWriter key(Supplier<?> key) {
         return new KeyValueWriter(this, key.get().toString());
     }
+
+    public String get() {
+        return stringBuilder.toString();
+    }
+
     @RequiredArgsConstructor
     public static class KeyValueWriter {
         final SpecialWriter parent;
