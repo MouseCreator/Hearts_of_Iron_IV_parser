@@ -76,6 +76,7 @@ public class LRValues {
         void orElseThrow();
         LeftValueDynamic setString(Consumer<String> consumer);
         LeftValueDynamic setDouble(Consumer<Double> consumer);
+        LeftValueDynamic setBoolean(Consumer<Boolean> consumer);
     }
 
     public interface MappedResult<R> {
@@ -180,6 +181,15 @@ public class LRValues {
             }
             return parent;
         }
+
+        @Override
+        public LeftValueDynamic setBoolean(Consumer<Boolean> consumer) {
+            if (!consumed && rv.isBoolean()) {
+                boolean v = rv.boolValue();
+                consumer.accept(v);
+            }
+            return parent;
+        }
     }
     @AllArgsConstructor
     public static class RightValueDynamicMock implements RightValueDynamic {
@@ -213,6 +223,11 @@ public class LRValues {
 
         @Override
         public LeftValueDynamic setDouble(Consumer<Double> consumer) {
+            return parent;
+        }
+
+        @Override
+        public LeftValueDynamic setBoolean(Consumer<Boolean> consumer) {
             return parent;
         }
     }

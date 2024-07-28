@@ -2,6 +2,9 @@ package mouse.hoi.tools.parser.impl.writer.style;
 
 import lombok.Getter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Getter
 public class DoubleStyle {
     private final int minAfter;
@@ -28,7 +31,16 @@ public class DoubleStyle {
     }
 
     public String styled(double d) {
-        return null;
+        BigDecimal bd = BigDecimal.valueOf(d).setScale(maxAfter, RoundingMode.DOWN);
+        String[] parts = bd.toPlainString().split("\\.");
+        String integerPart = parts[0];
+        StringBuilder decimalPart = new StringBuilder(parts.length > 1 ? parts[1] : "");
+
+        while (decimalPart.length() < minAfter) {
+            decimalPart.append("0");
+        }
+
+        return (decimalPart.isEmpty()) ? integerPart : integerPart + "." + decimalPart;
     }
 
 }

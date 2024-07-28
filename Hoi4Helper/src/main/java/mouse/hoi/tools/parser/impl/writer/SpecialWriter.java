@@ -83,8 +83,8 @@ public class SpecialWriter {
         }
         public SpecialWriter value(String string, StringStyle stringStyle) {
             return switch (stringStyle) {
-                case QUOTED -> keq().write(string);
-                case DEFAULT -> keq().write("\""+string+"\"");
+                case DEFAULT -> keq().write(string);
+                case QUOTED -> keq().write("\""+string+"\"");
             };
         }
         public SpecialWriter value(Supplier<?> supplier) {
@@ -132,7 +132,7 @@ public class SpecialWriter {
         }
 
         public SpecialWriter valueDouble(Supplier<Double> doubleSupplier) {
-            return value(doubleSupplier, DoubleStyle.defaultStyle());
+            return value(doubleSupplier.get(), DoubleStyle.defaultStyle());
         }
 
         public SpecialWriter object(Supplier<Object> supplier, CommonStyles commonStyles) {

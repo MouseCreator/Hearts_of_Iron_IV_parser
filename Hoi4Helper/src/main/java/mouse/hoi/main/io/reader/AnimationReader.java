@@ -30,8 +30,9 @@ public class AnimationReader implements DataReader<Animation> {
                 .onToken("animationdelay").setDouble(object::setDelaySeconds)
                 .onToken("animationblendmode").setString(object::setBlendMode)
                 .onToken("animationtype").setString(object::setType)
+                .onToken("animationlooping").setBoolean(object::setLooping)
                 .onToken("animationrotationoffset").mapBlock(this::block).consume(object::setRotationOffset)
-                .onToken("animationtexturescale").mapBlock(this::block).consume(object::setRotationOffset)
+                .onToken("animationtexturescale").mapBlock(this::block).consume(object::setTextureScale)
                 .orElseThrow();
     }
 

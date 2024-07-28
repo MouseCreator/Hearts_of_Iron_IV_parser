@@ -18,11 +18,11 @@ public class ReaderEngine {
     private final Map<Class<?>, DataReader<?>> readersMap;
     private final Interpreters interpreters;
     public ReaderEngine(List<DataReader<?>> readersList, Interpreters i) {
-        this.readersMap = new HashMap<>();
+       this.readersMap = new HashMap<>();
         for (DataReader<?> reader : readersList) {
             readersMap.put(reader.forType(), reader);
-        }
-        this.interpreters = i;
+     }
+       this.interpreters = i;
     }
 
     @PostConstruct

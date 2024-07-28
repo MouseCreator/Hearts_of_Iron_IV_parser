@@ -14,6 +14,16 @@ public class IntegerValue extends AbstractPossibleValue {
     }
 
     @Override
+    public boolean isDouble() {
+        return true;
+    }
+
+    @Override
+    public double doubleValue() {
+        return value;
+    }
+
+    @Override
     public int intValue() {
         return value;
     }

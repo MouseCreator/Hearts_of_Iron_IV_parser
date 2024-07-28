@@ -9,9 +9,11 @@ import mouse.hoi.tools.parser.impl.writer.engine.WriterEngine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
 class SpriteTypesTest {
     private ReaderEngine reader;
     private WriterEngine writer;
+
     private ScanParseBinder binder;
     @BeforeEach
     void setUp() {
@@ -59,6 +61,7 @@ class SpriteTypesTest {
                 """;
         AbstractSyntaxTree ast = binder.createTreeFromContent(content);
         SpriteTypesWrapper fromContent = reader.read(ast, SpriteTypesWrapper.class);
+        System.out.println(fromContent);
         String backToString = writer.write(fromContent);
         System.out.println(backToString);
     }

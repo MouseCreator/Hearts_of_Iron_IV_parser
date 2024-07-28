@@ -26,6 +26,7 @@ public class SpriteTypeReader implements DataReader<SpriteType> {
                 .onToken("texturefile").setString(object::setTextureFile)
                 .onToken("effectFile").setString(object::setEffectFile)
                 .onToken("animation").mapBlock(b -> readers.interpreters().read(Animation.class, b)).push(object::getAnimationList)
+                .onToken("legacy_lazy_load").setBoolean(object::setLegacyLazyLoad)
                 .orElseThrow();
     }
 }
