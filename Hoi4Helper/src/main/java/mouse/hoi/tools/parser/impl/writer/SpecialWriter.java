@@ -197,6 +197,21 @@ public class SpecialWriter {
             }
             return parent.parent;
         }
+
+        public SpecialWriter printIfNotNullLn(StringStyle style) {
+            if (toTest == null) {
+                return parent.parent;
+            }
+            printIfNotNull(style);
+            parent.parent.ln();
+            return parent.parent;
+        }
+        public SpecialWriter printIfNotNull(StringStyle style) {
+            if (toTest == null) {
+                return parent.parent;
+            }
+            return parent.value(toTest.toString(), style);
+        }
     }
 
     @RequiredArgsConstructor
@@ -269,6 +284,62 @@ public class SpecialWriter {
         }
         public SpecialWriter block(String blockName, Supplier<Collection<?>> supplier) {
             return block(blockName, supplier.get());
+        }
+
+        public OptionalListWriter testNotNull(Supplier<Collection<?>> collectionSupplier) {
+            Collection<?> collection = collectionSupplier.get();
+            if (collection == null) {
+                return new MockListWriter(this);
+            }
+            return new GoodListWriter(collection, this);
+        }
+
+        public OptionalListWriter testNotEmpty(Supplier<Collection<?>> collectionSupplier) {
+            Collection<?> collection = collectionSupplier.get();
+            if (collection == null || collection.isEmpty()) {
+                return new MockListWriter(this);
+            }
+            return new GoodListWriter(collection, this);
+        }
+    }
+
+    public interface OptionalListWriter {
+        SpecialWriter block(String blockName);
+        SpecialWriter simple();
+    }
+
+    public static class MockListWriter implements OptionalListWriter {
+        private final ListWriterBuilder parent;
+
+        public MockListWriter(ListWriterBuilder parent) {
+            this.parent = parent;
+        }
+        @Override
+        public SpecialWriter block(String blockName) {
+            return parent.parent;
+        }
+
+        @Override
+        public SpecialWriter simple() {
+            return parent.parent;
+        }
+    }
+    public static class GoodListWriter implements OptionalListWriter {
+        private final Collection<?> collection;
+        private final ListWriterBuilder parent;
+        public GoodListWriter(Collection<?> collection, ListWriterBuilder parent) {
+            this.collection = collection;
+            this.parent = parent;
+        }
+
+        @Override
+        public SpecialWriter block(String blockName) {
+            return parent.block(blockName, collection);
+        }
+
+        @Override
+        public SpecialWriter simple() {
+            return parent.simple(collection);
         }
     }
 

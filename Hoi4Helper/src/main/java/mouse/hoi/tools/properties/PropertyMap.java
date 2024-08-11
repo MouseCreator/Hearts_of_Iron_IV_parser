@@ -14,7 +14,7 @@ public class PropertyMap {
         map = new HashMap<>();
     }
 
-    private String expectedProperty(String name) {
+    public String expectedProperty(String name) {
         String val = map.get(name);
         if (val == null) {
             throw new MissingPropertyException("No property named " + name);

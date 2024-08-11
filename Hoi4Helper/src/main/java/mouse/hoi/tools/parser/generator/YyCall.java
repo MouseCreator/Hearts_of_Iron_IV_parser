@@ -14,10 +14,11 @@ public class YyCall {
             File file = new File(filename);
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
             List<Yytoken> yytokenList = read(bufferedReader);
+            bufferedReader.close();
             return new YyResult(filename, yytokenList);
 
         } catch (Exception e) {
-            throw new ScanException(e);
+            throw new ScanException("Error reading \"" + filename + "\"", e);
         }
     }
     public YyResult read(String content) {

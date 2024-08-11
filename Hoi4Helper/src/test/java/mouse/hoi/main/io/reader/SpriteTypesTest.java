@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 class SpriteTypesTest {
     private ReaderEngine reader;
     private WriterEngine writer;
-
     private ScanParseBinder binder;
     @BeforeEach
     void setUp() {
