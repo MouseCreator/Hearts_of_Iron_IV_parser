@@ -1,4 +1,4 @@
-package mouse.hoi.main.states.service.categories;
+package mouse.hoi.main.states.service.manpower;
 
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.states.service.commons.StatesProvinces;
@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class StateCategoryService implements AppService {
-    private final StateCategoryAssigner stateCategoryAssigner;
+public class StateManpowerService implements AppService {
     private final StatesProvinces statesProvinces;
+    private final StateManpowerAssigner stateManpowerAssigner;
     @Override
     public void start() {
-        statesProvinces.apply(stateCategoryAssigner::assignCategory);
+        statesProvinces.apply(stateManpowerAssigner::assignManpower);
     }
 }

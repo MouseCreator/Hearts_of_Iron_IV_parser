@@ -6,6 +6,7 @@ import mouse.hoi.main.map.provinces.ProvinceInfo;
 import mouse.hoi.main.states.data.State;
 import mouse.hoi.main.states.data.StateHistory;
 import mouse.hoi.main.states.data.VictoryPoint;
+import mouse.hoi.main.states.service.commons.StateCommons;
 import mouse.hoi.tools.random.RandomService;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class StateCategoryAssigner {
 
     private final RandomService randomService;
+    private final StateCommons commons;
 
     public void assignCategory(State state, ProvinceDefinitions provinceDefinitions) {
         String category = chooseCategory(state, provinceDefinitions);
@@ -27,7 +29,7 @@ public class StateCategoryAssigner {
         if (provinces.size() < 3) {
             return "small_island";
         }
-        int victoryPointSum = vpSum(state);
+        int victoryPointSum = commons.vpSum(state);
         if (victoryPointSum >= 45) {
             return "megalopolis";
         }
@@ -40,34 +42,20 @@ public class StateCategoryAssigner {
         if (provinces.size() < 3) {
             return "rural";
         }
-        if (hasTerrain(state, "jungle", provinceDefinitions)) {
+        if (commons.hasTerrain(state, "jungle", provinceDefinitions)) {
             return "rural";
         }
-        if (hasTerrain(state, "desert", provinceDefinitions)) {
+        if (commons.hasTerrain(state, "desert", provinceDefinitions)) {
             return "pastoral";
         }
         if (victoryPointSum >= 10) {
             return "town";
         }
-        if (hasTerrain(state, "marsh", provinceDefinitions)) {
+        if (commons.hasTerrain(state, "marsh", provinceDefinitions)) {
             return "rural";
         }
         return randomService.rand().nextBoolean() ? "town" : "rural";
     }
 
-    private boolean hasTerrain(State state, String terrain, ProvinceDefinitions provinceDefinitions) {
-        List<Integer> provinces = state.getProvinces();
-        for (int prov : provinces) {
-            ProvinceInfo provinceById = provinceDefinitions.getProvinceById(prov);
-            if (provinceById.getTerrain().equals(terrain)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
-    private int vpSum(State state) {
-        StateHistory stateHistory = state.historyOrInit();
-        return stateHistory.getVictoryPointList().stream().mapToInt(VictoryPoint::getPoints).sum();
-    }
 }
