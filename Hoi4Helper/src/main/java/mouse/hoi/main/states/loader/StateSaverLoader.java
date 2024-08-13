@@ -7,6 +7,8 @@ import mouse.hoi.tools.files.PathManager;
 import mouse.hoi.tools.files.PathsLoader;
 import mouse.hoi.tools.parser.impl.reader.ReaderService;
 import mouse.hoi.tools.parser.impl.writer.WriterService;
+import mouse.hoi.tools.properties.FileProperties;
+import mouse.hoi.tools.properties.PropertyMap;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,10 +18,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StateSaverLoader {
+    private final FileProperties fileProperties;
     private final PathsLoader pathsLoader;
     private final PathManager pathManager;
     private final ReaderService readerService;
     private final WriterService writerService;
+
+    public List<LoadedState> loadAllStates() {
+        PropertyMap map = fileProperties.readProperties("src/main/resources/states/init.input");
+        String directory = map.expectedProperty("directory");
+        return loadAllStates(directory);
+    }
     public List<LoadedState> loadAllStates(String stateDirectory) {
         List<String> files = pathsLoader.allFiles(stateDirectory, true, true);
         List<LoadedState> loadedStates = new ArrayList<>();

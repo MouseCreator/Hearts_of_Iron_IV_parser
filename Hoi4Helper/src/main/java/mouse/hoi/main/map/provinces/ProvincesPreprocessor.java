@@ -39,4 +39,14 @@ public class ProvincesPreprocessor {
         }
         return new ProvinceCollection(colorMap, posMap, allPositions, idMap);
     }
+
+    public ProvinceDefinitions preprocess(List<ProvinceInfo> provinceInfoList) {
+        Map<ProvinceColor, ProvinceInfo> colorMap = new HashMap<>();
+        Map<Integer, ProvinceInfo> idMap = new HashMap<>();
+        for (ProvinceInfo info : provinceInfoList) {
+            colorMap.put(info.color(), info);
+            idMap.put(info.getId(), info);
+        }
+        return new ProvinceDefinitions(colorMap, idMap);
+    }
 }

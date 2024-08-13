@@ -79,6 +79,12 @@ public class SpecialWriter {
         return endBlockLn();
     }
 
+    public SpecialWriter write(int i) {
+        onBegin();
+        stringBuilder.append(i);
+        return this;
+    }
+
     @RequiredArgsConstructor
     public static class KeyValueWriter {
         final SpecialWriter parent;

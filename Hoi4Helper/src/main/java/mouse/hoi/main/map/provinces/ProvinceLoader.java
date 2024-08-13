@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import mouse.hoi.tools.csv.CSVData;
 import mouse.hoi.tools.csv.CSVReader;
 import mouse.hoi.tools.csv.CSVRow;
+import mouse.hoi.tools.properties.FileProperties;
+import mouse.hoi.tools.properties.PropertyMap;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +15,14 @@ import java.util.List;
 public class ProvinceLoader {
 
     private final CSVReader csvReader;
+    private final FileProperties fileProperties;
+
+    public List<ProvinceInfo> loadProvinces() {
+        PropertyMap map = fileProperties.readProperties("src/main/resources/provinces/init.input");
+        String filename = map.expectedProperty("definition");
+        CSVData csvData = csvReader.readCSV(filename, ";", false);
+        return toProvinces(csvData);
+    }
     public List<ProvinceInfo> loadProvinces(String filename) {
         CSVData csvData = csvReader.readCSV(filename, ";", false);
         return toProvinces(csvData);

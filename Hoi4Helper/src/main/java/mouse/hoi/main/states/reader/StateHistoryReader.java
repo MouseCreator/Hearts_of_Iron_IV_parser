@@ -2,6 +2,7 @@ package mouse.hoi.main.states.reader;
 
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.states.data.StateHistory;
+import mouse.hoi.main.states.data.VictoryPoint;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
 import mouse.hoi.tools.parser.impl.reader.helper.Readers;
 import mouse.hoi.tools.parser.impl.reader.lr.LeftValue;
@@ -21,6 +22,7 @@ public class StateHistoryReader implements DataReader<StateHistory> {
     @Override
     public void onKeyValue(StateHistory history, LeftValue leftValue, RightValue rightValue) {
         readers.lrValues().with(leftValue, rightValue)
-                .onToken("owner").setString(history::setOwner);
+                .onToken("owner").setString(history::setOwner)
+                .onToken("victory_points").mapBlock(b -> readers.interpreters().read(VictoryPoint.class, b)).push(history::getVictoryPointList);
     }
 }

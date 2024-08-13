@@ -14,4 +14,11 @@ public class State {
     private double localSupplies;
     private double buildingsMaxLevelFactor;
     private StateHistory stateHistory;
+
+    public StateHistory historyOrInit() {
+        if (stateHistory == null){
+            stateHistory = new StateHistory();
+        }
+        return stateHistory;
+    }
 }
