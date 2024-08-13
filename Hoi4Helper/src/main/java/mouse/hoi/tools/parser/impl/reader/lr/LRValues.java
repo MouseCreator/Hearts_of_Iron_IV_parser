@@ -71,6 +71,14 @@ public class LRValues {
             }
             return new LeftValueMockMapper<>(this);
         }
+
+        public RightValueDynamic onInteger() {
+            if (leftValue.isInteger() && !consumed) {
+                consumed = true;
+                return new RightValueDynamicImpl(this, rightValue);
+            }
+            return rightMock();
+        }
     }
 
     public interface RightValueDynamic {

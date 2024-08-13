@@ -11,4 +11,8 @@ public class RandomService {
     public Random rand() {
         return random;
     }
+
+    public boolean withChance(double v) {
+        return rand().nextDouble() < v;
+    }
 }

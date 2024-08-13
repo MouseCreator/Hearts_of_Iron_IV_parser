@@ -5,13 +5,10 @@ import mouse.hoi.exception.ReaderException;
 import mouse.hoi.tools.parser.impl.ast.*;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
 import mouse.hoi.tools.parser.impl.reader.helper.Interpreters;
-import mouse.hoi.tools.parser.impl.reader.helper.Readers;
 import mouse.hoi.tools.parser.impl.reader.lr.*;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ReaderEngine {
@@ -115,5 +112,19 @@ public class ReaderEngine {
 
     public <T> T read(AbstractSyntaxTree ast, Class<T> baseClass) {
         return read(ast.root(), baseClass);
+    }
+
+    public List<LeftRightValue> getLeftRightValues(BlockNode blockNode) {
+        List<Node> nodes = blockNode.getChildren();
+        List<LeftRightValue> list = new ArrayList<>();
+        for (Node n : nodes) {
+            if (n instanceof KeyValueNode kv) {
+                LeftValue leftValue = createLeft(kv.getKey());
+                RightValue rightValue = createRight(kv.getValue());
+                LeftRightValue leftRightValue = new LeftRightValue(leftValue, rightValue);
+                list.add(leftRightValue);
+            }
+        }
+        return list;
     }
 }

@@ -130,7 +130,9 @@ public class SpecialWriter {
         public SpecialWriter value(Supplier<String> supplier, StringStyle stringStyle) {
             return value(supplier.get(), stringStyle);
         }
-
+        public SpecialWriter value(int i) {
+            return keq().write(String.valueOf(i));
+        }
         public SpecialWriter value(double d) {
             DoubleStyle doubleStyle = DoubleStyle.defaultStyle();
             String styled = doubleStyle.styled(d);
