@@ -71,6 +71,14 @@ public class SpecialWriter {
         return stringBuilder.toString();
     }
 
+    public SpecialWriter beginObj() {
+        return startBlockSimple().ln();
+    }
+
+    public SpecialWriter endObj() {
+        return endBlockLn();
+    }
+
     @RequiredArgsConstructor
     public static class KeyValueWriter {
         final SpecialWriter parent;
@@ -87,7 +95,17 @@ public class SpecialWriter {
                 case QUOTED -> keq().write("\""+string+"\"");
             };
         }
-        public SpecialWriter value(Supplier<?> supplier) {
+        public SpecialWriter value(Supplier<String> supplier) {
+            return valueFromSupplier(supplier);
+        }
+
+        public SpecialWriter valueInt(Supplier<Integer> supplier) {
+            return valueFromSupplier(supplier);
+        }
+        public SpecialWriter valueDouble(Supplier<Double> supplier) {
+            return valueFromSupplier(supplier);
+        }
+        private SpecialWriter valueFromSupplier(Supplier<?> supplier) {
             return keq().write(supplier.get().toString());
         }
         public SpecialWriter value(boolean b) {
@@ -129,10 +147,6 @@ public class SpecialWriter {
 
         public SpecialWriter valueBoolean(Supplier<Boolean> bool) {
             return value(bool, BooleanStyle.DEFAULT);
-        }
-
-        public SpecialWriter valueDouble(Supplier<Double> doubleSupplier) {
-            return value(doubleSupplier.get(), DoubleStyle.defaultStyle());
         }
 
         public SpecialWriter object(Supplier<Object> supplier, CommonStyles commonStyles) {
@@ -206,11 +220,27 @@ public class SpecialWriter {
             parent.parent.ln();
             return parent.parent;
         }
+
+        public SpecialWriter printIfNotNullLn() {
+            if (toTest == null) {
+                return parent.parent;
+            }
+            printIfNotNull();
+            parent.parent.ln();
+            return parent.parent;
+        }
         public SpecialWriter printIfNotNull(StringStyle style) {
             if (toTest == null) {
                 return parent.parent;
             }
             return parent.value(toTest.toString(), style);
+        }
+
+        public SpecialWriter printIfNotNull() {
+            if (toTest == null) {
+                return parent.parent;
+            }
+            return parent.object(toTest);
         }
     }
 
@@ -232,7 +262,9 @@ public class SpecialWriter {
             }
             return parent;
         }
-
+        public SpecialWriter simple(Supplier<Collection<?>> objects) {
+            return simple(objects.get());
+        }
         public SpecialWriter simple(Collection<?> objects) {
 
             switch (listStyle) {
@@ -240,9 +272,7 @@ public class SpecialWriter {
                     if (hasTitle(title)) {
                         parent.write(title).startBlock();
                     }
-                    for (Object o : objects) {
-                        parent.space().write(o.toString());
-                    }
+                    writeWithSpaces(objects);
                     if (hasTitle(title)){
                         parent.space().endBlock();
                     }
@@ -251,15 +281,7 @@ public class SpecialWriter {
                     if (hasTitle(title)) {
                         parent.write(title).startBlockLn();
                     }
-                    int i = 0;
-                    int target = objects.size() - 1;
-                    for (Object o : objects) {
-                        parent.write(o.toString());
-                        if (i == target) {
-                            parent.space();
-                        }
-                        i++;
-                    }
+                    writeWithSpaces(objects);
                     if (hasTitle(title)){
                         parent.ln().endBlock();
                     }
@@ -276,12 +298,21 @@ public class SpecialWriter {
                     }
                 }
             }
-
-            if (hasTitle(title)) {
-                parent.endBlock();
-            }
             return parent;
         }
+
+        private void writeWithSpaces(Collection<?> objects) {
+            int i = 0;
+            int target = objects.size() - 1;
+            for (Object o : objects) {
+                parent.write(o.toString());
+                if (i != target) {
+                    parent.space();
+                }
+                i++;
+            }
+        }
+
         public SpecialWriter block(String blockName, Supplier<Collection<?>> supplier) {
             return block(blockName, supplier.get());
         }

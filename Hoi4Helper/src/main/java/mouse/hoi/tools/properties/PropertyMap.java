@@ -2,6 +2,7 @@ package mouse.hoi.tools.properties;
 
 import mouse.hoi.exception.MissingPropertyException;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -46,5 +47,9 @@ public class PropertyMap {
     public Optional<String> optionalProperty(String name) {
         String val = map.get(name);
         return Optional.ofNullable(val);
+    }
+
+    public Collection<String> keys() {
+        return map.keySet();
     }
 }

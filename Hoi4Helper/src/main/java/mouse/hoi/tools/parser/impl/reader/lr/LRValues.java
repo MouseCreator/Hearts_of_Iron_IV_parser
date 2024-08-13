@@ -4,9 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.exception.ReaderException;
 import mouse.hoi.tools.parser.impl.ast.BlockNode;
+import mouse.hoi.tools.parser.impl.ast.Node;
+import mouse.hoi.tools.parser.impl.ast.SimpleNode;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.*;
 
@@ -77,6 +81,9 @@ public class LRValues {
         LeftValueDynamic setString(Consumer<String> consumer);
         LeftValueDynamic setDouble(Consumer<Double> consumer);
         LeftValueDynamic setBoolean(Consumer<Boolean> consumer);
+        LeftValueDynamic setInteger(Consumer<Integer> consumer);
+        MappedResult<List<Integer>> integerList();
+        MappedResult<List<String>> stringList();
     }
 
     public interface MappedResult<R> {
@@ -190,6 +197,54 @@ public class LRValues {
             }
             return parent;
         }
+
+        @Override
+        public LeftValueDynamic setInteger(Consumer<Integer> consumer) {
+            if (!consumed && rv.isInteger()) {
+                int v = rv.intValue();
+                consumer.accept(v);
+            }
+            return parent;
+        }
+
+        @Override
+        public MappedResult<List<Integer>> integerList() {
+            if (consumed || !rv.isBlock()) {
+                return new MappedResultMock<>(this);
+            }
+            List<Integer> result = new ArrayList<>();
+            BlockNode blockNode = rv.blockValue();
+            List<Node> children = blockNode.getChildren();
+            for (Node n : children) {
+                if (n instanceof SimpleNode sn) {
+                    String print = sn.print();
+                    int i = Integer.parseInt(print);
+                    result.add(i);
+                } else {
+                    throw new ReaderException("Expected integer, but got: " + n);
+                }
+            }
+            return new MappedResultImpl<>(this, result);
+        }
+
+        @Override
+        public MappedResult<List<String>> stringList() {
+            if (consumed || !rv.isBlock()) {
+                return new MappedResultMock<>(this);
+            }
+            List<String> result = new ArrayList<>();
+            BlockNode blockNode = rv.blockValue();
+            List<Node> children = blockNode.getChildren();
+            for (Node n : children) {
+                if (n instanceof SimpleNode sn) {
+                    String print = sn.print();
+                    result.add(print);
+                } else {
+                    throw new ReaderException("Expected integer, but got: " + n);
+                }
+            }
+            return new MappedResultImpl<>(this, result);
+        }
     }
     @AllArgsConstructor
     public static class RightValueDynamicMock implements RightValueDynamic {
@@ -229,6 +284,21 @@ public class LRValues {
         @Override
         public LeftValueDynamic setBoolean(Consumer<Boolean> consumer) {
             return parent;
+        }
+
+        @Override
+        public LeftValueDynamic setInteger(Consumer<Integer> consumer) {
+            return parent;
+        }
+
+        @Override
+        public MappedResult<List<Integer>> integerList() {
+            return new MappedResultMock<>(this);
+        }
+
+        @Override
+        public MappedResult<List<String>> stringList() {
+            return new MappedResultMock<>(this);
         }
     }
     public interface LeftValueMapper<R> {

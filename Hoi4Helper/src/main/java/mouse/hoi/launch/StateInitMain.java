@@ -1,13 +1,13 @@
 package mouse.hoi.launch;
 
-import mouse.hoi.main.search.SearchService;
+import mouse.hoi.main.states.service.init.StateInitService;
 import mouse.hoi.tools.context.Context;
 import org.springframework.context.ApplicationContext;
 
-public class SearchMain {
+public class StateInitMain {
     public static void main(String[] args) {
         ApplicationContext applicationContext = Context.get();
-        SearchService service = applicationContext.getBean(SearchService.class);
-        service.search();
+        StateInitService service = applicationContext.getBean(StateInitService.class);
+        service.initAll();
     }
 }

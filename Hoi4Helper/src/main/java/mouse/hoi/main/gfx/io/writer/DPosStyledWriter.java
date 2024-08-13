@@ -17,7 +17,7 @@ public class DPosStyledWriter implements StyledDataWriter<DPos, CommonStyles> {
 
     @Override
     public void write(SpecialWriter writer, DPos object) {
-        writer.space().key("x").value(object::getX).space().key("y").value(object::getY).space();
+        writer.space().key("x").valueDouble(object::getX).space().key("y").valueDouble(object::getY).space();
     }
 
     @Override

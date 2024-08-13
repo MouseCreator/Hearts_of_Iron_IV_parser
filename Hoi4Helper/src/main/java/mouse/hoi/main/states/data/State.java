@@ -13,4 +13,5 @@ public class State {
     private List<Integer> provinces;
     private double localSupplies;
     private double buildingsMaxLevelFactor;
+    private StateHistory stateHistory;
 }

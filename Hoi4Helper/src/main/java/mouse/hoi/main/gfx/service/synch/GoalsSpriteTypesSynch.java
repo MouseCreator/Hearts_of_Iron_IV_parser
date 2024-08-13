@@ -2,7 +2,7 @@ package mouse.hoi.main.gfx.service.synch;
 
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.gfx.data.SpriteType;
-import mouse.hoi.main.gfx.service.GfxPathManager;
+import mouse.hoi.tools.files.PathManager;
 import mouse.hoi.main.gfx.service.SpriteTypesSynchronizer;
 import mouse.hoi.main.gfx.service.properties.GFXType;
 import mouse.hoi.main.gfx.service.properties.GfxProperties;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GoalsSpriteTypesSynch implements Synchronizer{
     private final SpriteTypesSynchronizer spriteTypesSynchronizer;
-    private final GfxPathManager gfxPathManager;
+    private final PathManager pathManager;
     @Override
     public GFXType forType() {
         return GFXType.GOAL;
@@ -29,10 +29,10 @@ public class GoalsSpriteTypesSynch implements Synchronizer{
     }
     private SpriteType factory(String file) {
         SpriteType spriteType = new SpriteType();
-        String name = gfxPathManager.build(file).name().noExtension().get();
+        String name = pathManager.build(file).name().noExtension().get();
         name = "GFX_" + name;
         spriteType.setName(name);
-        String pathShort = gfxPathManager.build(file).dir("gfx").get();
+        String pathShort = pathManager.build(file).dir("gfx").get();
         spriteType.setTextureFile(pathShort);
         spriteType.setLegacyLazyLoad(true);
         return spriteType;

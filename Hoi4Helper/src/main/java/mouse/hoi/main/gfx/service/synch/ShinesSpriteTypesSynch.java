@@ -3,7 +3,7 @@ package mouse.hoi.main.gfx.service.synch;
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.gfx.data.Animation;
 import mouse.hoi.main.gfx.data.SpriteType;
-import mouse.hoi.main.gfx.service.GfxPathManager;
+import mouse.hoi.tools.files.PathManager;
 import mouse.hoi.main.gfx.service.properties.GFXType;
 import mouse.hoi.main.gfx.service.properties.GfxProperties;
 import mouse.hoi.main.gfx.service.SpriteTypesSynchronizer;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShinesSpriteTypesSynch implements Synchronizer {
     private final SpriteTypesSynchronizer spriteTypesSynchronizer;
-    private final GfxPathManager pathManager;
+    private final PathManager pathManager;
 
     public void sync(GfxProperties gfxProperties) {
         String gfxFile = gfxProperties.getGoalShinesFile();

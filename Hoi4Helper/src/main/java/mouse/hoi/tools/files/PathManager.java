@@ -1,12 +1,9 @@
-package mouse.hoi.main.gfx.service;
+package mouse.hoi.tools.files;
 
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 @Service
-public class GfxPathManager {
+public class PathManager {
     public String getFileNameWithoutExtension(String filePath) {
         String fileName = getFileNameWithExtension(filePath);
         int dotIndex = fileName.lastIndexOf('.');
@@ -48,10 +45,10 @@ public class GfxPathManager {
     }
 
     public static class PathBuilder {
-        private final GfxPathManager parent;
+        private final PathManager parent;
         private String myPath;
 
-        public PathBuilder(GfxPathManager parent, String myPath) {
+        public PathBuilder(PathManager parent, String myPath) {
             this.parent = parent;
             this.myPath = myPath;
         }
