@@ -1,48 +1,54 @@
 package mouse.hoi.main.states.data;
 
 import lombok.Data;
-import mouse.hoi.tools.parser.impl.reader.Inits;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-@Data
+
 public class Buildings  {
-    private List<Building> buildingList;
-    private List<ProvinceBuilding> provinceBuildings;
+    private final BuildingMap buildingMap;
+    private final Map<Integer, BuildingMap> provinceBuildings;
 
     public Buildings() {
-        buildingList = new ArrayList<>();
-        provinceBuildings = new ArrayList<>();
+        buildingMap = new BuildingMap();
+        provinceBuildings = new HashMap<>();
     }
 
     public boolean isEmpty() {
-        return buildingList.isEmpty() && provinceBuildings.isEmpty();
+        return buildingMap.isEmpty() && provinceBuildings.isEmpty();
     }
 
     public void removeType(String typeTarget) {
-        List<Building> toRemove = new ArrayList<>();
-        for (Building building : buildingList) {
-            if (building.getType().equals(typeTarget)) {
-                toRemove.add(building);
-            }
+        buildingMap.remove(typeTarget);
+        for (BuildingMap provinceMap : provinceBuildings.values()) {
+            provinceMap.remove(typeTarget);
         }
-        buildingList.removeAll(toRemove);
+    }
 
-        List<ProvinceBuilding> toRemoveProv = new ArrayList<>();
-        for (ProvinceBuilding building : provinceBuildings) {
-            List<Building> rm = new ArrayList<>();
-            for (Building provB : building.getBuildingList()) {
-                if (provB.getType().equals(typeTarget)) {
-                    rm.add(provB);
-                }
-            }
-            building.getBuildingList().removeAll(rm);
-            if (building.getBuildingList().isEmpty()) {
-                toRemoveProv.add(building);
-            }
+    public Optional<BuildingMap> getProvinceBuilding(int prov) {
+        BuildingMap buildingMap = provinceBuildings.get(prov);
+        return Optional.ofNullable(buildingMap);
+    }
+    public void addBuilding(String type, int level) {
+        buildingMap.put(type, level);
+    }
+    public void addProvinceBuilding(int prov, String type, int level) {
+        BuildingMap provMap = provinceBuildings.computeIfAbsent(prov, k -> new BuildingMap());
+        provMap.put(type, level);
+    }
+    public void removeProvinceBuilding(int prov, String type) {
+        BuildingMap provMap = provinceBuildings.get(prov);
+        if (provMap == null) {
+            return;
         }
-        buildingList.removeAll(toRemove);
-        provinceBuildings.removeAll(toRemoveProv);
+        provMap.remove(type);
+    }
+
+    public BuildingMap buildingsMap() {
+        return buildingMap;
+    }
+
+    public Collection<Integer> usedProvinces() {
+        return provinceBuildings.keySet();
     }
 }

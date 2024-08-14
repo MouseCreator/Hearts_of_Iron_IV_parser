@@ -19,7 +19,7 @@ public class InfrastructureGenerator {
         int level = chooseLevel(state, provinceDefinitions);
         Buildings buildings = state.historyOrInit().buildings();
         buildings.removeType("infrastructure");
-        buildings.getBuildingList().add(new Building("infrastructure", level));
+        buildings.addBuilding("infrastructure", level);
     }
 
     private int chooseLevel(State state, ProvinceDefinitions provinceDefinitions) {

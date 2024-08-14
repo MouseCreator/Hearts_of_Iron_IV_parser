@@ -9,6 +9,7 @@ import mouse.hoi.tools.parser.impl.reader.lr.LeftRightValue;
 import java.util.List;
 
 public interface Interpreters {
+    <T> void readObj(T obj, Node node);
     <T> T read(Class<T> clazz, Node node);
     void setEngine(ReaderEngine engine);
     List<LeftRightValue> getLeftRightValues(BlockNode blockNode);

@@ -6,6 +6,8 @@ import mouse.hoi.exception.ReaderException;
 import mouse.hoi.tools.parser.impl.ast.BlockNode;
 import mouse.hoi.tools.parser.impl.ast.Node;
 import mouse.hoi.tools.parser.impl.ast.SimpleNode;
+import mouse.hoi.tools.parser.impl.reader.helper.ReaderAware;
+import mouse.hoi.tools.parser.impl.reader.helper.Readers;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,18 +17,25 @@ import java.util.Optional;
 import java.util.function.*;
 
 @Service
-public class LRValues {
+public class LRValues implements ReaderAware {
     public LeftValueDynamic with(LeftValue lv, RightValue rv) {
-        return new LeftValueDynamic(lv, rv);
+        return new LeftValueDynamic(lv, rv, this);
+    }
+    Readers readers;
+    @Override
+    public void setReaders(Readers readers) {
+        this.readers = readers;
     }
 
     public static class LeftValueDynamic {
         private final LeftValue leftValue;
         private final RightValue rightValue;
+        private final LRValues root;
         private boolean consumed = false;
-        public LeftValueDynamic(LeftValue lv, RightValue rv) {
+        public LeftValueDynamic(LeftValue lv, RightValue rv, LRValues root) {
             this.leftValue = lv;
             this.rightValue = rv;
+            this.root = root;
         }
         public RightValueDynamic test(Predicate<String> stringPredicate) {
             if (consumed) {
@@ -79,11 +88,173 @@ public class LRValues {
             }
             return rightMock();
         }
+
+        public RememberedValue<String> rememberString() {
+            String s = leftValue.stringValue();
+            return new RememberedValueImpl<>(s, this, rightValue);
+        }
+
+        public RememberedValue<Integer> rememberInteger() {
+            if (leftValue.isInteger()) {
+                int i = leftValue.intValue();
+                return new RememberedValueImpl<>(i, this, rightValue);
+            }
+            return new RememberedValueMock<>(this);
+        }
+
+        public void orElse(Runnable r) {
+            r.run();
+            consumed = true;
+        }
     }
+    public interface RememberedValue<T> {
+        RememberedValue<T> test(Predicate<T> test);
+        <R> RememberedValue<R> map(Function<T, R> function);
+        MappedResult<T> res();
+        RememberedValue<T> onBlock(BiConsumer<T, BlockNode> blockNodeConsumer);
+        RememberedValue<T> onBlock();
+        RememberedValue<T> onString(BiConsumer<T, String> strConsumer);
+        RememberedValue<T> onInteger(BiConsumer<T, Integer> intConsumer);
+        RememberedValue<T> onDouble(BiConsumer<T, Double> doubleNodeConsumer);
+        RememberedValue<T> onBoolean(BiConsumer<T, Boolean> boolConsumer);
+    }
+    public static class RememberedValueImpl<T> implements RememberedValue<T> {
+         private final T value;
+         private final LeftValueDynamic parent;
+         private final RightValue rightValue;
+         private boolean consumed = false;
+         public RememberedValueImpl(T v, LeftValueDynamic parent, RightValue rightValue) {
+             this.value = v;
+             this.parent = parent;
+             this.rightValue = rightValue;
+         }
+
+         public RememberedValue<T> test(Predicate<T> test) {
+             boolean isGood = test.test(value);
+             if (isGood) {
+                 return this;
+             }
+             return new RememberedValueMock<>(parent);
+         }
+
+        @Override
+        public <R> RememberedValue<R> map(Function<T, R> function) {
+            R apply = function.apply(value);
+            return new RememberedValueImpl<>(apply, parent, rightValue);
+        }
+
+        @Override
+        public MappedResult<T> res() {
+             if (!consumed) {
+                throw new ReaderException("Right value is not consumed: " + rightValue);
+             }
+             return new MappedResultImpl<>(parent, value);
+        }
+
+        @Override
+        public RememberedValue<T> onBlock(BiConsumer<T, BlockNode> blockNodeConsumer) {
+             if (rightValue.isBlock() && !consumed) {
+                 consumed = true;
+                 blockNodeConsumer.accept(value, rightValue.blockValue());
+             }
+             return this;
+        }
+
+        @Override
+        public RememberedValue<T> onBlock() {
+             return onBlock(parent.root.readers.interpreters()::readObj);
+        }
+
+        @Override
+        public RememberedValue<T> onString(BiConsumer<T, String> stringNodeConsumer) {
+            if (!consumed) {
+                consumed = true;
+                stringNodeConsumer.accept(value, rightValue.stringValue());
+            }
+            return this;
+        }
+
+        @Override
+        public RememberedValue<T> onInteger(BiConsumer<T, Integer> consumer) {
+            if (!consumed && rightValue.isInteger()) {
+                consumed = true;
+                consumer.accept(value, rightValue.intValue());
+            }
+            return this;
+        }
+
+        @Override
+        public RememberedValue<T> onDouble(BiConsumer<T, Double> consumer) {
+            if (!consumed && rightValue.isDouble()) {
+                consumed = true;
+                consumer.accept(value, rightValue.doubleValue());
+            }
+            return this;
+        }
+
+        @Override
+        public RememberedValue<T> onBoolean(BiConsumer<T, Boolean> boolConsumer) {
+            if (!consumed && rightValue.isBoolean()) {
+                consumed = true;
+                boolConsumer.accept(value, rightValue.boolValue());
+            }
+            return this;
+        }
+
+    }
+
+    public static class RememberedValueMock<T> implements RememberedValue<T> {
+        private final LeftValueDynamic parent;
+        public RememberedValueMock(LeftValueDynamic parent) {
+            this.parent = parent;
+        }
+
+        public RememberedValue<T> test(Predicate<T> test) {
+            return this;
+        }
+
+        @Override
+        public <R> RememberedValue<R> map(Function<T, R> function) {
+            return new RememberedValueMock<>(parent);
+        }
+
+        @Override
+        public MappedResult<T> res() {
+            return new MappedResultMock<>(parent);
+        }
+
+        @Override
+        public RememberedValue<T> onBlock(BiConsumer<T, BlockNode> blockNodeConsumer) {
+            return this;
+        }
+
+        @Override
+        public RememberedValue<T> onString(BiConsumer<T, String> stringNodeConsumer) {
+            return this;
+        }
+
+        @Override
+        public RememberedValue<T> onInteger(BiConsumer<T, Integer> intConsumer) {
+            return this;
+        }
+
+        @Override
+        public RememberedValue<T> onDouble(BiConsumer<T, Double> doubleNodeConsumer) {
+            return this;
+        }
+
+        @Override
+        public RememberedValue<T> onBoolean(BiConsumer<T, Boolean> boolConsumer) {
+            return this;
+        }
+
+    }
+
 
     public interface RightValueDynamic {
         RightValueDynamic onBlock(Consumer<BlockNode> blockNode);
         <R> MappedResult<R> mapBlock(Function<BlockNode, R> blockNode);
+        <R> MappedResult<R> mapBlock(Class<R> mapTo);
         LeftValueDynamic or();
         void orElseThrow();
         LeftValueDynamic setString(Consumer<String> consumer);
@@ -92,7 +263,10 @@ public class LRValues {
         LeftValueDynamic setInteger(Consumer<Integer> consumer);
         MappedResult<List<Integer>> integerList();
         MappedResult<List<String>> stringList();
+        <T> RememberedValue<T> init(Supplier<T> object);
     }
+
+
 
     public interface MappedResult<R> {
         LeftValueDynamic consume(Consumer<R> consumer);
@@ -103,14 +277,14 @@ public class LRValues {
     @AllArgsConstructor
     public static class MappedResultImpl<R> implements MappedResult<R> {
 
-        private final RightValueDynamic parent;
+        private final LeftValueDynamic parent;
 
         private final R result;
 
         @Override
         public LeftValueDynamic consume(Consumer<R> consumer) {
             consumer.accept(result);
-            return parent.or();
+            return parent;
         }
 
         @Override
@@ -121,17 +295,17 @@ public class LRValues {
         @Override
         public LeftValueDynamic push(Supplier<Collection<R>> collection) {
             collection.get().add(result);
-            return parent.or();
+            return parent;
         }
     }
     @AllArgsConstructor
     public static class MappedResultMock<R> implements MappedResult<R> {
 
-        private final RightValueDynamic parent;
+        private final LeftValueDynamic parent;
 
         @Override
         public LeftValueDynamic consume(Consumer<R> consumer) {
-            return parent.or();
+            return parent;
         }
 
         @Override
@@ -141,7 +315,7 @@ public class LRValues {
 
         @Override
         public LeftValueDynamic push(Supplier<Collection<R>> collection) {
-            return parent.or();
+            return parent;
         }
     }
     @RequiredArgsConstructor
@@ -164,9 +338,14 @@ public class LRValues {
             if (rv.isBlock() && !consumed) {
                 consumed = true;
                 R apply = blockNode.apply(rv.blockValue());
-                return new MappedResultImpl<>(this, apply);
+                return new MappedResultImpl<>(parent, apply);
             }
-            return new MappedResultMock<>(this);
+            return new MappedResultMock<>(parent);
+        }
+
+        @Override
+        public <R> MappedResult<R> mapBlock(Class<R> mapTo) {
+            return mapBlock(r -> parent.root.readers.interpreters().read(mapTo, r));
         }
 
         @Override
@@ -218,7 +397,7 @@ public class LRValues {
         @Override
         public MappedResult<List<Integer>> integerList() {
             if (consumed || !rv.isBlock()) {
-                return new MappedResultMock<>(this);
+                return new MappedResultMock<>(parent);
             }
             List<Integer> result = new ArrayList<>();
             BlockNode blockNode = rv.blockValue();
@@ -232,13 +411,13 @@ public class LRValues {
                     throw new ReaderException("Expected integer, but got: " + n);
                 }
             }
-            return new MappedResultImpl<>(this, result);
+            return new MappedResultImpl<>(parent, result);
         }
 
         @Override
         public MappedResult<List<String>> stringList() {
             if (consumed || !rv.isBlock()) {
-                return new MappedResultMock<>(this);
+                return new MappedResultMock<>(parent);
             }
             List<String> result = new ArrayList<>();
             BlockNode blockNode = rv.blockValue();
@@ -251,7 +430,13 @@ public class LRValues {
                     throw new ReaderException("Expected integer, but got: " + n);
                 }
             }
-            return new MappedResultImpl<>(this, result);
+            return new MappedResultImpl<>(parent, result);
+        }
+
+        @Override
+        public <T> RememberedValue<T> init(Supplier<T> object) {
+            T t = object.get();
+            return new RememberedValueImpl<>(t, parent, rv);
         }
     }
     @AllArgsConstructor
@@ -266,7 +451,12 @@ public class LRValues {
 
         @Override
         public <R> MappedResult<R> mapBlock(Function<BlockNode, R> blockNode) {
-            return new MappedResultMock<>(this);
+            return new MappedResultMock<>(parent);
+        }
+
+        @Override
+        public <R> MappedResult<R> mapBlock(Class<R> mapTo) {
+            return new MappedResultMock<>(parent);
         }
 
         @Override
@@ -301,12 +491,17 @@ public class LRValues {
 
         @Override
         public MappedResult<List<Integer>> integerList() {
-            return new MappedResultMock<>(this);
+            return new MappedResultMock<>(parent);
         }
 
         @Override
         public MappedResult<List<String>> stringList() {
-            return new MappedResultMock<>(this);
+            return new MappedResultMock<>(parent);
+        }
+
+        @Override
+        public <T> RememberedValue<T> init(Supplier<T> object) {
+            return new RememberedValueMock<>(parent);
         }
     }
     public interface LeftValueMapper<R> {

@@ -2,9 +2,7 @@ package mouse.hoi.main.states.reader;
 
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.exception.ReaderException;
-import mouse.hoi.main.states.data.Building;
 import mouse.hoi.main.states.data.Buildings;
-import mouse.hoi.main.states.data.ProvinceBuilding;
 import mouse.hoi.main.states.data.StateEnums;
 import mouse.hoi.tools.parser.impl.ast.BlockNode;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
@@ -34,23 +32,22 @@ public class BuildingsReader implements DataReader<Buildings> {
         for(String v : buildConst) {
             if (type.equalsIgnoreCase(v)) {
                 int level = rightValue.intValue();
-                buildings.getBuildingList().add(new Building(type, level));
+                buildings.addBuilding(type, level);
                 return;
             }
         }
         if (leftValue.isInteger()) {
-            createProvinceBuildings(leftValue, rightValue);
+            createProvinceBuildings(buildings, leftValue, rightValue);
+            return;
         }
         throw new ReaderException("Unknown building type: " + leftValue);
     }
 
-    private void createProvinceBuildings(LeftValue leftValue, RightValue rightValue) {
+    private void createProvinceBuildings(Buildings buildings, LeftValue leftValue, RightValue rightValue) {
         String[] provConst = StateEnums.PROVINCE_BUILDINGS;
         int province = leftValue.intValue();
         BlockNode blockNode = rightValue.blockValue();
         List<LeftRightValue> leftRightValues = readers.interpreters().getLeftRightValues(blockNode);
-        ProvinceBuilding provinceBuilding = new ProvinceBuilding();
-        provinceBuilding.setProvince(province);
         for (LeftRightValue lrValues : leftRightValues) {
             LeftValue leftSub = lrValues.getLeftValue();
             String typeS = leftSub.stringValue();
@@ -58,7 +55,7 @@ public class BuildingsReader implements DataReader<Buildings> {
             for (String str : provConst) {
                 if (str.equals(typeS)) {
                     int level = lrValues.getRightValue().intValue();
-                    provinceBuilding.getBuildingList().add(new Building(typeS, level));
+                    buildings.addProvinceBuilding(province, typeS, level);
                     match = true;
                     break;
                 }

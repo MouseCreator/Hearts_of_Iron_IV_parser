@@ -18,6 +18,11 @@ public class InterpretersImpl implements Interpreters {
     }
 
     @Override
+    public <T> void readObj(T obj, Node node) {
+        readerEngine.readObject(node, obj);
+    }
+
+    @Override
     public <T> T read(Class<T> clazz, Node node) {
         return readerEngine.read(node, clazz);
     }

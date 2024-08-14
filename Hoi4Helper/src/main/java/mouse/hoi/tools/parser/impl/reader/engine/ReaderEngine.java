@@ -39,25 +39,7 @@ public class ReaderEngine {
     private <T> T initializeAndApply(DataReader<T> reader, Node node) {
         Object obj = reader.initialize();
         T cObj = reader.forType().cast(obj);
-        List<Node> nodes = processRoot(reader, node);
-        for (Node n : nodes) {
-            switch (n) {
-                case KeyValueNode kv -> {
-                    LeftValue leftValue = createLeft(kv.getKey());
-                    RightValue rightValue = createRight(kv.getValue());
-                    reader.onKeyValue(cObj, leftValue, rightValue);
-                }
-                case SimpleNode sn -> {
-                    SimpleValue simpleValue = createSimple(sn);
-                    reader.onSimple(cObj, simpleValue);
-                }
-                case ComplexNode cn -> {
-                    ComplexValue complexValue = createComplex(cn);
-                    reader.onComplex(cObj, complexValue);
-                }
-                case null, default -> throw new ReaderException("Unexpected node type: " + node);
-            }
-        }
+        readObject(reader, node, cObj);
         return cObj;
     }
 
@@ -126,5 +108,42 @@ public class ReaderEngine {
             }
         }
         return list;
+    }
+
+    public <T> void readObject(Node node, T obj) {
+        Class<?> aClass = obj.getClass();
+        DataReader<?> reader = readersMap.get(aClass);
+        if (reader == null) {
+            throw new ReaderException("No reader for type: " + aClass);
+        }
+        t_readObject(reader, node, obj);
+    }
+
+    private <T> void t_readObject(DataReader<T> reader, Node node, Object obj) {
+        Class<T> clazz = reader.forType();
+        T cast = clazz.cast(obj);
+        readObject(reader, node, cast);
+    }
+
+    private <T> void readObject(DataReader<T> reader, Node node, T cObj) {
+        List<Node> nodes = processRoot(reader, node);
+        for (Node n : nodes) {
+            switch (n) {
+                case KeyValueNode kv -> {
+                    LeftValue leftValue = createLeft(kv.getKey());
+                    RightValue rightValue = createRight(kv.getValue());
+                    reader.onKeyValue(cObj, leftValue, rightValue);
+                }
+                case SimpleNode sn -> {
+                    SimpleValue simpleValue = createSimple(sn);
+                    reader.onSimple(cObj, simpleValue);
+                }
+                case ComplexNode cn -> {
+                    ComplexValue complexValue = createComplex(cn);
+                    reader.onComplex(cObj, complexValue);
+                }
+                case null, default -> throw new ReaderException("Unexpected node type: " + node);
+            }
+        }
     }
 }
