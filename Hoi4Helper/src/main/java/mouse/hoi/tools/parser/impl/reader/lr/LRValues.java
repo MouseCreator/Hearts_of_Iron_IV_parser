@@ -103,7 +103,9 @@ public class LRValues implements ReaderAware {
         }
 
         public void orElse(Runnable r) {
-            r.run();
+            if (!consumed) {
+                r.run();
+            }
             consumed = true;
         }
     }
@@ -229,6 +231,11 @@ public class LRValues implements ReaderAware {
         }
 
         @Override
+        public RememberedValue<T> onBlock() {
+            return new RememberedValueMock<>(parent);
+        }
+
+        @Override
         public RememberedValue<T> onString(BiConsumer<T, String> stringNodeConsumer) {
             return this;
         }
@@ -264,6 +271,7 @@ public class LRValues implements ReaderAware {
         MappedResult<List<Integer>> integerList();
         MappedResult<List<String>> stringList();
         <T> RememberedValue<T> init(Supplier<T> object);
+        LeftValueDynamic skip();
     }
 
 
@@ -438,6 +446,11 @@ public class LRValues implements ReaderAware {
             T t = object.get();
             return new RememberedValueImpl<>(t, parent, rv);
         }
+
+        @Override
+        public LeftValueDynamic skip() {
+            return parent;
+        }
     }
     @AllArgsConstructor
     public static class RightValueDynamicMock implements RightValueDynamic {
@@ -502,6 +515,11 @@ public class LRValues implements ReaderAware {
         @Override
         public <T> RememberedValue<T> init(Supplier<T> object) {
             return new RememberedValueMock<>(parent);
+        }
+
+        @Override
+        public LeftValueDynamic skip() {
+            return parent;
         }
     }
     public interface LeftValueMapper<R> {

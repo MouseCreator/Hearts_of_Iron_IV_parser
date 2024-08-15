@@ -1,11 +1,10 @@
 package mouse.hoi.main.common.data.effect;
 
-public class StringEffect implements Effect{
-    private String effectName;
-    private String value;
+public abstract class StringEffect implements Effect{
 
-    public StringEffect(String name, String value) {
-        this.effectName = name;
+    protected String value;
+
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -15,7 +14,7 @@ public class StringEffect implements Effect{
     }
 
     @Override
-    public String getEffectName() {
-        return effectName;
+    public boolean isString() {
+        return true;
     }
 }

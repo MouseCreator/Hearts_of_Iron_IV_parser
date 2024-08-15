@@ -1,18 +1,11 @@
 package mouse.hoi.main.common.data.effect;
 
 
-public class IntEffect implements Effect {
-    private final String effectName;
-    private final int value;
+public abstract class IntEffect implements Effect {
+    private int value;
 
-    public IntEffect(String name, int value) {
-        this.effectName = name;
+    public void setValue(int value) {
         this.value = value;
-    }
-
-    @Override
-    public String getEffectName() {
-        return effectName;
     }
 
     @Override

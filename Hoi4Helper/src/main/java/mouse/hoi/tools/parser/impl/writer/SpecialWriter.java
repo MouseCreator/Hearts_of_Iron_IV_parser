@@ -85,6 +85,33 @@ public class SpecialWriter {
         return this;
     }
 
+    public SpecialWriter eq() {
+        onBegin();
+        stringBuilder.append(" = ");
+        return this;
+    }
+
+    public SpecialWriter eqb() {
+        return eq().beginObj();
+    }
+
+    public SpecialWriter comment(String comment) {
+        return write(" # " + comment);
+    }
+
+    public SpecialWriter lineComment(String lineComment) {
+        onBegin();
+        return comment(lineComment);
+    }
+
+    public SpecialWriter write(String val, StringStyle style) {
+        return switch (style) {
+            case DEFAULT ->write(val);
+            case QUOTED -> write("\""+val+"\"");
+        };
+    }
+
+
     @RequiredArgsConstructor
     public static class KeyValueWriter {
         final SpecialWriter parent;
@@ -399,7 +426,7 @@ public class SpecialWriter {
         return endBlock().ln();
     }
 
-    private SpecialWriter writeObject(Object obj) {
+    public SpecialWriter writeObject(Object obj) {
         helper.write(this, obj);
         return this;
     }

@@ -101,26 +101,7 @@ public class EffectMap {
         List<Effect> effects = map.computeIfAbsent(name, k -> new ArrayList<>());
         effects.add(effect);
     }
-    public void putEffectInt(String name, int value) {
-        Effect effect = new IntEffect(name, value);
-        putEffect(effect);
-    }
-    public void putEffectDouble(String name, double d) {
-        Effect effect = new DoubleEffect(name, d);
-        putEffect( effect);
-    }
-    public void putEffectObject(String name, Object o) {
-        Effect effect = new ObjectEffect(name, o);
-        putEffect(effect);
-    }
-    public void putEffectBoolean(String name, boolean v) {
-        Effect effect = new BooleanEffect(name, v);
-        putEffect(effect);
-    }
-    public void putEffectString(String name, String value) {
-        Effect effect = new StringEffect(name, value);
-        putEffect(effect);
-    }
+
 
     public boolean isEmpty() {
         return map.isEmpty();

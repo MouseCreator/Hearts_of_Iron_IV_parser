@@ -1,6 +1,7 @@
 package mouse.hoi.main.bookmark.data;
 
 import lombok.Data;
+import mouse.hoi.main.common.data.effect.scoped.Effects;
 import mouse.hoi.tools.parser.impl.reader.Inits;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class Bookmark implements Inits {
     private String picture;
     private boolean isDefault;
     private String defaultCountry;
-    private GlobalEffects effects;
+    private Effects effects;
     private List<CountryDescription> countryDescriptionList;
 
     @Override

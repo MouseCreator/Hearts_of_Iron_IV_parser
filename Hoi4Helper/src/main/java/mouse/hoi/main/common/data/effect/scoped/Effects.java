@@ -46,7 +46,7 @@ public class Effects implements Scoped {
         return subEffects.keySet();
     }
 
-    public Optional<Effects> getStateEffect(String subKey) {
+    public Optional<Effects> getSubEffect(String subKey) {
         Effects effectMap = subEffects.get(subKey);
         return Optional.ofNullable(effectMap);
     }
@@ -69,7 +69,7 @@ public class Effects implements Scoped {
     }
 
     public void addSubEffects(Effects c) {
-        String scopeBuffer = c.getScope().origin();
-        subEffects.put(scopeBuffer, c);
+        String key = c.getScope().origin();
+        subEffects.put(key, c);
     }
 }

@@ -1,18 +1,19 @@
 package mouse.hoi.main.common.data.effect;
 
+
+import mouse.hoi.main.common.data.effect.store.EffectData;
+
 public abstract class SpecialEffect implements Effect{
 
-    public SpecialEffect(String effectName) {
-        this.effectName = effectName;
+    public SpecialEffect() {
+
     }
 
     @Override
     public boolean isSpecial() {
         return true;
     }
-    protected String effectName;
-    @Override
-    public String getEffectName() {
-        return effectName;
-    }
+
+    public abstract void read(EffectData effectDataInput);
+    public abstract EffectData write();
 }

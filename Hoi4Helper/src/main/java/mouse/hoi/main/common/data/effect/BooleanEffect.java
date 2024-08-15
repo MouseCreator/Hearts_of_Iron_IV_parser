@@ -1,11 +1,9 @@
 package mouse.hoi.main.common.data.effect;
 
-public class BooleanEffect implements Effect{
-    private String name;
+public abstract class BooleanEffect implements Effect{
     private boolean value;
 
-    public BooleanEffect(String name, boolean v) {
-        this.name = name;
+    public void setValue(boolean v) {
         this.value = v;
     }
 
@@ -17,11 +15,6 @@ public class BooleanEffect implements Effect{
     @Override
     public boolean booleanValue() {
         return value;
-    }
-
-    @Override
-    public String getEffectName() {
-        return name;
     }
 
 }

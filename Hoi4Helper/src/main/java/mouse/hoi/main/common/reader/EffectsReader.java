@@ -4,22 +4,21 @@ import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.common.data.effect.conditional.ConditionalEffect;
 import mouse.hoi.main.common.data.effect.conditional.ConditionalEffects;
 import mouse.hoi.main.common.data.effect.scoped.Effects;
-import mouse.hoi.tools.database.TokenTester;
-import mouse.hoi.tools.parser.impl.ast.BlockNode;
-import mouse.hoi.tools.parser.impl.ast.Node;
+import mouse.hoi.main.common.framework.EffectManager;
+import mouse.hoi.main.common.framework.EffectReaderHelper;
+import mouse.hoi.main.common.tester.TokenTester;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
 import mouse.hoi.tools.parser.impl.reader.helper.Readers;
 import mouse.hoi.tools.parser.impl.reader.lr.LeftValue;
 import mouse.hoi.tools.parser.impl.reader.lr.RightValue;
 import org.springframework.stereotype.Service;
 
-import java.util.function.BiConsumer;
-
 @Service
 @RequiredArgsConstructor
 public class EffectsReader implements DataReader<Effects> {
     private final Readers readers;
     private final TokenTester tester;
+    private final EffectManager effectManager;
     @Override
     public Class<Effects> forType() {
         return Effects.class;
@@ -48,11 +47,13 @@ public class EffectsReader implements DataReader<Effects> {
                         last.setElseEffect(c);
                 })
                 .rememberInteger()
-                    .map(i -> effects.getScope().onInteger()).map(Effects::new)
+                    .map(effects.getScope()::onInteger).map(Effects::new)
                     .onBlock().res().consume(effects::addSubEffects)
                 .rememberString()
-                    .test(tester::isCountryTag).map(s -> effects.getScope().onTag()).map(Effects::new)
+                    .test(tester::isCountryTag).map(effects.getScope()::onTag).map(Effects::new)
                     .onBlock().res().consume(effects::addSubEffects)
+                .rememberString()
+                .map(s -> effectManager.createEffect(s, effects.getScope(), rightValue)).res().consume(effects.simpleEffects()::putEffect)
                 .orElseThrow();
 
     }
