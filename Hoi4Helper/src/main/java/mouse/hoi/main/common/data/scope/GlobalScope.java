@@ -1,6 +1,13 @@
 package mouse.hoi.main.common.data.scope;
 
 public class GlobalScope implements Scope {
+
+    private final String origin;
+
+    public GlobalScope(String origin) {
+        this.origin = origin;
+    }
+
     @Override
     public Scope onInteger(int i) {
         String origin = String.valueOf(i);
@@ -9,12 +16,12 @@ public class GlobalScope implements Scope {
 
     @Override
     public String origin() {
-        return null;
+        return origin;
     }
 
     @Override
     public Scope onTag(String tag) {
-        return null;
+        return new CountryScope(origin);
     }
 
     @Override

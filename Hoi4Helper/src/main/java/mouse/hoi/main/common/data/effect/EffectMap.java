@@ -52,7 +52,7 @@ public class EffectMap {
         return map.remove(key) != null;
     }
     public boolean removeEffect(Effect effect) {
-        String effectName = effect.getEffectName();
+        String effectName = effect.key();
         List<Effect> effects = map.get(effectName);
         if (effects.isEmpty()) {
             return false;
@@ -97,7 +97,7 @@ public class EffectMap {
     }
 
     public void putEffect(Effect effect) {
-        String name = effect.getEffectName();
+        String name = effect.key();
         List<Effect> effects = map.computeIfAbsent(name, k -> new ArrayList<>());
         effects.add(effect);
     }

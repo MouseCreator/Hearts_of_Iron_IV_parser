@@ -5,7 +5,6 @@ import mouse.hoi.main.common.data.effect.conditional.ConditionalEffect;
 import mouse.hoi.main.common.data.effect.conditional.ConditionalEffects;
 import mouse.hoi.main.common.data.effect.scoped.Effects;
 import mouse.hoi.main.common.framework.EffectManager;
-import mouse.hoi.main.common.framework.EffectReaderHelper;
 import mouse.hoi.main.common.tester.TokenTester;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
 import mouse.hoi.tools.parser.impl.reader.helper.Readers;
@@ -46,17 +45,18 @@ public class EffectsReader implements DataReader<Effects> {
                         ConditionalEffects last = effects.getConditionalEffects().getLast();
                         last.setElseEffect(c);
                 })
-                .rememberInteger()
+                .rememberString().test(tester::isInteger).map(Integer::parseInt)
                     .map(effects.getScope()::onInteger).map(Effects::new)
                     .onBlock().res().consume(effects::addSubEffects)
                 .rememberString()
                     .test(tester::isCountryTag).map(effects.getScope()::onTag).map(Effects::new)
                     .onBlock().res().consume(effects::addSubEffects)
                 .rememberString()
-                .map(s -> effectManager.createEffect(s, effects.getScope(), rightValue)).res().consume(effects.simpleEffects()::putEffect)
-                .orElseThrow();
+                .map(s -> effectManager.createEffect(s, effects.getScope(), rightValue)).res().consume(effects.simpleEffects()::putEffect);
 
     }
+
+
 
 
 }

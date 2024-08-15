@@ -3,7 +3,7 @@ package mouse.hoi.main.common.data.effect;
 
 import mouse.hoi.main.common.data.effect.store.EffectData;
 
-public abstract class SpecialEffect implements Effect{
+public abstract class SpecialEffect extends AbstractEffect {
 
     public SpecialEffect() {
 

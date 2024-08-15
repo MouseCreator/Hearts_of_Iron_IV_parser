@@ -12,4 +12,14 @@ public class TokenTesterImpl implements TokenTester {
     public boolean isCountryTag(String string) {
         return database.countryRepository().hasCountry(string);
     }
+
+    @Override
+    public boolean isInteger(String string) {
+        try {
+            Integer.parseInt(string);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }

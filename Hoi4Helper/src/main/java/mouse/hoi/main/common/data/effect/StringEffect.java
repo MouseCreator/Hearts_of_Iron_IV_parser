@@ -1,6 +1,6 @@
 package mouse.hoi.main.common.data.effect;
 
-public abstract class StringEffect implements Effect{
+public abstract class StringEffect extends AbstractEffect{
 
     protected String value;
 

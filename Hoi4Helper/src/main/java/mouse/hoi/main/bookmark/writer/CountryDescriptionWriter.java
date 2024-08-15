@@ -17,10 +17,12 @@ public class CountryDescriptionWriter implements DataWriter<CountryDescription> 
     @Override
     public void write(SpecialWriter writer, CountryDescription country) {
         writer
-                .key("minor").testValue(country::isMinor).printIf(i->i)
-                .key("history").value(country::getHistory, StringStyle.QUOTED)
-                .key("ideology").value(country::getIdeology)
-                .list("ideas", ListStyle.MULTI_LINE).simple(country::getIdeas)
-                .list("focuses", ListStyle.MULTI_LINE).simple(country::getFocuses);
+                .key("minor").testValue(country::isMinor).printIfLn("true", Object::toString)
+                .key("history").testValue(country::getHistory).printIfNotNullLn(StringStyle.QUOTED).ln();
+       if (country.getIdeology() != null) {
+           writer.write("ideology").eq().write(country.getIdeology());
+       }
+        writer.list("ideas", ListStyle.MULTI_LINE).simple(country::getIdeas).ln()
+        .list("focuses", ListStyle.MULTI_LINE).simple(country::getFocuses);
     }
 }

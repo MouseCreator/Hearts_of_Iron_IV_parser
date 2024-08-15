@@ -1,6 +1,6 @@
 package mouse.hoi.main.common.data.effect;
 
-public abstract class DoubleEffect implements Effect{
+public abstract class DoubleEffect extends AbstractEffect{
     private double value;
 
     public void setValue(double d) {
@@ -15,5 +15,10 @@ public abstract class DoubleEffect implements Effect{
     @Override
     public double doubleValue() {
         return value;
+    }
+
+    @Override
+    public String stringValue() {
+        return String.valueOf(value);
     }
 }

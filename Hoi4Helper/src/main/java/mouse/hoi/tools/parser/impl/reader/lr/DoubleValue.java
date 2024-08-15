@@ -26,4 +26,6 @@ public class DoubleValue extends AbstractPossibleValue {
     public double doubleValue() {
         return value;
     }
+
+
 }

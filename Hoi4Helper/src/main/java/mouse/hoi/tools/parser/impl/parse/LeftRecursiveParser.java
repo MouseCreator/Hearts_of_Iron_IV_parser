@@ -89,9 +89,24 @@ public class LeftRecursiveParser implements GameFileParser {
         if (currentToken.is("{")) {
             return createBlock(tokenStream);
         }
-        SimpleNode simpleNode = simpleNodeOf(currentToken);
-        tokenStream.next();
-        return simpleNode;
+        Optional<Token> lookahead = tokenStream.lookahead();
+        boolean subs = false;
+        if (lookahead.isPresent()) {
+            subs = lookahead.get().is(".");
+        }
+        if (subs) {
+            SubscriptNode subscriptNode = new SubscriptNode();
+            SimpleNode simpleNode = simpleNodeOf(currentToken);
+            subscriptNode.setRoot(simpleNode);
+            tokenStream.next();
+            Node subscript = createSubscript(tokenStream);
+            subscriptNode.setSubscript(subscript);
+            return subscriptNode;
+        } else {
+            SimpleNode simpleNode = simpleNodeOf(currentToken);
+            tokenStream.next();
+            return simpleNode;
+        }
     }
 
     private BlockNode createBlock(TokenStream tokenStream) {

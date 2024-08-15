@@ -83,18 +83,23 @@ public class LRValues implements ReaderAware {
 
         public RightValueDynamic onInteger() {
             if (leftValue.isInteger() && !consumed) {
-                consumed = true;
                 return new RightValueDynamicImpl(this, rightValue);
             }
             return rightMock();
         }
 
         public RememberedValue<String> rememberString() {
+            if (consumed) {
+                return new RememberedValueMock<>(this);
+            }
             String s = leftValue.stringValue();
             return new RememberedValueImpl<>(s, this, rightValue);
         }
 
         public RememberedValue<Integer> rememberInteger() {
+            if (consumed) {
+                return new RememberedValueMock<>(this);
+            }
             if (leftValue.isInteger()) {
                 int i = leftValue.intValue();
                 return new RememberedValueImpl<>(i, this, rightValue);
@@ -147,9 +152,7 @@ public class LRValues implements ReaderAware {
 
         @Override
         public MappedResult<T> res() {
-             if (!consumed) {
-                throw new ReaderException("Right value is not consumed: " + rightValue);
-             }
+             parent.consumed = true;
              return new MappedResultImpl<>(parent, value);
         }
 

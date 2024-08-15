@@ -1,7 +1,7 @@
 package mouse.hoi.main.common.data.effect;
 
 
-public abstract class IntEffect implements Effect {
+public abstract class IntEffect extends AbstractEffect {
     private int value;
 
     public void setValue(int value) {
@@ -26,5 +26,10 @@ public abstract class IntEffect implements Effect {
     @Override
     public double doubleValue() {
         return value;
+    }
+
+    @Override
+    public String stringValue() {
+        return String.valueOf(value);
     }
 }

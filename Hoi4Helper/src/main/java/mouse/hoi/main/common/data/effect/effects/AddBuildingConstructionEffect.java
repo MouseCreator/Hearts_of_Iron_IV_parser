@@ -1,14 +1,15 @@
 package mouse.hoi.main.common.data.effect.effects;
 
 import lombok.Data;
+import mouse.hoi.main.common.data.effect.UseEffect;
 import mouse.hoi.main.common.data.effect.store.EffectData;
 import mouse.hoi.main.common.data.effect.SpecialEffect;
 import mouse.hoi.main.common.data.effect.store.EffectDataObj;
 import mouse.hoi.main.common.data.effect.store.EffectDataSimple;
 import mouse.hoi.main.common.data.scope.ScopeEnum;
 
-import java.util.List;
 import java.util.Optional;
+@UseEffect(key = "add_building_construction", scope=ScopeEnum.STATE)
 public class AddBuildingConstructionEffect extends SpecialEffect {
 
     private String type;
@@ -34,16 +35,6 @@ public class AddBuildingConstructionEffect extends SpecialEffect {
             limitToVictoryPoint = false;
         }
     }
-    @Override
-    public List<ScopeEnum> scopes() {
-        return List.of(ScopeEnum.STATE);
-    }
-
-    @Override
-    public String getEffectName() {
-        return "add_building_construction";
-    }
-
     @Override
     public void read(EffectData effectDataInput) {
         EffectDataObj effectData = effectDataInput.object();
