@@ -21,4 +21,8 @@ public class PossibleValues {
     public static PossibleValueException notBlock(PossibleValue simpleValue) {
         return new PossibleValueException("Not a block value: " + simpleValue);
     }
+
+    public static PossibleValueException notDate(PossibleValue possibleValue) {
+        return new PossibleValueException("Not a date value: " + possibleValue);
+    }
 }

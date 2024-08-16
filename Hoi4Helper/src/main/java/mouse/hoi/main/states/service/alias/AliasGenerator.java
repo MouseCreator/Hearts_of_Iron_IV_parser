@@ -22,6 +22,10 @@ public class AliasGenerator implements AppService {
         List<String> fileNames = new ArrayList<>(pathsLoader.allFiles(statesDirectory, false, false));
         fileNames.sort(specialComparator);
         Map<String, String> aliasMap = createAliasMap(alias);
+        boolean canSkip = true;
+        if (new HashSet<>(aliasMap.values()).contains("SKIP")) {
+            canSkip = false;
+        }
         StringBuilder result = new StringBuilder();
         for (String filename : fileNames) {
             StateNameInfo stateNameInfo = getInfoFromName(filename);
@@ -29,7 +33,10 @@ public class AliasGenerator implements AppService {
             String tag = stateNameInfo.tag();
             String country = aliasMap.get(tag);
             if (country == null) {
-                throw new RuntimeException("Invalid tag: " + tag + " for state " + filename);
+                if (canSkip)
+                    continue;
+                else
+                    throw new RuntimeException("Invalid tag: " + tag + " for state " + filename);
             }
             if (country.equals("SKIP")) {
                 continue;

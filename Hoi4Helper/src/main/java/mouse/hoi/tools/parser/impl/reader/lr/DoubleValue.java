@@ -2,6 +2,7 @@ package mouse.hoi.tools.parser.impl.reader.lr;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import mouse.hoi.tools.parser.data.GameDate;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -27,5 +28,12 @@ public class DoubleValue extends AbstractPossibleValue {
         return value;
     }
 
+    public boolean isDate() { return true; }
 
+    @Override
+    public GameDate dateValue() {
+        int year = (int) value;
+        int month = (int) (value * 100) % 100;
+        return new GameDate(year, month);
+    }
 }

@@ -43,6 +43,7 @@ public class NodeMapper {
             case BooleanNode b -> new BooleanValue(b.isValue());
             case IdNode i -> new StringValue(i.getId());
             case BlockNode b -> new BlockValue(b);
+            case DateNode d -> new DateValue(d.getGameDate());
             case null, default -> throw new ReaderException("Unknown node type: " + node);
         };
     }

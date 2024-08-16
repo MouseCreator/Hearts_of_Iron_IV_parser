@@ -50,6 +50,7 @@ IDENTIFIER = ({ALPHA}|_)({ALPHA}|{DIGIT}|:|_)*
 
   -?{DIGIT}+ { return new Yytoken(TokenType.INT, yytext(), yyline, yycolumn); }
   -?{DIGIT}+\.{DIGIT}+ { return new Yytoken(TokenType.DOUBLE, yytext(), yyline, yycolumn); }
+  {DIGIT}+\.{DIGIT}+\.{DIGIT}+(\.{DIGIT}+)? { return new Yytoken(TokenType.DATE, yytext(), yyline, yycolumn); }
   {IDENTIFIER} { return new Yytoken(TokenType.ID, yytext(), yyline, yycolumn); }
 }
 

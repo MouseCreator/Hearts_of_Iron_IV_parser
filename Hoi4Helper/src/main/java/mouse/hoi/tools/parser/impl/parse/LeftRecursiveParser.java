@@ -81,7 +81,7 @@ public class LeftRecursiveParser implements GameFileParser {
         return  token instanceof IdToken ||
                 token instanceof IntegerToken ||
                 token instanceof DoubleToken ||
-                token instanceof StringToken;
+                token instanceof StringToken || token instanceof DateToken;
     }
 
     private Node onRightValueExpected(TokenStream tokenStream) {
@@ -181,6 +181,9 @@ public class LeftRecursiveParser implements GameFileParser {
     private Optional<SimpleNode> simpleNodeOpt(Token token) {
         if (token instanceof StringToken stringToken) {
             return Optional.of(new StringNode(stringToken.location(), stringToken.value()));
+        }
+        if (token instanceof DateToken dateToken) {
+            return Optional.of(new DateNode(dateToken.location(), dateToken.value()));
         }
         if (token instanceof IntegerToken integerToken) {
             return Optional.of(new IntegerNode(integerToken.location(), integerToken.value()));

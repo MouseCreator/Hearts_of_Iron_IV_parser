@@ -1,6 +1,7 @@
 package mouse.hoi.tools.parser.impl.reader.lr;
 
 
+import mouse.hoi.tools.parser.data.GameDate;
 import mouse.hoi.tools.parser.impl.ast.BlockNode;
 import mouse.hoi.tools.parser.impl.reader.subs.SubscriptObject;
 
@@ -22,6 +23,11 @@ public abstract class AbstractPossibleValue implements LeftValue, SimpleValue, R
 
     @Override
     public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isDate() {
         return false;
     }
 
@@ -53,5 +59,10 @@ public abstract class AbstractPossibleValue implements LeftValue, SimpleValue, R
     @Override
     public BlockNode blockValue() {
         throw PossibleValues.notBlock(this);
+    }
+
+    @Override
+    public GameDate dateValue() {
+        throw PossibleValues.notDate(this);
     }
 }
