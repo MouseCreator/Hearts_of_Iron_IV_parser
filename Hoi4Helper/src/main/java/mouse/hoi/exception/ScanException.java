@@ -1,4 +1,4 @@
-package mouse.hoi.tools.parser.impl.error;
+package mouse.hoi.exception;
 
 public class ScanException extends RuntimeException{
     public ScanException(String msg) {

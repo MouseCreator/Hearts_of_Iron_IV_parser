@@ -1,6 +1,7 @@
 package mouse.hoi.tools.utils;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class NotNull {
     public static <T> void then (T obj, Consumer<T> consumer) {
@@ -22,5 +23,13 @@ public class NotNull {
             return;
         }
         throw new NullPointerException(message);
+    }
+
+    public static <T> void supply(Supplier<T> supplier, Consumer<T> consumer) {
+        T t = supplier.get();
+        if (t == null) {
+            return;
+        }
+        consumer.accept(t);
     }
 }

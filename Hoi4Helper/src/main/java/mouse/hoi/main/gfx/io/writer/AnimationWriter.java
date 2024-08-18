@@ -1,32 +1,40 @@
 package mouse.hoi.main.gfx.io.writer;
 
+import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.gfx.data.Animation;
-import mouse.hoi.tools.parser.impl.writer.DataWriter;
-import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
-import mouse.hoi.tools.parser.impl.writer.style.CommonStyles;
+import mouse.hoi.tools.parser.impl.writer.n.DataWriter;
+import mouse.hoi.tools.parser.impl.writer.n.dw.DWData;
+import mouse.hoi.tools.parser.impl.writer.n.support.DWObjectBuilder;
+import mouse.hoi.tools.parser.impl.writer.n.support.WriterSupport;
 import mouse.hoi.tools.parser.impl.writer.style.DoubleStyle;
+import mouse.hoi.tools.parser.impl.writer.style.ObjectStyle;
 import mouse.hoi.tools.parser.impl.writer.style.StringStyle;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AnimationWriter implements DataWriter<Animation> {
+
+    private final WriterSupport writerSupport;
     @Override
     public Class<Animation> forType() {
         return Animation.class;
     }
 
+
     @Override
-    public void write(SpecialWriter writer, Animation object) {
-        writer
-                .key("animationmaskfile").value(object::getAnimationMaskFile, StringStyle.QUOTED).ln()
-                .key("animationtexturefile").value(object::getAnimationTextureFile, StringStyle.QUOTED).ln()
-                .key("animationrotation").value(object::getAnimationRotation, DoubleStyle.min(1)).ln()
-                .key("animationlooping").valueBoolean(object::isLooping).ln()
-                .key("animationtime").valueDouble(object::getAnimationTime).ln()
-                .key("animationdelay").valueDouble(object::getDelaySeconds).ln()
-                .key("animationblendmode").value(object::getBlendMode, StringStyle.QUOTED).ln()
-                .key("animationtype").value(object::getType, StringStyle.QUOTED).ln()
-                .key("animationrotationoffset").object(object::getRotationOffset, CommonStyles.SIMPLE).ln()
-                .key("animationtexturescale").object(object::getTextureScale, CommonStyles.SIMPLE).ln();
+    public DWData write(Animation animation, ObjectStyle style) {
+        DWObjectBuilder b = writerSupport.build(style);
+        b.key("animationmaskfile").string(animation::getAnimationMaskFile, StringStyle.QUOTED);
+        b.key("animationtexturefile").string(animation::getAnimationTextureFile, StringStyle.QUOTED);
+        b.key("animationrotation").dbl(animation::getAnimationRotation, DoubleStyle.min(1));
+        b.key("animationmaskfile").bool(animation::isLooping);
+        b.key("animationmaskfile").dbl(animation::getAnimationTime);
+        b.key("animationmaskfile").dbl(animation::getDelaySeconds);
+        b.key("animationmaskfile").string(animation::getBlendMode, StringStyle.QUOTED);
+        b.key("animationtype").string(animation::getType, StringStyle.QUOTED);
+        b.key("animationrotationoffset").object(animation::getRotationOffset, ObjectStyle.ONE_LINE);
+        b.key("animationtexturescale").object(animation::getTextureScale, ObjectStyle.ONE_LINE);
+        return b.get();
     }
 }

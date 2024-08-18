@@ -1,7 +1,5 @@
 package mouse.hoi.main.gfx.data;
 
-import mouse.hoi.tools.parser.impl.reader.Inits;
-
 import java.util.ArrayList;
 import java.util.List;
 

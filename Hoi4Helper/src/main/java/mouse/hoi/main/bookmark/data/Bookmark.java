@@ -2,7 +2,6 @@ package mouse.hoi.main.bookmark.data;
 
 import lombok.Data;
 import mouse.hoi.main.common.data.effect.scoped.Effects;
-import mouse.hoi.tools.parser.impl.reader.Inits;
 
 import java.util.ArrayList;
 import java.util.List;

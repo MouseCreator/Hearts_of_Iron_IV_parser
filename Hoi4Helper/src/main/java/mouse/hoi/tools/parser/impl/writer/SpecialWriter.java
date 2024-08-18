@@ -1,6 +1,8 @@
 package mouse.hoi.tools.parser.impl.writer;
 
 import lombok.RequiredArgsConstructor;
+import mouse.hoi.tools.parser.impl.writer.n.dw.DWData;
+import mouse.hoi.tools.parser.impl.writer.n.dw.DWSimple;
 import mouse.hoi.tools.parser.impl.writer.style.BooleanStyle;
 import mouse.hoi.tools.parser.impl.writer.style.CommonStyles;
 import mouse.hoi.tools.parser.impl.writer.style.DoubleStyle;
@@ -109,6 +111,11 @@ public class SpecialWriter {
             case DEFAULT ->write(val);
             case QUOTED -> write("\""+val+"\"");
         };
+    }
+
+    public SpecialWriter write(DWData dwData) {
+        dwData.write(this);
+        return this;
     }
 
 

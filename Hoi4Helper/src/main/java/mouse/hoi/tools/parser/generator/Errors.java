@@ -1,6 +1,6 @@
 package mouse.hoi.tools.parser.generator;
 
-import mouse.hoi.tools.parser.impl.error.ScanException;
+import mouse.hoi.exception.ScanException;
 
 public class Errors {
     public static void report(String message, int line, int position) {

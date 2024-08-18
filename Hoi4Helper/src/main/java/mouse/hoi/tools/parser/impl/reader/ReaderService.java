@@ -3,6 +3,8 @@ package mouse.hoi.tools.parser.impl.reader;
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.tools.parser.impl.ast.AbstractSyntaxTree;
 import mouse.hoi.tools.parser.impl.bind.ScanParseBinder;
+import mouse.hoi.tools.parser.impl.dom.DomData;
+import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;
 import mouse.hoi.tools.parser.impl.reader.engine.ReaderEngine;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +13,10 @@ import org.springframework.stereotype.Service;
 public class ReaderService {
     private final ScanParseBinder binder;
     private final ReaderEngine engine;
+    private final InterpreterManager interpreterManager;
     public <T> T readFromFile(String filename, Class<T> objectClass) {
         AbstractSyntaxTree ast = binder.createTreeFromFile(filename);
-        return engine.read(ast, objectClass);
+        DomData domFromRoot = engine.createDomFromRoot(ast);
+        return interpreterManager.createObject(domFromRoot, objectClass);
     }
 }

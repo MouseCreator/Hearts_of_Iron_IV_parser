@@ -1,7 +1,6 @@
 package mouse.hoi.main.states.data;
 
 import lombok.Data;
-import mouse.hoi.tools.parser.impl.reader.Inits;
 
 import java.util.ArrayList;
 import java.util.List;

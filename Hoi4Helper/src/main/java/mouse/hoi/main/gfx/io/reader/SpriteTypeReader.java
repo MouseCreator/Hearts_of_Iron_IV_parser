@@ -3,10 +3,11 @@ package mouse.hoi.main.gfx.io.reader;
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.gfx.data.Animation;
 import mouse.hoi.main.gfx.data.SpriteType;
+import mouse.hoi.tools.parser.impl.dom.DomData;
+import mouse.hoi.tools.parser.impl.dom.query.DomObjectQuery;
+import mouse.hoi.tools.parser.impl.dom.query.DomQueryService;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
 import mouse.hoi.tools.parser.impl.reader.helper.Readers;
-import mouse.hoi.tools.parser.impl.reader.lr.LeftValue;
-import mouse.hoi.tools.parser.impl.reader.lr.RightValue;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,19 +15,21 @@ import org.springframework.stereotype.Service;
 public class SpriteTypeReader implements DataReader<SpriteType> {
 
     private final Readers readers;
+    private final DomQueryService domQueryService;
     @Override
     public Class<SpriteType> forType() {
         return SpriteType.class;
     }
 
     @Override
-    public void onKeyValue(SpriteType object, LeftValue leftValue, RightValue rightValue) {
-        readers.lrValues().with(leftValue, rightValue)
-                .onToken("name").setString(object::setName)
-                .onToken("texturefile").setString(object::setTextureFile)
-                .onToken("effectFile").setString(object::setEffectFile)
-                .onToken("animation").mapBlock(b -> readers.interpreters().read(Animation.class, b)).push(object::getAnimationList)
-                .onToken("legacy_lazy_load").setBoolean(object::setLegacyLazyLoad)
-                .orElseThrow();
+    public SpriteType read(DomData domData) {
+        SpriteType type = new SpriteType();
+        DomObjectQuery domObjectQuery = domQueryService.validateAndQueryObject(domData);
+        domObjectQuery.requireToken("name").string().set(type::setName);
+        domObjectQuery.requireToken("texturefile").string().set(type::setTextureFile);
+        domObjectQuery.onToken("effectFile").string().set(type::setEffectFile);
+        domObjectQuery.onToken("animation").object(Animation.class).push(type::getAnimationList);
+        domObjectQuery.onToken("legacy_lazy_load").bool().set(type::setLegacyLazyLoad);
+        return type;
     }
 }

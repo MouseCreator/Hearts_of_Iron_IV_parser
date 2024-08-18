@@ -3,7 +3,7 @@ package mouse.hoi.tools.parser.impl.token.mapper;
 import mouse.hoi.tools.parser.generator.TokenType;
 import mouse.hoi.tools.parser.generator.YyResult;
 import mouse.hoi.tools.parser.generator.Yytoken;
-import mouse.hoi.tools.parser.impl.error.ScanException;
+import mouse.hoi.exception.ScanException;
 import mouse.hoi.tools.parser.impl.token.Location;
 import mouse.hoi.tools.parser.impl.token.Token;
 import mouse.hoi.tools.parser.impl.token.mapper.creator.TokenCreator;

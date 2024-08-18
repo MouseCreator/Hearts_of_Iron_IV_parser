@@ -1,7 +1,5 @@
 package mouse.hoi.tools.parser.impl.reader.helper;
 
-import mouse.hoi.tools.parser.impl.reader.Inits;
-
 public class DefaultInitializer {
     public static <T> T init(Class<T> clazz) {
         T t;

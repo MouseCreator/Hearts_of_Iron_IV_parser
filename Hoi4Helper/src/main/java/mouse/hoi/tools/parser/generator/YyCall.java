@@ -1,6 +1,6 @@
 package mouse.hoi.tools.parser.generator;
 
-import mouse.hoi.tools.parser.impl.error.ScanException;
+import mouse.hoi.exception.ScanException;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
