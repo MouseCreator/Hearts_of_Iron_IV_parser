@@ -1,9 +1,7 @@
 package mouse.hoi.main.states.writer;
 
-import mouse.hoi.main.states.data.Building;
 import mouse.hoi.main.states.data.BuildingMap;
 import mouse.hoi.main.states.data.Buildings;
-import mouse.hoi.tools.parser.impl.writer.DataWriter;
 import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
 import org.springframework.stereotype.Service;
 

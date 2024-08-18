@@ -3,6 +3,9 @@ package mouse.hoi.tools.parser.impl.dom.query;
 import mouse.hoi.exception.DomException;
 import mouse.hoi.tools.parser.data.GameDate;
 import mouse.hoi.tools.parser.impl.dom.DomData;
+import mouse.hoi.tools.parser.impl.dom.DomList;
+import mouse.hoi.tools.parser.impl.reader.lr.PossibleValue;
+import mouse.hoi.tools.parser.impl.reader.lr.SimpleValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,37 +64,67 @@ public class DomQueryResult {
         T mappedObject = createObject(clazz, domData);
         return new GenericResultQuery<>(mappedObject);
     }
+    public <T> GenericResultQuery<T> object(Supplier<T> initializedObject) {
+        DomData domData = requireSingle();
+        T t = initializedObject.get();
+        fillObject(t, domData);
+        return new GenericResultQuery<>(t);
+    }
+
+    private void fillObject(Object object, DomData domData) {
+        //TODO: fill object by class
+    }
 
     private <T> T createObject(Class<T> clazz, DomData domData) {
         //TODO: add interpretation by class
     }
 
     public GenericResultQuery<String> string() {
-        DomData domData = requeireSimple();
+        DomData domData = requireSimple();
         return new GenericResultQuery<>(domData.simple().val().stringValue());
     }
     public GenericResultQuery<Double> doublev() {
-        DomData domData = requeireSimple();
+        DomData domData = requireSimple();
         return new GenericResultQuery<>(domData.simple().val().doubleValue());
     }
     public GenericResultQuery<Boolean> bool() {
-        DomData domData = requeireSimple();
+        DomData domData = requireSimple();
         return new GenericResultQuery<>(domData.simple().val().boolValue());
     }
     public GenericResultQuery<Integer> integer() {
-        DomData domData = requeireSimple();
+        DomData domData = requireSimple();
         return new GenericResultQuery<>(domData.simple().val().intValue());
     }
     public GenericResultQuery<GameDate> date() {
-        DomData domData = requeireSimple();
+        DomData domData = requireSimple();
         return new GenericResultQuery<>(domData.simple().val().dateValue());
     }
 
-    private DomData requeireSimple() {
+    private DomData requireSimple() {
         DomData domData = requireSingle();
         if (!domData.isSimple()) {
             throw new DomException("Expected to be a simple value, but got: " + domData);
         }
         return domData;
+    }
+
+    private DomList requireList() {
+        DomData domData = requireSingle();
+        if (!domData.isList()) {
+            throw new DomException("Expected to be a list value, but got: " + domData);
+        }
+        return domData.list();
+    }
+
+    public GenericResultQuery<List<Integer>> integerList() {
+        DomList domData = requireList();
+        List<Integer> integers = domData.getList().stream().map(PossibleValue::intValue).toList();
+        return new GenericResultQuery<>(integers);
+    }
+
+    public GenericResultQuery<List<String>> stringList() {
+        DomList domData = requireList();
+        List<String> strings = domData.getList().stream().map(PossibleValue::stringValue).toList();
+        return new GenericResultQuery<>(strings);
     }
 }

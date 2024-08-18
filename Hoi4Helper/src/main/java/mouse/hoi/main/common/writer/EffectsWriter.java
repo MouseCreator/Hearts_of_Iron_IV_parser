@@ -6,7 +6,6 @@ import mouse.hoi.main.common.data.effect.EffectMap;
 import mouse.hoi.main.common.data.effect.conditional.ConditionalEffects;
 import mouse.hoi.main.common.data.effect.scoped.Effects;
 import mouse.hoi.main.common.framework.EffectsWriterHelper;
-import mouse.hoi.tools.parser.impl.writer.DataWriter;
 import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
 import org.springframework.stereotype.Service;
 

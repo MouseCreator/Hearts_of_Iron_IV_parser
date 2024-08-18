@@ -5,11 +5,10 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 @Data
-public class Bookmarks implements Inits {
+public class Bookmarks {
     private List<Bookmark> list;
 
-    @Override
-    public void initialize() {
+    public Bookmarks() {
         list = new ArrayList<>();
     }
 }

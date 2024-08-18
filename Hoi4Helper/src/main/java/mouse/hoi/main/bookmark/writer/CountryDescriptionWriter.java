@@ -1,8 +1,7 @@
 package mouse.hoi.main.bookmark.writer;
 
 import mouse.hoi.main.bookmark.data.CountryDescription;
-import mouse.hoi.tools.parser.impl.writer.DataWriter;
-import mouse.hoi.tools.parser.impl.writer.ListStyle;
+import mouse.hoi.tools.parser.impl.writer.style.ListStyle;
 import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
 import mouse.hoi.tools.parser.impl.writer.style.StringStyle;
 import org.springframework.stereotype.Service;

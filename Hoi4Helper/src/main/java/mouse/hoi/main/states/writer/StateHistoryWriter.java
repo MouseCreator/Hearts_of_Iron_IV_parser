@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.states.data.Buildings;
 import mouse.hoi.main.states.data.StateHistory;
 import mouse.hoi.main.states.data.VictoryPoint;
-import mouse.hoi.tools.parser.impl.writer.DataWriter;
 import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
 import org.springframework.stereotype.Service;
 

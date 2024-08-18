@@ -2,10 +2,10 @@ package mouse.hoi.main.gfx.io.writer;
 
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.gfx.data.SpriteTypes;
-import mouse.hoi.tools.parser.impl.writer.n.DataWriter;
-import mouse.hoi.tools.parser.impl.writer.n.dw.DWData;
-import mouse.hoi.tools.parser.impl.writer.n.support.DWObjectBuilder;
-import mouse.hoi.tools.parser.impl.writer.n.support.WriterSupport;
+import mouse.hoi.tools.parser.impl.writer.DataWriter;
+import mouse.hoi.tools.parser.impl.writer.dw.DWData;
+import mouse.hoi.tools.parser.impl.writer.support.DWObjectBuilder;
+import mouse.hoi.tools.parser.impl.writer.support.WriterSupport;
 import mouse.hoi.tools.parser.impl.writer.style.ObjectStyle;
 import org.springframework.stereotype.Service;
 

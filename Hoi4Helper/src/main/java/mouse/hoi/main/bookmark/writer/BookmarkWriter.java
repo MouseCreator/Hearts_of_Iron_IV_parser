@@ -2,7 +2,6 @@ package mouse.hoi.main.bookmark.writer;
 
 import mouse.hoi.main.bookmark.data.Bookmark;
 import mouse.hoi.main.bookmark.data.CountryDescription;
-import mouse.hoi.tools.parser.impl.writer.DataWriter;
 import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
 import mouse.hoi.tools.parser.impl.writer.style.BooleanStyle;
 import mouse.hoi.tools.parser.impl.writer.style.StringStyle;

@@ -6,6 +6,7 @@ import mouse.hoi.tools.parser.impl.dom.DomObject;
 import mouse.hoi.tools.parser.impl.dom.DomSimple;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class DomObjectQuery {
     private final DomObject domObject;
@@ -31,5 +32,9 @@ public class DomObjectQuery {
             throw new DomException("Expected to get one value by key '" + string + "' but got none");
         }
         return dataByKey;
+    }
+
+    public Stream<DomSimple> tokenStream() {
+        return domObject.keys().stream();
     }
 }

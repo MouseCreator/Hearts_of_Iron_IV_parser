@@ -1,10 +1,7 @@
 package mouse.hoi.tools.parser.impl.dom;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DomObject implements DomData {
 
@@ -15,7 +12,9 @@ public class DomObject implements DomData {
         map = new HashMap<>();
         casesMap = new HashMap<>();
     }
-
+    public Collection<DomSimple> keys() {
+        return map.keySet();
+    }
     @Override
     public boolean isObject() {
         return true;

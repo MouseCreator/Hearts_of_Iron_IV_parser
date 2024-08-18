@@ -1,8 +1,8 @@
-package mouse.hoi.tools.parser.impl.writer.n.support;
+package mouse.hoi.tools.parser.impl.writer.support;
 
 import mouse.hoi.tools.parser.data.GameDate;
-import mouse.hoi.tools.parser.impl.writer.n.DataWriterManager;
-import mouse.hoi.tools.parser.impl.writer.n.dw.*;
+import mouse.hoi.tools.parser.impl.writer.DataWriterManager;
+import mouse.hoi.tools.parser.impl.writer.dw.*;
 import mouse.hoi.tools.parser.impl.writer.style.BooleanStyle;
 import mouse.hoi.tools.parser.impl.writer.style.DoubleStyle;
 import mouse.hoi.tools.parser.impl.writer.style.ObjectStyle;

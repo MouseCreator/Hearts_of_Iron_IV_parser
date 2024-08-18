@@ -1,6 +1,6 @@
-package mouse.hoi.tools.parser.impl.writer.n.dw;
+package mouse.hoi.tools.parser.impl.writer.dw;
 
-import mouse.hoi.tools.parser.impl.writer.ListStyle;
+import mouse.hoi.tools.parser.impl.writer.style.ListStyle;
 import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
 
 import java.util.List;

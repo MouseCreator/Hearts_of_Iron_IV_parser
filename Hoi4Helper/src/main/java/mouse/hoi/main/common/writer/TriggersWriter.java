@@ -1,7 +1,6 @@
 package mouse.hoi.main.common.writer;
 
 import mouse.hoi.main.common.data.trigger.Triggers;
-import mouse.hoi.tools.parser.impl.writer.DataWriter;
 import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
 import org.springframework.stereotype.Service;
 

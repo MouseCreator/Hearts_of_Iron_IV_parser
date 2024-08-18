@@ -1,6 +1,8 @@
 package mouse.hoi.tools.parser.impl.dom;
 
 
+import mouse.hoi.tools.parser.impl.reader.lr.SimpleValue;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +21,8 @@ public class DomList implements DomData {
         return this;
     }
 
-    private final List<Object> objectList;
-    public List<Object> getList() {
+    private final List<SimpleValue> objectList;
+    public List<SimpleValue> getList() {
        return objectList;
     }
 }

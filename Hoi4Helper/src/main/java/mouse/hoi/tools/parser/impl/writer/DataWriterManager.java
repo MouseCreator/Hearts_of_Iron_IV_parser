@@ -1,6 +1,6 @@
-package mouse.hoi.tools.parser.impl.writer.n;
+package mouse.hoi.tools.parser.impl.writer;
 
-import mouse.hoi.tools.parser.impl.writer.n.dw.DWData;
+import mouse.hoi.tools.parser.impl.writer.dw.DWData;
 import mouse.hoi.tools.parser.impl.writer.style.ObjectStyle;
 import org.springframework.stereotype.Service;
 

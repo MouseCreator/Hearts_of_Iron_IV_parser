@@ -1,4 +1,4 @@
-package mouse.hoi.tools.parser.impl.writer.n.dw;
+package mouse.hoi.tools.parser.impl.writer.dw;
 
 import mouse.hoi.tools.parser.data.GameDate;
 import mouse.hoi.tools.parser.impl.writer.SpecialWriter;

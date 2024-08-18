@@ -2,30 +2,28 @@ package mouse.hoi.main.bookmark.reader;
 
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.bookmark.data.CountryDescription;
-import mouse.hoi.tools.parser.impl.reader.DataReader;
-import mouse.hoi.tools.parser.impl.reader.helper.Readers;
-import mouse.hoi.tools.parser.impl.reader.lr.LeftValue;
-import mouse.hoi.tools.parser.impl.reader.lr.RightValue;
+import mouse.hoi.tools.parser.impl.dom.DomData;
+import mouse.hoi.tools.parser.impl.dom.query.DomObjectQuery;
+import mouse.hoi.tools.parser.impl.dom.query.DomQueryService;
+import mouse.hoi.tools.parser.impl.reader.inits.InitsReader;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CountryDescriptionReader implements DataReader<CountryDescription> {
+public class CountryDescriptionReader implements InitsReader<CountryDescription> {
 
-    private final Readers readers;
+    private final DomQueryService queryService;
     @Override
     public Class<CountryDescription> forType() {
         return CountryDescription.class;
     }
 
     @Override
-    public void onKeyValue(CountryDescription desc, LeftValue leftValue, RightValue rightValue) {
-        readers.lrValues().with(leftValue, rightValue)
-                .onToken("history").setString(desc::setHistory)
-                .onToken("ideology").setString(desc::setIdeology)
-                .onToken("ideas").stringList().consume(desc::setIdeas)
-                .onToken("focuses").stringList().consume(desc::setFocuses)
-                .onToken("minor").setBoolean(desc::setMinor)
-                .orElseThrow();
+    public void read(CountryDescription desc, DomData domData) {
+        DomObjectQuery query = queryService.validateAndQueryObject(domData);
+        query.onToken("history").string().set(desc::setHistory);
+        query.onToken("ideology").string().set(desc::setIdeology);
+        query.onToken("ideas").stringList().set(desc::setIdeas);
+        query.onToken("focuses").stringList().set(desc::setFocuses);
     }
 }
