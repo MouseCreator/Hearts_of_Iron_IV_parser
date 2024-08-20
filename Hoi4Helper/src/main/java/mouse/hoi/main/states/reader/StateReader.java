@@ -25,14 +25,14 @@ public class StateReader implements DataReader<State> {
     public State read(DomData domData) {
         State state = new State();
         DomObjectQuery query = queryService.validateAndQueryObject(domData);
-        query.onToken("id").integer().set(state::setId);
-        query.onToken("name").string().set(state::setName);
-        query.onToken("manpower").integer().set(state::setManpower);
-        query.onToken("provinces").integerList().set(state::setProvinces);
-        query.onToken("local_supplies").doublev().set(state::setLocalSupplies);
-        query.onToken("state_category").string().set(state::setCategory);
-        query.onToken("buildings_max_level_factor").doublev().set(state::setBuildingsMaxLevelFactor);
-        query.onToken("history").object(StateHistory.class).set(state::setStateHistory);
+        query.requireToken("id").integer().set(state::setId);
+        query.requireToken("name").string().set(state::setName);
+        query.onToken("manpower").integer().setOrDefault(state::setManpower, 0);
+        query.requireToken("provinces").integerList().set(state::setProvinces);
+        query.onToken("local_supplies").doublev().setOrDefault(state::setLocalSupplies, 0.0);
+        query.onToken("state_category").string().setOrNull(state::setCategory);
+        query.onToken("buildings_max_level_factor").doublev().setOrDefault(state::setBuildingsMaxLevelFactor, 1.0);
+        query.onToken("history").object(StateHistory.class).setOrDefault(state::setStateHistory, new StateHistory());
         return state;
     }
 }

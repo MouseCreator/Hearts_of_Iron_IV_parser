@@ -36,7 +36,7 @@ public class EffectsWriter implements DataWriter<Effects> {
         EffectMap effectMap = effects.simpleEffects();
         effectsWriterHelper.writeEffectMap(b, effectMap);
 
-        Set<String> subKeys = effects.subKeys();
+        List<String> subKeys = effects.subKeysSorted();
         for (String key : subKeys) {
             Optional<Effects> subEffect = effects.getSubEffect(key);
             if (subEffect.isEmpty()) {

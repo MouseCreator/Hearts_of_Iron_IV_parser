@@ -3,9 +3,8 @@ package mouse.hoi.main.common.framework.effect;
 import mouse.hoi.main.common.data.scope.ScopeEnum;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class EffectsHolder {
@@ -24,5 +23,9 @@ public class EffectsHolder {
         Class<?> clazz = map.get(pair);
 
         return Optional.ofNullable(clazz);
+    }
+
+    public Set<String> allKeys() {
+        return map.keySet().stream().map(KeyScopePair::key).collect(Collectors.toSet());
     }
 }

@@ -21,9 +21,10 @@ public class CountryDescriptionReader implements InitsReader<CountryDescription>
     @Override
     public void read(CountryDescription desc, DomData domData) {
         DomObjectQuery query = queryService.validateAndQueryObject(domData);
-        query.onToken("history").string().set(desc::setHistory);
-        query.onToken("ideology").string().set(desc::setIdeology);
-        query.onToken("ideas").stringList().set(desc::setIdeas);
-        query.onToken("focuses").stringList().set(desc::setFocuses);
+        query.onToken("history").string().setOrNull(desc::setHistory);
+        query.onToken("ideology").string().setOrNull(desc::setIdeology);
+        query.onToken("ideas").stringList().setOrSkip(desc::setIdeas);
+        query.onToken("focuses").stringList().setOrSkip(desc::setFocuses);
+        query.onToken("minor").bool().setOrDefault(desc::setMinor, false);
     }
 }

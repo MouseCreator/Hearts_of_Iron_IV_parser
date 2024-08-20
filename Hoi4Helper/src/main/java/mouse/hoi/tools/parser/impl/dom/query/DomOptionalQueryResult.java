@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class DomQueryResult {
+public class DomOptionalQueryResult {
     private final DomSimple key;
     private final List<DomData> list;
     private final InterpreterManager interpreterManager;
-    public DomQueryResult(DomSimple key, List<DomData> dataByKey, InterpreterManager interpreterManager) {
+    public DomOptionalQueryResult(DomSimple key, List<DomData> dataByKey, InterpreterManager interpreterManager) {
         this.key = key;
         this.list = dataByKey;
         this.interpreterManager = interpreterManager;
@@ -54,26 +54,22 @@ public class DomQueryResult {
         }
         return first();
     }
-
-
-    public SimpleResultQuery simple() {
-        DomData domData = requireSingle();
-        if (domData.isSimple()) {
-            return new SimpleResultQuery(domData.simple().val());
+    public <T> DefaultableResultQuery<T> object(Class<T> clazz) {
+        if (isEmpty()) {
+            return DefaultableResultQuery.empty();
         }
-        throw new DomException("Expected to be a simple value, but got: " + domData);
-    }
-
-    public <T> GenericResultQuery<T> object(Class<T> clazz) {
         DomData domData = requireSingle();
         T mappedObject = createObject(clazz, domData);
-        return new GenericResultQuery<>(mappedObject);
+        return DefaultableResultQuery.with(mappedObject);
     }
-    public <T> GenericResultQuery<T> object(Supplier<T> initializedObject) {
+    public <T> DefaultableResultQuery<T> object(Supplier<T> initializedObject) {
+        if (isEmpty()) {
+            return DefaultableResultQuery.empty();
+        }
         DomData domData = requireSingle();
         T t = initializedObject.get();
         fillObject(t, domData);
-        return new GenericResultQuery<>(t);
+        return DefaultableResultQuery.with(t);
     }
 
     private void fillObject(Object object, DomData domData) {
@@ -84,25 +80,40 @@ public class DomQueryResult {
         return interpreterManager.createObject(domData, clazz);
     }
 
-    public GenericResultQuery<String> string() {
+    public DefaultableResultQuery<String> string() {
+        if (isEmpty()) {
+            return DefaultableResultQuery.empty();
+        }
         DomData domData = requireSimple();
-        return new GenericResultQuery<>(domData.simple().val().stringValue());
+        return DefaultableResultQuery.with(domData.simple().val().stringValue());
     }
-    public GenericResultQuery<Double> doublev() {
+    public DefaultableResultQuery<Double> doublev() {
+        if (isEmpty()) {
+            return DefaultableResultQuery.empty();
+        }
         DomData domData = requireSimple();
-        return new GenericResultQuery<>(domData.simple().val().doubleValue());
+        return DefaultableResultQuery.with(domData.simple().val().doubleValue());
     }
-    public GenericResultQuery<Boolean> bool() {
+    public DefaultableResultQuery<Boolean> bool() {
+        if (isEmpty()) {
+            return DefaultableResultQuery.empty();
+        }
         DomData domData = requireSimple();
-        return new GenericResultQuery<>(domData.simple().val().boolValue());
+        return DefaultableResultQuery.with(domData.simple().val().boolValue());
     }
-    public GenericResultQuery<Integer> integer() {
+    public DefaultableResultQuery<Integer> integer() {
+        if (isEmpty()) {
+            return DefaultableResultQuery.empty();
+        }
         DomData domData = requireSimple();
-        return new GenericResultQuery<>(domData.simple().val().intValue());
+        return DefaultableResultQuery.with(domData.simple().val().intValue());
     }
-    public GenericResultQuery<GameDate> date() {
+    public DefaultableResultQuery<GameDate> date() {
+        if (isEmpty()) {
+            return DefaultableResultQuery.empty();
+        }
         DomData domData = requireSimple();
-        return new GenericResultQuery<>(domData.simple().val().dateValue());
+        return DefaultableResultQuery.with(domData.simple().val().dateValue());
     }
 
     private DomData requireSimple() {
@@ -120,22 +131,30 @@ public class DomQueryResult {
         }
         return domData.list();
     }
-
-    public GenericResultQuery<List<Integer>> integerList() {
+    public DefaultableResultQuery<List<Integer>> integerList() {
+        if (isEmpty()) {
+            return DefaultableResultQuery.empty();
+        }
         DomList domData = requireList();
         List<Integer> integers = domData.getList().stream().map(PossibleValue::intValue).toList();
-        return new GenericResultQuery<>(integers);
+        return DefaultableResultQuery.with(integers);
     }
 
-    public GenericResultQuery<List<String>> stringList() {
+    public DefaultableResultQuery<List<String>> stringList() {
+        if (isEmpty()) {
+            return DefaultableResultQuery.empty();
+        }
         DomList domData = requireList();
         List<String> strings = domData.getList().stream().map(PossibleValue::stringValue).toList();
-        return new GenericResultQuery<>(strings);
+        return DefaultableResultQuery.with(strings);
     }
 
-    public <T> GenericResultQuery<T> objectRaw(T object) {
+    public <T> DefaultableResultQuery<T> objectRaw(T object) {
+        if (isEmpty()) {
+            return DefaultableResultQuery.empty();
+        }
         DomData d = requireSingle();
         fillObject(object, d);
-        return new GenericResultQuery<>(object);
+        return DefaultableResultQuery.with(object);
     }
 }

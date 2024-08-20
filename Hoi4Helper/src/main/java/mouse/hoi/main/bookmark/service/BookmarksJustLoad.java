@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class JustLoad implements AppService {
+public class BookmarksJustLoad implements AppService {
 
     private final FileProperties fileProperties;
     private final ReaderService readerService;

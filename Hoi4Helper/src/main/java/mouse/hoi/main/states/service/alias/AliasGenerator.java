@@ -5,6 +5,7 @@ import mouse.hoi.tools.context.AppService;
 import mouse.hoi.tools.files.PathsLoader;
 import mouse.hoi.tools.properties.FileProperties;
 import mouse.hoi.tools.properties.PropertyMap;
+import mouse.hoi.tools.utils.Comparators;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -20,7 +21,7 @@ public class AliasGenerator implements AppService {
         String statesDirectory = map.expectedProperty("directory");
         PropertyMap alias = fileProperties.readProperties("src/main/resources/states/alias.input");
         List<String> fileNames = new ArrayList<>(pathsLoader.allFiles(statesDirectory, false, false));
-        fileNames.sort(specialComparator);
+        fileNames.sort(Comparators.numberAwareComparator);
         Map<String, String> aliasMap = createAliasMap(alias);
         boolean canSkip = true;
         if (new HashSet<>(aliasMap.values()).contains("SKIP")) {
@@ -46,31 +47,7 @@ public class AliasGenerator implements AppService {
         }
         System.out.println(result);
     }
-    private static final Comparator<String> specialComparator = (s1, s2) -> {
-        int m = Math.min(s1.length(), s2.length());
-        int n1 = 0;
-        int n2 = 0;
-        int mult = 1;
-        for (int i = 0; i < m; i++) {
-            char c1 = s1.charAt(i);
-            char c2 = s2.charAt(i);
-            if (Character.isDigit(c1) && Character.isDigit(c2)) {
-                n1 += mult * (c1 - '0');
-                n2 += mult * (c1 - '0');
-                mult *= 10;
-                continue;
-            }
-            if (!Character.isDigit(c1) && !Character.isDigit(c2)) {
-                break;
-            }
-            if (Character.isDigit(c1)) {
-                return 1;
-            } else {
-                return -1;
-            }
-        }
-        return n1 - n2;
-    };
+
     private StateNameInfo getInfoFromName(String filename) {
         String[] split = filename.split("-", 2);
         int id = Integer.parseInt(split[0]);

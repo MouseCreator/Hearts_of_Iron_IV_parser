@@ -25,9 +25,9 @@ public class SpriteTypeReader implements DataReader<SpriteType> {
         DomObjectQuery domObjectQuery = domQueryService.validateAndQueryObject(domData);
         domObjectQuery.requireToken("name").string().set(type::setName);
         domObjectQuery.requireToken("texturefile").string().set(type::setTextureFile);
-        domObjectQuery.onToken("effectFile").string().set(type::setEffectFile);
+        domObjectQuery.onToken("effectFile").string().setOrSkip(type::setEffectFile);
         domObjectQuery.onToken("animation").object(Animation.class).push(type::getAnimationList);
-        domObjectQuery.onToken("legacy_lazy_load").bool().set(type::setLegacyLazyLoad);
+        domObjectQuery.onToken("legacy_lazy_load").bool().setOrSkip(type::setLegacyLazyLoad);
         return type;
     }
 }

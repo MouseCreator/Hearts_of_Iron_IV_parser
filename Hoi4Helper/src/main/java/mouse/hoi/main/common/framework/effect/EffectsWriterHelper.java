@@ -48,7 +48,7 @@ public class EffectsWriterHelper {
     private DWData writeConditionalInner(ConditionalEffect conditionalEffect) {
         DWObjectBuilder s = writerSupport.build();
         s.key("limit").object(conditionalEffect::getTriggers);
-        s.embedded(conditionalEffect::getEffects, ObjectStyle.DEFAULT);
+        s.embedded(conditionalEffect::getEffects);
         return s.get();
     }
 }

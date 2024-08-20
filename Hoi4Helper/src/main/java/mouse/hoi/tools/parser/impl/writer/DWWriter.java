@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class DWWriter {
     public String write(DWData dwData) {
         SpecialWriter specialWriter = new SpecialWriter();
-        specialWriter.write(dwData);
+        dwData.onRoot(specialWriter);
         return specialWriter.get();
     }
 }

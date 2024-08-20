@@ -5,6 +5,7 @@ import mouse.hoi.main.states.data.Buildings;
 import mouse.hoi.main.states.data.StateHistory;
 import mouse.hoi.main.states.data.VictoryPoint;
 import mouse.hoi.tools.parser.impl.dom.DomData;
+import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterAware;
 import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;
 import mouse.hoi.tools.parser.impl.dom.query.DomObjectQuery;
 import mouse.hoi.tools.parser.impl.dom.query.DomQueryService;
@@ -15,9 +16,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class StateHistoryReader implements DataReader<StateHistory> {
+public class StateHistoryReader implements DataReader<StateHistory>, InterpreterAware {
 
-    private final InterpreterManager interpreterManager;
+    private InterpreterManager interpreterManager;
+
+
 
     private final DomQueryService queryService;
     @Override
@@ -29,15 +32,20 @@ public class StateHistoryReader implements DataReader<StateHistory> {
     public StateHistory read(DomData domData) {
         StateHistory history = new StateHistory();
         DomObjectQuery query = queryService.validateAndQueryObject(domData);
-        query.onToken("owner").string().set(history::setOwner);
+        query.onToken("owner").string().setOrNull(history::setOwner);
         List<DomData> victoryPoints = query.onToken("victory_points").list();
         for (DomData vp : victoryPoints) {
             VictoryPoint victoryPoint = interpreterManager.createObject(vp, VictoryPoint.class);
             history.getVictoryPointList().add(victoryPoint);
         }
-        query.onToken("buildings").object(Buildings.class).set(history::setBuildings);
+        query.onToken("buildings").object(Buildings.class).setOrSupply(history::setBuildings, Buildings::new);
         query.onToken("add_core_of").string().push(history::getCores);
         query.onToken("add_claim_by").string().push(history::getClaims);
         return history;
+    }
+
+    @Override
+    public void setInterpreter(InterpreterManager interpreterManager) {
+        this.interpreterManager = interpreterManager;
     }
 }

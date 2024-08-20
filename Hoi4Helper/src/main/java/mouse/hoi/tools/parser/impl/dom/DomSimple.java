@@ -23,4 +23,9 @@ public class DomSimple implements DomData {
     public SimpleValue val() {
         return simpleValue;
     }
+
+    @Override
+    public String toString() {
+        return simpleValue.stringValue();
+    }
 }

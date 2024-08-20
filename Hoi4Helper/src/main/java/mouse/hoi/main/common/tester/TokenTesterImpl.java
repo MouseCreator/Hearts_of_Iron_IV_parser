@@ -10,7 +10,7 @@ public class TokenTesterImpl implements TokenTester {
     private final Database database;
     @Override
     public boolean isCountryTag(String string) {
-        return database.countryRepository().hasCountry(string);
+        return database.getCountryRepository().hasCountry(string);
     }
 
     @Override
@@ -25,11 +25,11 @@ public class TokenTesterImpl implements TokenTester {
 
     @Override
     public boolean isEffect(String stringKey) {
-        return false;
+        return database.getEffectsRepository().isEffect(stringKey);
     }
 
     @Override
     public boolean isTrigger(String stringKey) {
-        return false;
+        return database.getTriggersRepository().isTrigger(stringKey);
     }
 }

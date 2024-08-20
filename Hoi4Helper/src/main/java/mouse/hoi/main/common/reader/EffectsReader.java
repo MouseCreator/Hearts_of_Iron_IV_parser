@@ -12,6 +12,7 @@ import mouse.hoi.main.common.data.scope.Scope;
 import mouse.hoi.main.common.framework.effect.EffectManager;
 import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.DomKV;
+import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterAware;
 import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;
 import mouse.hoi.tools.parser.impl.reader.inits.InitsReader;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class EffectsReader implements InitsReader<Effects> {
+public class EffectsReader implements InitsReader<Effects>, InterpreterAware {
     private final EffectManager effectManager;
-    private final InterpreterManager interpreterManager;
     private final CategoryAssigner categoryAssigner;
+
+    private InterpreterManager interpreterManager;
     @Override
     public Class<Effects> forType() {
         return Effects.class;
@@ -31,6 +33,43 @@ public class EffectsReader implements InitsReader<Effects> {
     @Override
     public void read(Effects effects, DomData domData) {
         CategoryMap categoryMap = categoryAssigner.mapCategory(domData.object());
+        processFlow(effects, categoryMap);
+        processIntegers(effects, categoryMap);
+        processTags(effects, categoryMap);
+        processRegularEffects(effects, categoryMap);
+    }
+
+    private void processRegularEffects(Effects effects, CategoryMap categoryMap) {
+        List<DomKV> possibleEffects = categoryMap.onCategory(TokenCategory.EFFECT);
+        for (DomKV d : possibleEffects) {
+            Effect effect = effectManager.createEffect(d, effects.getScope());
+            effects.simpleEffects().putEffect(effect);
+        }
+    }
+
+    private void processTags(Effects effects, CategoryMap categoryMap) {
+        List<DomKV> tagTokens = categoryMap.onCategory(TokenCategory.TAG);
+        for (DomKV tagKV : tagTokens) {
+            String string = tagKV.key().val().stringValue();
+            Scope scope = effects.getScope().onTag(string);
+            Effects tagEffects = new Effects(scope);
+            interpreterManager.fillObject(tagKV.value(), tagEffects);
+            effects.addSubEffects(string, tagEffects);
+        }
+    }
+
+    private void processIntegers(Effects effects, CategoryMap categoryMap) {
+        List<DomKV> integerTokens = categoryMap.onCategory(TokenCategory.NUMBER);
+        for (DomKV domKV : integerTokens) {
+            int integer = domKV.key().val().intValue();
+            Scope scope = effects.getScope().onInteger(integer);
+            Effects intEffects = new Effects(scope);
+            interpreterManager.fillObject(domKV.value(), intEffects);
+            effects.addSubEffects(integer, intEffects);
+        }
+    }
+
+    private void processFlow(Effects effects, CategoryMap categoryMap) {
         List<DomKV> flowTokens = categoryMap.onCategory(TokenCategory.FLOW);
         for (DomKV domKV : flowTokens) {
             String key = key(domKV);
@@ -59,30 +98,14 @@ public class EffectsReader implements InitsReader<Effects> {
                 }
             }
         }
-        List<DomKV> integerTokens = categoryMap.onCategory(TokenCategory.NUMBER);
-        for (DomKV domKV : integerTokens) {
-            int integer = domKV.key().val().intValue();
-            Scope scope = effects.getScope().onInteger(integer);
-            Effects intEffects = new Effects(scope);
-            interpreterManager.fillObject(domKV.value(), intEffects);
-            effects.addSubEffects(integer, intEffects);
-        }
-        List<DomKV> tagTokens = categoryMap.onCategory(TokenCategory.TAG);
-        for (DomKV tagKV : tagTokens) {
-            String string = tagKV.key().val().stringValue();
-            Scope scope = effects.getScope().onTag(string);
-            Effects tagEffects = new Effects(scope);
-            interpreterManager.fillObject(tagKV.value(), tagEffects);
-            effects.addSubEffects(string, tagEffects);
-        }
-        List<DomKV> possibleEffects = categoryMap.onCategory(TokenCategory.EFFECT);
-        for (DomKV d : possibleEffects) {
-            Effect effect = effectManager.createEffect(d, effects.getScope());
-            effects.simpleEffects().putEffect(effect);
-        }
     }
 
     private String key(DomKV domKV) {
         return domKV.key().val().stringValue();
+    }
+
+    @Override
+    public void setInterpreter(InterpreterManager interpreterManager) {
+        this.interpreterManager = interpreterManager;
     }
 }

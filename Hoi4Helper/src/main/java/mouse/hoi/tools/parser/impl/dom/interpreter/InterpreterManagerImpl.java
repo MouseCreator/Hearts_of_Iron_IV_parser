@@ -1,5 +1,6 @@
 package mouse.hoi.tools.parser.impl.dom.interpreter;
 
+import jakarta.annotation.PostConstruct;
 import mouse.hoi.exception.DomException;
 import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
@@ -12,10 +13,13 @@ import java.util.Map;
 @Service
 public class InterpreterManagerImpl implements InterpreterManager {
 
-    private final Map<Class<?>,DataReader<?>> readerMap;
+    private final Map<Class<?>, DataReader<?>> readerMap;
     private final Map<Class<?>, InitsReader<?>> initsMap;
 
-    public InterpreterManagerImpl(List<DataReader<?>> dataReaderList, List<InitsReader<?>> initsReaders) {
+    private final List<InterpreterAware> awares;
+
+    public InterpreterManagerImpl(List<DataReader<?>> dataReaderList, List<InitsReader<?>> initsReaders, List<InterpreterAware> awares) {
+        this.awares = awares;
         readerMap = new HashMap<>();
         initsMap = new HashMap<>();
         for (DataReader<?> reader : dataReaderList) {
@@ -24,6 +28,11 @@ public class InterpreterManagerImpl implements InterpreterManager {
         for (InitsReader<?> inits : initsReaders) {
             initsMap.put(inits.forType(), inits);
         }
+    }
+
+    @PostConstruct
+    void init() {
+        awares.forEach(t -> t.setInterpreter(this));
     }
 
     @Override

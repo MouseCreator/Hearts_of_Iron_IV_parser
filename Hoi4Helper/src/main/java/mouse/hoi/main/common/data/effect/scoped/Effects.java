@@ -6,6 +6,7 @@ import mouse.hoi.main.common.data.effect.EffectMap;
 import mouse.hoi.main.common.data.effect.conditional.ConditionalEffects;
 import mouse.hoi.main.common.data.scope.Scope;
 import mouse.hoi.main.common.data.scope.Scoped;
+import mouse.hoi.tools.utils.Comparators;
 
 import java.util.*;
 
@@ -23,11 +24,11 @@ public class Effects implements Scoped {
     }
 
     public boolean isEmpty() {
-        filterStateEffects();
+        filterSubEffects();
         return simpleEffects.isEmpty() && subEffects.isEmpty();
     }
 
-    private void filterStateEffects() {
+    private void filterSubEffects() {
         List<String> toRemove = new ArrayList<>();
         for (String i : subEffects.keySet()) {
             Effects effectMap = subEffects.get(i);
@@ -46,12 +47,17 @@ public class Effects implements Scoped {
         return subEffects.keySet();
     }
 
+    public List<String> subKeysSorted() {
+        Set<String> strings = subEffects.keySet();
+        return strings.stream().sorted(Comparators.numberAwareComparator).toList();
+    }
+
     public Optional<Effects> getSubEffect(String subKey) {
         Effects effectMap = subEffects.get(subKey);
         return Optional.ofNullable(effectMap);
     }
 
-    public Effects demandStateEffect(String subKey) {
+    public Effects demandSubEffect(String subKey) {
         Effects effectMap = subEffects.get(subKey);
         if (effectMap == null) {
             throw new EffectException("No subkey in effect map: " + subKey);

@@ -24,7 +24,7 @@ public class StateWrapperReader implements DataReader<StateWrapper> {
     public StateWrapper read(DomData domData) {
         StateWrapper stateWrapper = new StateWrapper();
         DomObjectQuery query = queryService.validateAndQueryObject(domData);
-        query.onToken("state").object(State.class).set(stateWrapper::setState);
+        query.requireToken("state").object(State.class).set(stateWrapper::setState);
         return stateWrapper;
     }
 }

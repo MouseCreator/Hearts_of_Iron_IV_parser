@@ -3,9 +3,7 @@ package mouse.hoi.main.common.data.scope;
 import mouse.hoi.exception.ScopeException;
 
 public class ProvinceScope implements Scope {
-    private final String origin;
-    public ProvinceScope(String origin) {
-        this.origin = origin;
+    public ProvinceScope() {
     }
 
     @Override
@@ -14,13 +12,8 @@ public class ProvinceScope implements Scope {
     }
 
     @Override
-    public String origin() {
-        return origin;
-    }
-
-    @Override
     public Scope onTag(String tag) {
-        return new CountryScope(tag);
+        return new CountryScope();
     }
 
     @Override

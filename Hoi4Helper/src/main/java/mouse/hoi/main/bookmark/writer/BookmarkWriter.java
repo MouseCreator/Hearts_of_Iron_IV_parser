@@ -29,6 +29,7 @@ public class BookmarkWriter implements DataWriter<Bookmark> {
         b.key("name").string(object::getName, StringStyle.QUOTED);
         b.key("desc").string(object::getDesc, StringStyle.QUOTED);
         b.key("date").date(object::getDate);
+        b.key("picture").string(object::getPicture);
         TestIf.ifTrue(object::isDefault).then(t -> b.key("default").bool(t));
         b.key("default_country").string(object::getDefaultCountry, StringStyle.QUOTED);
         b.key("effect").object(object::getEffects);
@@ -36,6 +37,7 @@ public class BookmarkWriter implements DataWriter<Bookmark> {
         for (CountryDescription description : countryDescriptionList) {
             String tag = description.getTag();
             b.key(tag, StringStyle.QUOTED).objectRaw(description);
+            b.skipLine();
         }
         return b.get();
     }

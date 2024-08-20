@@ -22,8 +22,8 @@ public class DPosReader implements DataReader<DPos> {
     public DPos read(DomData domData) {
         DPos dPos = new DPos();
         DomObjectQuery domObjectQuery = queryService.validateAndQueryObject(domData);
-        domObjectQuery.onToken("x").simple().setDouble(dPos::setX);
-        domObjectQuery.onToken("y").simple().setDouble(dPos::setY);
+        domObjectQuery.requireToken("x").simple().setDouble(dPos::setX);
+        domObjectQuery.requireToken("y").simple().setDouble(dPos::setY);
         return dPos;
     }
 }

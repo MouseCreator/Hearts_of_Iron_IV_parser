@@ -1,10 +1,8 @@
 package mouse.hoi.tools.database.repository;
 
-import java.util.List;
+import java.util.Set;
 
 public interface EffectsRepository {
-    List<String> allEffects();
-    void addEffect(String trigger);
-    void removeEffect(String trigger);
+    Set<String> allEffects();
     boolean isEffect(String trigger);
 }

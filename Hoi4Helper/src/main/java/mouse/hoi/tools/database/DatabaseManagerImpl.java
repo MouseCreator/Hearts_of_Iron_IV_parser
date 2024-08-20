@@ -15,7 +15,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
     public void loadCountries() {
         Collection<String> allCountries = countryTagLoader.getAllCountries();
         for (String tag : allCountries) {
-            database.countryRepository().addCountryTag(tag);
+            database.getCountryRepository().addCountryTag(tag);
         }
     }
 }

@@ -1,6 +1,7 @@
 package mouse.hoi.tools.parser.impl.writer.dw;
 
 import lombok.Getter;
+import mouse.hoi.exception.WriterException;
 import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
 import mouse.hoi.tools.parser.impl.writer.style.ObjectStyle;
 
@@ -28,22 +29,46 @@ public class DWObject implements DWFieldList{
 
     @Override
     public void write(SpecialWriter writer) {
-        writer.write("{");
-        if (style == ObjectStyle.DEFAULT) {
-            writer.incrementTabs().ln();
-            for (DWField field : keyValuePairs) {
-                field.write(writer);
-                writer.ln();
+        writeWithStyle(writer, style);
+
+    }
+
+    private void writeWithStyle(SpecialWriter writer, ObjectStyle additionalStyle) {
+        switch (additionalStyle) {
+            case DEFAULT -> {
+                writer.write("{");
+                writer.incrementTabs().ln();
+                for (DWField field : keyValuePairs) {
+                    field.write(writer);
+                    writer.ln();
+                }
+                writer.decrementTabs();
+                writer.write("}");
             }
-            writer.decrementTabs();
-        } else {
-            writer.space();
-            for (DWField dwKeyValue : keyValuePairs) {
-                dwKeyValue.write(writer);
+            case ONE_LINE -> {
+                writer.write("{");
                 writer.space();
+                for (DWField dwKeyValue : keyValuePairs) {
+                    dwKeyValue.write(writer);
+                    writer.space();
+                }
+                writer.write("}");
             }
+            case EMBEDDED -> {
+                writer.incrementTabs().ln();
+                for (DWField field : keyValuePairs) {
+                    field.write(writer);
+                    writer.ln();
+                }
+                writer.decrementTabs();
+            }
+            default -> throw new WriterException("Unknown object style: " + style);
         }
-        writer.write("}");
+    }
+
+    @Override
+    public void onRoot(SpecialWriter writer) {
+        writeWithStyle(writer, ObjectStyle.EMBEDDED);
     }
 
     @Override

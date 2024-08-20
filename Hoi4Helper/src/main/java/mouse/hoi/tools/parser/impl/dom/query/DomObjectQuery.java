@@ -7,7 +7,6 @@ import mouse.hoi.tools.parser.impl.dom.DomObject;
 import mouse.hoi.tools.parser.impl.dom.DomSimple;
 import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -20,15 +19,15 @@ public class DomObjectQuery {
         this.interpreterManager = interpreterManager;
     }
 
-    public DomQueryResult onToken(String string) {
+    public DomOptionalQueryResult onToken(String string) {
         DomSimple domSimple = new DomSimple(SV.string(string));
         List<DomData> dataByKey = domObject.getIgnoreCase(domSimple);
-        return new DomQueryResult(dataByKey, interpreterManager);
+        return new DomOptionalQueryResult(domSimple, dataByKey, interpreterManager);
     }
     public DomQueryResult requireToken(String string) {
         DomSimple domSimple = new DomSimple(SV.string(string));
         List<DomData> dataByKey = domObject.getIgnoreCase(domSimple);
-        return new DomQueryResult(dataByKey, interpreterManager);
+        return new DomQueryResult(domSimple, dataByKey, interpreterManager);
     }
 
     public List<DomKV> allTokens() {

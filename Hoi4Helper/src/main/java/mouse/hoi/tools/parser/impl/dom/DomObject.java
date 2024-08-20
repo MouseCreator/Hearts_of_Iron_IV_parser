@@ -1,6 +1,8 @@
 package mouse.hoi.tools.parser.impl.dom;
 
 
+import mouse.hoi.exception.DomException;
+
 import java.util.*;
 
 public class DomObject implements DomData {
@@ -42,7 +44,7 @@ public class DomObject implements DomData {
     }
 
     public List<DomData> getIgnoreCase(DomSimple domSimple) {
-        DomSimple key = casesMap.get(domSimple.val().stringValue());
+        DomSimple key = casesMap.get(domSimple.val().stringValue().toLowerCase());
         return get(key);
     }
 
@@ -57,5 +59,28 @@ public class DomObject implements DomData {
         dataList.add(value);
         domKVS.add(domKV);
         casesMap.put(key.val().stringValue().toLowerCase(), key);
+    }
+
+    @Override
+    public String toString() {
+        return "Object{" + domKVS + "}";
+    }
+
+    public boolean isEmpty() {
+        return domKVS.isEmpty();
+    }
+
+    @Override
+    public boolean isList() {
+        return isEmpty();
+    }
+
+    @Override
+    public DomList list() {
+        if (isEmpty()) {
+            return new DomList();
+        } else {
+            throw new DomException("Not a list: " + this);
+        }
     }
 }

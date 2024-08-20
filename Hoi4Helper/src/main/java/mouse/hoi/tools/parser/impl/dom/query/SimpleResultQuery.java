@@ -9,15 +9,12 @@ public class SimpleResultQuery {
     public SimpleResultQuery(SimpleValue val) {
         simpleValue = val;
     }
-
     public void setDouble(Consumer<Double> doubleConsumer) {
         doubleConsumer.accept(simpleValue.doubleValue());
     }
-
     public void setString(Consumer<String> stringConsumer) {
         stringConsumer.accept(simpleValue.stringValue());
     }
-
     public void setBoolean(Consumer<Boolean> setBoolean) {
         setBoolean.accept(simpleValue.boolValue());
     }

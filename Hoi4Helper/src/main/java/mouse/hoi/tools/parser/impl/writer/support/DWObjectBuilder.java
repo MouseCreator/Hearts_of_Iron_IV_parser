@@ -1,6 +1,5 @@
 package mouse.hoi.tools.parser.impl.writer.support;
 
-import mouse.hoi.exception.DomException;
 import mouse.hoi.tools.parser.data.GameDate;
 import mouse.hoi.tools.parser.impl.writer.DataWriterManager;
 import mouse.hoi.tools.parser.impl.writer.dw.*;
@@ -44,16 +43,10 @@ public class DWObjectBuilder {
         return new ListBuilder(new DWString(key));
     }
 
-    public void embedded(Supplier<Object> supplier, ObjectStyle style) {
+    public void embedded(Supplier<Object> supplier) {
         Object obj = supplier.get();
-        DWData dwData = writerManager.write(obj);
-        if (dwData instanceof DWFieldList fl) {
-            List<DWField> fields = fl.getFields();
-            DWEmbedded embedded = new DWEmbedded(style);
-            embedded.addFields(fields);
-        } else {
-            throw new DomException("Embedded object cannot be a simple value!");
-        }
+        DWData dwData = writerManager.write(obj, ObjectStyle.EMBEDDED);
+        object.add(new DWEmbedded(dwData));
     }
 
     public void skipLine() {
@@ -131,7 +124,8 @@ public class DWObjectBuilder {
             value(new DWDouble(d, style));
         }
         public void object(Supplier<Object> supplier) {
-            writerManager.write(supplier.get());
+            DWData written = writerManager.write(supplier.get());
+            value(written);
         }
         public void object(Supplier<Object> supplier, ObjectStyle style) {
             writerManager.write(supplier.get(), style);

@@ -6,6 +6,7 @@ import mouse.hoi.main.common.data.effect.scoped.Effects;
 import mouse.hoi.main.common.data.trigger.Triggers;
 import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.DomObject;
+import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterAware;
 import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;
 import mouse.hoi.tools.parser.impl.dom.query.DomObjectQuery;
 import mouse.hoi.tools.parser.impl.dom.query.DomQueryService;
@@ -18,9 +19,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ConditionalEffectReader implements InitsReader<ConditionalEffect> {
+public class ConditionalEffectReader implements InitsReader<ConditionalEffect>, InterpreterAware {
     private final DomQueryService queryService;
-    private final InterpreterManager interpreterManager;
+    private InterpreterManager interpreterManager;
     private final CategorySplitManager categorySplitManager;
     @Override
     public Class<ConditionalEffect> forType() {
@@ -34,7 +35,7 @@ public class ConditionalEffectReader implements InitsReader<ConditionalEffect> {
         DomObject limitObject = split.getFirst();
 
         DomObjectQuery query = queryService.validateAndQueryObject(limitObject);
-        query.onToken("limit").object(Triggers.class).set(conditionalEffect::setTriggers);
+        query.requireToken("limit").object(Triggers.class).set(conditionalEffect::setTriggers);
         DomObject effectsObject = split.getLast();
 
         Effects effects = new Effects(conditionalEffect.getScope());
@@ -47,5 +48,10 @@ public class ConditionalEffectReader implements InitsReader<ConditionalEffect> {
                 t -> t.key().val().stringValue().equalsIgnoreCase("limit")
         );
         return List.of(limit);
+    }
+
+    @Override
+    public void setInterpreter(InterpreterManager interpreterManager) {
+        this.interpreterManager = interpreterManager;
     }
 }
