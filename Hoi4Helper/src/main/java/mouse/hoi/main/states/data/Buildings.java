@@ -1,6 +1,5 @@
 package mouse.hoi.main.states.data;
 
-import lombok.Data;
 
 import java.util.*;
 

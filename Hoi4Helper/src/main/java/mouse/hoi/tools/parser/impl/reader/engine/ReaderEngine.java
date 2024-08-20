@@ -18,7 +18,7 @@ public class ReaderEngine {
     }
 
 
-    private <T> List<Node> processRoot(Node node) {
+    private List<Node> processRoot(Node node) {
         List<Node> nodes;
         if (node instanceof BlockNode blockNode) {
             nodes = blockNode.getChildren();
@@ -28,20 +28,6 @@ public class ReaderEngine {
             throw new ReaderException("Unexpected node type! Block or root is expected!");
         }
         return nodes;
-    }
-
-    public List<LeftRightValue> getLeftRightValues(BlockNode blockNode) {
-        List<Node> nodes = blockNode.getChildren();
-        List<LeftRightValue> list = new ArrayList<>();
-        for (Node n : nodes) {
-            if (n instanceof KeyValueNode kv) {
-                LeftValue leftValue = nodeMapper.createLeft(kv.getKey());
-                RightValue rightValue = nodeMapper.createRight(kv.getValue());
-                LeftRightValue leftRightValue = new LeftRightValue(leftValue, rightValue);
-                list.add(leftRightValue);
-            }
-        }
-        return list;
     }
     public DomData createDomFromRoot(AbstractSyntaxTree tree) {
         return createDomFromNode(tree.root());

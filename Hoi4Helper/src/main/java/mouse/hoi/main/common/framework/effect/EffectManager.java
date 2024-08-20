@@ -1,13 +1,17 @@
-package mouse.hoi.main.common.framework;
+package mouse.hoi.main.common.framework.effect;
 
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.exception.EffectException;
 import mouse.hoi.main.common.data.effect.*;
-import mouse.hoi.main.common.data.effect.store.EffectData;
 import mouse.hoi.main.common.data.scope.Scope;
 import mouse.hoi.main.common.data.scope.ScopeEnum;
-import mouse.hoi.tools.parser.impl.reader.lr.RightValue;
-import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
+import mouse.hoi.tools.parser.impl.dom.DomData;
+import mouse.hoi.tools.parser.impl.dom.DomKV;
+import mouse.hoi.tools.parser.impl.dom.active.ActiveObjectManager;
+import mouse.hoi.tools.parser.impl.dom.active.ActiveWriter;
+import mouse.hoi.tools.parser.impl.reader.lr.SimpleValue;
+import mouse.hoi.tools.parser.impl.writer.dw.DWData;
+import mouse.hoi.tools.parser.impl.writer.support.DWObjectBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,29 +20,32 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EffectManager {
     private final EffectHolderInitializer effectHolderInitializer;
-    private final EffectReaderHelper effectReaderHelper;
     private final EffectFactory effectFactory;
-    private final EffectDataStringify effectDataStringify;
+    private final ActiveObjectManager activeObjectManager;
 
-    public Effect createEffect(String key, Scope scope, RightValue rightValue) {
+    public Effect createEffect(DomKV dom, Scope scope) {
         EffectsHolder effectHolder = effectHolderInitializer.effectsHolder();
         ScopeEnum scopeEnum = scope.enumValue();
-        Optional<Class<?>> effectClass = effectHolder.onEffect(key, scopeEnum);
+        String string = dom.key().val().stringValue();
+        Optional<Class<?>> effectClass = effectHolder.onEffect(string, scopeEnum);
         if (effectClass.isEmpty()) {
-            throw new EffectException(String.format("No effect has key '%s' and scope '%s'", key, scopeEnum));
+            throw new EffectException(String.format("No effect has key '%s' and scope '%s'", string, scopeEnum));
         }
         Effect effect = effectFactory.createEffect(effectClass.get());
-        defineEffect(key, effect, rightValue);
+        defineEffect(string, effect, dom.value());
         return effect;
     }
 
-    private void defineEffect(String key, Effect effect, RightValue rightValue) {
+    private void defineEffect(String key, Effect effect, DomData domData) {
         if (effect.isSpecial()) {
             SpecialEffect specialEffect = (SpecialEffect) effect;
-            EffectData effectData = effectReaderHelper.read(rightValue);
-            specialEffect.read(effectData);
+            specialEffect.read(activeObjectManager.createActiveObject(domData));
             return;
         }
+        if (!domData.isSimple()) {
+            throw new EffectException("Not special effect '" + key + "' defined with complex value: " + domData);
+        }
+        SimpleValue rightValue = domData.simple().val();
         if (effect.isInteger()) {
             if (rightValue.isInteger()) {
                 IntEffect intEffect = (IntEffect) effect;
@@ -75,14 +82,16 @@ public class EffectManager {
         throw new EffectException("Effect " + key + " cannot be initialized with " + rightValue);
     }
 
-    public void writeEffect(SpecialWriter writer, Effect effect) {
+    public void writeEffect(DWObjectBuilder b, Effect effect) {
         if(effect.isSpecial()) {
             SpecialEffect specialEffect = (SpecialEffect) effect;
-            EffectData data = specialEffect.write();
-            effectDataStringify.write(data, writer);
+            ActiveWriter active = specialEffect.write();
+            b.key(effect.key()).value(active.getDWData());
         } else {
-            String stringValue = effect.stringValue();
-            writer.write(effect.key()).eq().write(stringValue);
+            DWData dwData = effect.dwValue();
+            b.key(effect.key()).value(dwData);
         }
     }
+
+
 }

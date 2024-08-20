@@ -1,15 +1,14 @@
 package mouse.hoi.main.states.reader;
 
 import lombok.RequiredArgsConstructor;
-import mouse.hoi.exception.ReaderException;
 import mouse.hoi.main.states.data.Buildings;
-import mouse.hoi.main.states.data.StateEnums;
-import mouse.hoi.tools.parser.impl.ast.BlockNode;
+import mouse.hoi.tools.parser.impl.categories.CategoryAssigner;
+import mouse.hoi.tools.parser.impl.categories.CategoryMap;
+import mouse.hoi.tools.parser.impl.categories.TokenCategory;
+import mouse.hoi.tools.parser.impl.dom.DomData;
+import mouse.hoi.tools.parser.impl.dom.DomKV;
+import mouse.hoi.tools.parser.impl.dom.DomObject;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
-import mouse.hoi.tools.parser.impl.reader.helper.Readers;
-import mouse.hoi.tools.parser.impl.reader.lr.LeftRightValue;
-import mouse.hoi.tools.parser.impl.reader.lr.LeftValue;
-import mouse.hoi.tools.parser.impl.reader.lr.RightValue;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,51 +17,38 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BuildingsReader implements DataReader<Buildings> {
 
-    private final Readers readers;
+    private final CategoryAssigner categoryAssigner;
     @Override
     public Class<Buildings> forType() {
         return Buildings.class;
     }
-
     @Override
-    public void onKeyValue(Buildings buildings, LeftValue leftValue, RightValue rightValue) {
-        String[] buildConst = StateEnums.BUILDINGS;
-
-        String type = leftValue.stringValue();
-        for(String v : buildConst) {
-            if (type.equalsIgnoreCase(v)) {
-                int level = rightValue.intValue();
-                buildings.addBuilding(type, level);
-                return;
-            }
+    public Buildings read(DomData domData) {
+        CategoryMap categoryMap = categoryAssigner.mapCategory(domData.object());
+        List<DomKV> buildingList = categoryMap.onCategory(TokenCategory.BUILDING);
+        Buildings buildings = new Buildings();
+        for (DomKV building : buildingList) {
+            String type = building.key().val().stringValue();
+            int level = building.value().simple().val().intValue();
+            buildings.addBuilding(type, level);
         }
-        if (leftValue.isInteger()) {
-            createProvinceBuildings(buildings, leftValue, rightValue);
-            return;
+        List<DomKV> provinceBuildingList = categoryMap.onCategory(TokenCategory.NUMBER);
+        for (DomKV provBuilding : provinceBuildingList) {
+            createProvinceBuildings(buildings, provBuilding);
         }
-        throw new ReaderException("Unknown building type: " + leftValue);
+        return buildings;
+    }
+    private void createProvinceBuildings(Buildings buildings, DomKV provBuilding) {
+        int province = provBuilding.key().val().intValue();
+        DomObject object = provBuilding.value().object();
+        CategoryMap categoryMap = categoryAssigner.mapCategory(object);
+        List<DomKV> provBuildList = categoryMap.onCategory(TokenCategory.BUILDING);
+        for (DomKV domKV : provBuildList) {
+            String type = domKV.key().val().stringValue();
+            int level = domKV.value().simple().val().intValue();
+            buildings.addProvinceBuilding(province, type, level);
+        }
     }
 
-    private void createProvinceBuildings(Buildings buildings, LeftValue leftValue, RightValue rightValue) {
-        String[] provConst = StateEnums.PROVINCE_BUILDINGS;
-        int province = leftValue.intValue();
-        BlockNode blockNode = rightValue.blockValue();
-        List<LeftRightValue> leftRightValues = readers.interpreters().getLeftRightValues(blockNode);
-        for (LeftRightValue lrValues : leftRightValues) {
-            LeftValue leftSub = lrValues.getLeftValue();
-            String typeS = leftSub.stringValue();
-            boolean match = false;
-            for (String str : provConst) {
-                if (str.equals(typeS)) {
-                    int level = lrValues.getRightValue().intValue();
-                    buildings.addProvinceBuilding(province, typeS, level);
-                    match = true;
-                    break;
-                }
-            }
-            if (!match) {
-                throw new ReaderException("Unexpected province building: " + typeS);
-            }
-        }
-    }
+
 }

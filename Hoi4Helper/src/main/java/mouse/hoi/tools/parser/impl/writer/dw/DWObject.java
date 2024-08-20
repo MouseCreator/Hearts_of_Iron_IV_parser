@@ -7,9 +7,9 @@ import mouse.hoi.tools.parser.impl.writer.style.ObjectStyle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DWObject implements DWData{
+public class DWObject implements DWFieldList{
     @Getter
-    private final List<DWKeyValue> keyValuePairs;
+    private final List<DWField> keyValuePairs;
     private final ObjectStyle style;
 
     public DWObject() {
@@ -22,8 +22,8 @@ public class DWObject implements DWData{
         keyValuePairs = new ArrayList<>();
     }
 
-    public void add(DWKeyValue dwKeyValue) {
-        keyValuePairs.add(dwKeyValue);
+    public void add(DWField field) {
+        keyValuePairs.add(field);
     }
 
     @Override
@@ -31,18 +31,23 @@ public class DWObject implements DWData{
         writer.write("{");
         if (style == ObjectStyle.DEFAULT) {
             writer.incrementTabs().ln();
-            for (DWKeyValue dwKeyValue : keyValuePairs) {
-                dwKeyValue.write(writer);
+            for (DWField field : keyValuePairs) {
+                field.write(writer);
                 writer.ln();
             }
             writer.decrementTabs();
         } else {
             writer.space();
-            for (DWKeyValue dwKeyValue : keyValuePairs) {
+            for (DWField dwKeyValue : keyValuePairs) {
                 dwKeyValue.write(writer);
                 writer.space();
             }
         }
         writer.write("}");
+    }
+
+    @Override
+    public List<DWField> getFields() {
+        return keyValuePairs;
     }
 }

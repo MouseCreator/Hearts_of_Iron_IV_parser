@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class SpriteType implements Inits {
+public class SpriteType {
     private String name;
     private String textureFile;
     private String effectFile;
     private List<Animation> animationList;
     private boolean legacyLazyLoad;
-    public void initialize() {
+
+    public SpriteType() {
         animationList = new ArrayList<>();
     }
 }

@@ -22,4 +22,14 @@ public class TokenTesterImpl implements TokenTester {
             return false;
         }
     }
+
+    @Override
+    public boolean isEffect(String stringKey) {
+        return false;
+    }
+
+    @Override
+    public boolean isTrigger(String stringKey) {
+        return false;
+    }
 }

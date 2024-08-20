@@ -5,12 +5,11 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 @Data
-public class SpriteTypes implements Inits {
+public class SpriteTypes {
 
     private List<SpriteType> spriteTypeList;
 
-    @Override
-    public void initialize() {
+    public SpriteTypes() {
         spriteTypeList = new ArrayList<>();
     }
 }

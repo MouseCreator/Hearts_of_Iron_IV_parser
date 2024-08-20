@@ -47,7 +47,7 @@ public class SpriteTypesSynchronizer {
         List<SpriteType> missing = createSpriteTypesFromFilenames(supplier, distinct.getMissing());
         resultSpriteTypes.addAll(missing);
         spriteTypes.setSpriteTypeList(resultSpriteTypes);
-        wrapper.setList(List.of(spriteTypes));
+        wrapper.setSpriteTypes(List.of(spriteTypes));
         return wrapper;
     }
 

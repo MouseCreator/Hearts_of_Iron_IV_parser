@@ -7,9 +7,6 @@ import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.query.DomObjectQuery;
 import mouse.hoi.tools.parser.impl.dom.query.DomQueryService;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
-import mouse.hoi.tools.parser.impl.reader.helper.Readers;
-import mouse.hoi.tools.parser.impl.reader.lr.LeftValue;
-import mouse.hoi.tools.parser.impl.reader.lr.RightValue;
 import org.springframework.stereotype.Service;
 
 @Service

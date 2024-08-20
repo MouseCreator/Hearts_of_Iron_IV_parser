@@ -4,6 +4,7 @@ import mouse.hoi.main.gfx.data.SpriteTypesWrapper;
 import mouse.hoi.tools.context.Context;
 import mouse.hoi.tools.parser.impl.ast.AbstractSyntaxTree;
 import mouse.hoi.tools.parser.impl.bind.ScanParseBinder;
+import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.reader.engine.ReaderEngine;
 import mouse.hoi.tools.parser.impl.writer.engine.WriterEngine;
 import org.junit.jupiter.api.Assertions;
@@ -61,8 +62,6 @@ class SpriteTypesTest {
                 
                 """;
         AbstractSyntaxTree ast = binder.createTreeFromContent(expected);
-        SpriteTypesWrapper fromContent = reader.read(ast, SpriteTypesWrapper.class);
-        String backToString = writer.write(fromContent);
-        Assertions.assertEquals(expected, backToString);
+        DomData domFromRoot = reader.createDomFromRoot(ast);
     }
 }

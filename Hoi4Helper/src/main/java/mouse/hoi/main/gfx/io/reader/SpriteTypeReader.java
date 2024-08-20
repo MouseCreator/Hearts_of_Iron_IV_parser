@@ -7,14 +7,12 @@ import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.query.DomObjectQuery;
 import mouse.hoi.tools.parser.impl.dom.query.DomQueryService;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
-import mouse.hoi.tools.parser.impl.reader.helper.Readers;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class SpriteTypeReader implements DataReader<SpriteType> {
 
-    private final Readers readers;
     private final DomQueryService domQueryService;
     @Override
     public Class<SpriteType> forType() {

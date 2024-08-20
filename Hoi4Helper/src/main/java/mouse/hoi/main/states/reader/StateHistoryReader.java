@@ -4,27 +4,40 @@ import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.states.data.Buildings;
 import mouse.hoi.main.states.data.StateHistory;
 import mouse.hoi.main.states.data.VictoryPoint;
+import mouse.hoi.tools.parser.impl.dom.DomData;
+import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;
+import mouse.hoi.tools.parser.impl.dom.query.DomObjectQuery;
+import mouse.hoi.tools.parser.impl.dom.query.DomQueryService;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
-import mouse.hoi.tools.parser.impl.reader.helper.Readers;
-import mouse.hoi.tools.parser.impl.reader.lr.LeftValue;
-import mouse.hoi.tools.parser.impl.reader.lr.RightValue;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class StateHistoryReader implements DataReader<StateHistory> {
 
-    private final Readers readers;
+    private final InterpreterManager interpreterManager;
+
+    private final DomQueryService queryService;
     @Override
     public Class<StateHistory> forType() {
         return StateHistory.class;
     }
 
     @Override
-    public void onKeyValue(StateHistory history, LeftValue leftValue, RightValue rightValue) {
-        readers.lrValues().with(leftValue, rightValue)
-                .onToken("owner").setString(history::setOwner)
-                .onToken("victory_points").mapBlock(b -> readers.interpreters().read(VictoryPoint.class, b)).push(history::getVictoryPointList)
-                .onToken("buildings").mapBlock(b -> readers.interpreters().read(Buildings.class, b)).consume(history::setBuildings);
+    public StateHistory read(DomData domData) {
+        StateHistory history = new StateHistory();
+        DomObjectQuery query = queryService.validateAndQueryObject(domData);
+        query.onToken("owner").string().set(history::setOwner);
+        List<DomData> victoryPoints = query.onToken("victory_points").list();
+        for (DomData vp : victoryPoints) {
+            VictoryPoint victoryPoint = interpreterManager.createObject(vp, VictoryPoint.class);
+            history.getVictoryPointList().add(victoryPoint);
+        }
+        query.onToken("buildings").object(Buildings.class).set(history::setBuildings);
+        query.onToken("add_core_of").string().push(history::getCores);
+        query.onToken("add_claim_by").string().push(history::getClaims);
+        return history;
     }
 }

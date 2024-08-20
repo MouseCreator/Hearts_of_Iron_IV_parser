@@ -17,10 +17,12 @@ public class Triggers implements Scoped {
     @Getter
     private final List<FlowTrigger> flowTriggers;
     private final Map<String, Triggers> subTriggers;
+    private final List<Trigger> simpleTriggers;
     public Triggers(Scope scope) {
         this.scope = scope;
         conditionalTriggers = new ArrayList<>();
         flowTriggers = new ArrayList<>();
+        simpleTriggers = new ArrayList<>();
         subTriggers = new HashMap<>();
     }
 
@@ -29,8 +31,15 @@ public class Triggers implements Scoped {
         return scope;
     }
 
-    public void addSubTriggers(Triggers triggers) {
-        String origin = triggers.getScope().origin();
-        subTriggers.put(origin, triggers);
+    public void addSubTriggers(String key, Triggers triggers) {
+        subTriggers.put(key, triggers);
+    }
+
+    public void addSubTriggers(int key, Triggers triggers) {
+        subTriggers.put(String.valueOf(key), triggers);
+    }
+
+    public void addSimpleTrigger(Trigger trigger) {
+        simpleTriggers.add(trigger);
     }
 }

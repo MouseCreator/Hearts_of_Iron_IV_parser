@@ -2,6 +2,7 @@ package mouse.hoi.tools.parser.impl.writer.support;
 
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.tools.parser.impl.writer.DataWriterManager;
+import mouse.hoi.tools.parser.impl.writer.style.ListStyle;
 import mouse.hoi.tools.parser.impl.writer.style.ObjectStyle;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +18,8 @@ public class WriterSupport {
     }
     public DWObjectBuilder build(ObjectStyle style) {
         return new DWObjectBuilder(style, writerManager);
+    }
+    public DWListBuilder list(ListStyle style) {
+        return new DWListBuilder(style);
     }
 }

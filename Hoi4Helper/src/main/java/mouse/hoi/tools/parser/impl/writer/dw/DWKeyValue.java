@@ -2,7 +2,7 @@ package mouse.hoi.tools.parser.impl.writer.dw;
 
 import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
 
-public class DWKeyValue implements DWData {
+public class DWKeyValue implements DWField {
 
     private final DWSimple key;
     private final DWData target;

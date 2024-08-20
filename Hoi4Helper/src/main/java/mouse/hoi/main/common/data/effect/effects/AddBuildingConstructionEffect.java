@@ -2,16 +2,15 @@ package mouse.hoi.main.common.data.effect.effects;
 
 import lombok.Data;
 import mouse.hoi.main.common.data.effect.UseEffect;
-import mouse.hoi.main.common.data.effect.store.EffectData;
 import mouse.hoi.main.common.data.effect.SpecialEffect;
-import mouse.hoi.main.common.data.effect.store.EffectDataObj;
-import mouse.hoi.main.common.data.effect.store.EffectDataSimple;
 import mouse.hoi.main.common.data.scope.ScopeEnum;
+import mouse.hoi.tools.parser.impl.dom.active.ActiveObject;
+import mouse.hoi.tools.parser.impl.dom.active.ActiveWriter;
+import mouse.hoi.tools.parser.impl.dom.active.ObjectActiveWriter;
 
 import java.util.Optional;
 @UseEffect(key = "add_building_construction", scope=ScopeEnum.STATE)
 public class AddBuildingConstructionEffect extends SpecialEffect {
-
     private String type;
     private int level;
     private boolean instant;
@@ -36,43 +35,39 @@ public class AddBuildingConstructionEffect extends SpecialEffect {
         }
     }
     @Override
-    public void read(EffectData effectDataInput) {
-        EffectDataObj effectData = effectDataInput.object();
-        type = effectData.getString("bunker");
-        level = effectData.getInteger("level");
-        instant = effectData.getBoolean("instant_build");
-        Optional<EffectData> province = effectData.optionalData("province");
+    public void read(ActiveObject activeObject) {
+        type = activeObject.getString("bunker");
+        level = activeObject.getInteger("level");
+        instant = activeObject.getBoolean("instant_build");
+        Optional<ActiveObject> province = activeObject.optionalData("province");
         if (province.isPresent()) {
-            EffectData provinceData = province.get();
+            ActiveObject provinceData = province.get();
             if (provinceData.isSimple()) {
                 provinceSimple = provinceData.simple().intValue();
             } else {
-                EffectDataObj object = provinceData.object();
                 provinceComplex = new ProvinceComplex();
-                object.optionalBoolean("all_provinces").ifPresent(provinceComplex::setAllProvinces);
-                object.optionalBoolean("limit_to_coastal").ifPresent(provinceComplex::setLimitToCoastal);
-                object.optionalBoolean("limit_to_naval_base").ifPresent(provinceComplex::setLimitToNavalBase);
-                object.optionalBoolean("limit_to_border").ifPresent(provinceComplex::setLimitToBorder);
-                object.optionalString("limit_to_border_country").ifPresent(provinceComplex::setLimitToBorderCountry);
-                object.optionalBoolean("limit_to_victory_point").ifPresent(provinceComplex::setLimitToVictoryPoint);
+                provinceData.optionalBoolean("all_provinces").ifPresent(provinceComplex::setAllProvinces);
+                provinceData.optionalBoolean("limit_to_coastal").ifPresent(provinceComplex::setLimitToCoastal);
+                provinceData.optionalBoolean("limit_to_naval_base").ifPresent(provinceComplex::setLimitToNavalBase);
+                provinceData.optionalBoolean("limit_to_border").ifPresent(provinceComplex::setLimitToBorder);
+                provinceData.optionalString("limit_to_border_country").ifPresent(provinceComplex::setLimitToBorderCountry);
+                provinceData.optionalBoolean("limit_to_victory_point").ifPresent(provinceComplex::setLimitToVictoryPoint);
             }
         }
     }
 
     @Override
-    public EffectData write() {
-        EffectDataObj effectData = new EffectDataObj();
+    public ActiveWriter write() {
+        ObjectActiveWriter effectData = ObjectActiveWriter.object();
         effectData.put("type", type);
         effectData.put("level", level);
         if (instant)
             effectData.put("instant_build", true);
         if (provinceSimple != null) {
-            EffectDataSimple simple = new EffectDataSimple();
-            simple.putSimple(provinceSimple);
-            effectData.put("province", simple);
+            effectData.put("province", provinceSimple);
         }
         else if (provinceComplex != null) {
-            EffectDataObj provinceData = new EffectDataObj();
+            ObjectActiveWriter provinceData = ObjectActiveWriter.object();
             if (provinceComplex.allProvinces) {
                 provinceData.put("all_provinces", true);
             }

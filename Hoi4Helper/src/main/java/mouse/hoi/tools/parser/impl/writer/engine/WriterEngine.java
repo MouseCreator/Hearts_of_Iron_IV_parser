@@ -11,7 +11,6 @@ import java.util.*;
 
 @Service
 public class WriterEngine {
-
     private final Map<Class<?>, List<DataWriter<?>>> writersMap;
     private final DWWriter dwWriter;
     public WriterEngine(List<DataWriter<?>> writers, DWWriter dwWriter) {

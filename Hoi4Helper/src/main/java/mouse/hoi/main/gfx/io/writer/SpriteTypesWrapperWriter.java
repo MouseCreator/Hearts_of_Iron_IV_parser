@@ -21,7 +21,7 @@ public class SpriteTypesWrapperWriter implements DataWriter<SpriteTypesWrapper> 
     @Override
     public DWData write(SpriteTypesWrapper wrapper, ObjectStyle style) {
         DWObjectBuilder builder = writerSupport.build(style);
-        builder.listAll("spriteTypes").objects(wrapper::getList);
+        builder.listAll("spriteTypes").objects(wrapper::getSpriteTypes);
         return builder.get();
     }
 }

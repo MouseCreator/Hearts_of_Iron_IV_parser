@@ -1,4 +1,4 @@
-package mouse.hoi.main.common.framework;
+package mouse.hoi.main.common.framework.effect;
 
 import lombok.Getter;
 import mouse.hoi.main.common.data.scope.ScopeEnum;

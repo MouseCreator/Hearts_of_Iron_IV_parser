@@ -68,8 +68,10 @@ public class Effects implements Scoped {
         return scope;
     }
 
-    public void addSubEffects(Effects c) {
-        String key = c.getScope().origin();
+    public void addSubEffects(String key, Effects c) {
         subEffects.put(key, c);
+    }
+    public void addSubEffects(int key, Effects c) {
+        subEffects.put(String.valueOf(key), c);
     }
 }

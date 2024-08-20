@@ -6,14 +6,12 @@ import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.query.DomObjectQuery;
 import mouse.hoi.tools.parser.impl.dom.query.DomQueryService;
 import mouse.hoi.tools.parser.impl.reader.DataReader;
-import mouse.hoi.tools.parser.impl.reader.helper.Readers;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class DPosReader implements DataReader<DPos> {
 
-    private final Readers readers;
     private final DomQueryService queryService;
     @Override
     public Class<DPos> forType() {

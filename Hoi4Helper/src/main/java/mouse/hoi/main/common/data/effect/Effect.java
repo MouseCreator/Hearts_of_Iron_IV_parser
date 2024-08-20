@@ -1,9 +1,7 @@
 package mouse.hoi.main.common.data.effect;
 
 import mouse.hoi.exception.EffectException;
-import mouse.hoi.main.common.data.scope.ScopeEnum;
-
-import java.util.List;
+import mouse.hoi.tools.parser.impl.writer.dw.DWData;
 
 public interface Effect {
     default boolean isInteger() {
@@ -33,5 +31,8 @@ public interface Effect {
     default boolean isSpecial() {
         return false;
     }
-    String key() ;
+    String key();
+    default DWData dwValue()  {
+        throw new EffectException("Effect " + this + " has no DW value");
+    }
 }

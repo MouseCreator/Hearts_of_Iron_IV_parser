@@ -22,7 +22,7 @@ public class SpriteTypesWrapperReader implements DataReader<SpriteTypesWrapper> 
     public SpriteTypesWrapper read(DomData domData) {
         SpriteTypesWrapper spriteTypesWrapper = new SpriteTypesWrapper();
         DomObjectQuery query = queryService.validateAndQueryObject(domData);
-        query.onToken("spriteTypes").object(SpriteTypes.class).push(spriteTypesWrapper::getList);
+        query.onToken("spriteTypes").object(SpriteTypes.class).push(spriteTypesWrapper::getSpriteTypes);
         return spriteTypesWrapper;
     }
 }

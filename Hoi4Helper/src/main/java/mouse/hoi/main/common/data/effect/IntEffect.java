@@ -1,6 +1,9 @@
 package mouse.hoi.main.common.data.effect;
 
 
+import mouse.hoi.tools.parser.impl.writer.dw.DWData;
+import mouse.hoi.tools.parser.impl.writer.dw.DWInteger;
+
 public abstract class IntEffect extends AbstractEffect {
     private int value;
 
@@ -31,5 +34,10 @@ public abstract class IntEffect extends AbstractEffect {
     @Override
     public String stringValue() {
         return String.valueOf(value);
+    }
+
+    @Override
+    public DWData dwValue() {
+        return new DWInteger(value);
     }
 }

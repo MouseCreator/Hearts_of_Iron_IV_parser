@@ -4,6 +4,7 @@ import mouse.hoi.exception.DomException;
 import mouse.hoi.tools.parser.data.GameDate;
 import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.DomList;
+import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;
 import mouse.hoi.tools.parser.impl.reader.lr.PossibleValue;
 import mouse.hoi.tools.parser.impl.reader.lr.SimpleValue;
 
@@ -14,8 +15,11 @@ import java.util.stream.Stream;
 
 public class DomQueryResult {
     private final List<DomData> list;
-    public DomQueryResult(List<DomData> dataByKey) {
+
+    private final InterpreterManager interpreterManager;
+    public DomQueryResult(List<DomData> dataByKey, InterpreterManager interpreterManager) {
         this.list = dataByKey;
+        this.interpreterManager = interpreterManager;
     }
 
     public boolean isEmpty() {
@@ -72,11 +76,11 @@ public class DomQueryResult {
     }
 
     private void fillObject(Object object, DomData domData) {
-        //TODO: fill object by class
+        interpreterManager.fillObject(domData, object);
     }
 
     private <T> T createObject(Class<T> clazz, DomData domData) {
-        //TODO: add interpretation by class
+        return interpreterManager.createObject(domData, clazz);
     }
 
     public GenericResultQuery<String> string() {

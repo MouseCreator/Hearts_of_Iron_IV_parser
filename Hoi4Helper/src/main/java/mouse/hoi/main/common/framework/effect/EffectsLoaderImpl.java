@@ -1,4 +1,4 @@
-package mouse.hoi.main.common.framework;
+package mouse.hoi.main.common.framework.effect;
 
 import mouse.hoi.main.common.data.effect.UseEffect;
 import mouse.hoi.main.common.data.scope.ScopeEnum;
