@@ -11,33 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 @Service
-public class InterpreterManagerImpl implements InterpreterManager {
+public class InterpreterManagerImpl implements InterpreterManager, InterpreterMapAware {
 
-    private final Map<Class<?>, DataReader<?>> readerMap;
-    private final Map<Class<?>, InitsReader<?>> initsMap;
-
-    private final List<InterpreterAware> awares;
-
-    public InterpreterManagerImpl(List<DataReader<?>> dataReaderList, List<InitsReader<?>> initsReaders, List<InterpreterAware> awares) {
-        this.awares = awares;
-        readerMap = new HashMap<>();
-        initsMap = new HashMap<>();
-        for (DataReader<?> reader : dataReaderList) {
-            readerMap.put(reader.forType(), reader);
-        }
-        for (InitsReader<?> inits : initsReaders) {
-            initsMap.put(inits.forType(), inits);
-        }
-    }
-
-    @PostConstruct
-    void init() {
-        awares.forEach(t -> t.setInterpreter(this));
-    }
+    private InterpreterMap interpreterMap;
 
     @Override
     public <T> T createObject(DomData domData, Class<T> clazz) {
-        DataReader<?> reader = readerMap.get(clazz);
+        DataReader<?> reader = interpreterMap.getReader(clazz);
         if (reader == null) {
             throw new DomException("No data reader for class: " + clazz);
         }
@@ -48,7 +28,7 @@ public class InterpreterManagerImpl implements InterpreterManager {
     @Override
     public void fillObject(DomData domData, Object object) {
         Class<?> clazz = object.getClass();
-        InitsReader<?> initsReader = initsMap.get(clazz);
+        InitsReader<?> initsReader = interpreterMap.getInits(clazz);
         if (initsReader == null) {
             throw new DomException("No inits reader for class: " + clazz);
         }
@@ -59,5 +39,10 @@ public class InterpreterManagerImpl implements InterpreterManager {
         Class<T> type = initsReader.forType();
         T casted = type.cast(object);
         initsReader.read(casted, domData);
+    }
+
+    @Override
+    public void setInterpreter(InterpreterMap interpreterMap) {
+        this.interpreterMap = interpreterMap;
     }
 }

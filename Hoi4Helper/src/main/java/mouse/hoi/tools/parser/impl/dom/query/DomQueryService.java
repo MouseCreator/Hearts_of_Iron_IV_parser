@@ -4,15 +4,14 @@ import lombok.RequiredArgsConstructor;
 import mouse.hoi.exception.DomException;
 import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.DomObject;
-import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterAware;
 import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class DomQueryService implements InterpreterAware {
+public class DomQueryService  {
 
-    private InterpreterManager interpreterManager;
+    private final InterpreterManager interpreterManager;
     public DomObjectQuery queryObject(DomObject domObject) {
         return new DomObjectQuery(domObject, interpreterManager);
     }
@@ -33,10 +32,5 @@ public class DomQueryService implements InterpreterAware {
             throw new DomException("Expected to be a list, but got: " + domData);
         }
         return new DomListQuery(domData.list());
-    }
-
-    @Override
-    public void setInterpreter(InterpreterManager interpreterManager) {
-        this.interpreterManager = interpreterManager;
     }
 }

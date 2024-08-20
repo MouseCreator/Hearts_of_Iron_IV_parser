@@ -5,7 +5,6 @@ import mouse.hoi.main.states.data.Buildings;
 import mouse.hoi.main.states.data.StateHistory;
 import mouse.hoi.main.states.data.VictoryPoint;
 import mouse.hoi.tools.parser.impl.dom.DomData;
-import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterAware;
 import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;
 import mouse.hoi.tools.parser.impl.dom.query.DomObjectQuery;
 import mouse.hoi.tools.parser.impl.dom.query.DomQueryService;
@@ -16,10 +15,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class StateHistoryReader implements DataReader<StateHistory>, InterpreterAware {
+public class StateHistoryReader implements DataReader<StateHistory> {
 
-    private InterpreterManager interpreterManager;
-
+    private final InterpreterManager interpreterManager;
 
 
     private final DomQueryService queryService;
@@ -42,10 +40,5 @@ public class StateHistoryReader implements DataReader<StateHistory>, Interpreter
         query.onToken("add_core_of").string().push(history::getCores);
         query.onToken("add_claim_by").string().push(history::getClaims);
         return history;
-    }
-
-    @Override
-    public void setInterpreter(InterpreterManager interpreterManager) {
-        this.interpreterManager = interpreterManager;
     }
 }

@@ -16,6 +16,14 @@ public class AddBuildingConstructionEffect extends SpecialEffect {
     private boolean instant;
     private Integer provinceSimple = null;
     private ProvinceComplex provinceComplex = null;
+
+    public static AddBuildingConstructionEffect build(String type, int level) {
+        AddBuildingConstructionEffect effect = new AddBuildingConstructionEffect();
+        effect.type = type;
+        effect.level = level;
+        effect.instant = true;
+        return effect;
+    }
     @Data
     private static class ProvinceComplex {
         private boolean allProvinces;

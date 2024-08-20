@@ -14,7 +14,6 @@ import mouse.hoi.main.common.data.trigger.conditional.ConditionalTriggers;
 import mouse.hoi.main.common.framework.trigger.TriggerManager;
 import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.DomKV;
-import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterAware;
 import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;
 import mouse.hoi.tools.parser.impl.reader.inits.InitsReader;
 
@@ -24,11 +23,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TriggersReader implements InitsReader<Triggers>, InterpreterAware {
+public class TriggersReader implements InitsReader<Triggers> {
 
     private final CategoryAssigner categoryAssigner;
 
-    private InterpreterManager interpreterManager;
+    private final InterpreterManager interpreterManager;
 
     private final TriggerManager triggerManager;
     @Override
@@ -93,10 +92,5 @@ public class TriggersReader implements InitsReader<Triggers>, InterpreterAware {
             Trigger trigger = triggerManager.createTrigger(d);
             triggers.addSimpleTrigger(trigger);
         }
-    }
-
-    @Override
-    public void setInterpreter(InterpreterManager interpreterManager) {
-        this.interpreterManager = interpreterManager;
     }
 }

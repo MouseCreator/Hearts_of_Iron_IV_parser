@@ -6,7 +6,6 @@ import mouse.hoi.main.bookmark.data.CountryDescription;
 import mouse.hoi.main.common.data.effect.scoped.Effects;
 import mouse.hoi.main.common.data.scope.GlobalScope;
 import mouse.hoi.main.common.tester.TokenTester;
-import mouse.hoi.tools.parser.impl.categories.CategoryAssigner;
 import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.query.DomObjectQuery;
 import mouse.hoi.tools.parser.impl.dom.query.DomQueryService;
@@ -33,7 +32,7 @@ public class BookmarkReader implements DataReader<Bookmark> {
         query.requireToken("desc").string().set(bookmark::setDesc);
         query.requireToken("date").date().set(bookmark::setDate);
         query.requireToken("picture").string().set(bookmark::setPicture);
-        query.requireToken("default").bool().set(bookmark::setDefault);
+        query.onToken("default").bool().setOrDefault(bookmark::setDefault, false);
         query.requireToken("default_country").string().set(bookmark::setDefaultCountry);
         Effects effects = new Effects(new GlobalScope());
         query.onToken("effect").object(()->effects).setOrDefault(bookmark::setEffects, effects);

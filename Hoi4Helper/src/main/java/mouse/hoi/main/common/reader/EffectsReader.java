@@ -12,7 +12,6 @@ import mouse.hoi.main.common.data.scope.Scope;
 import mouse.hoi.main.common.framework.effect.EffectManager;
 import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.DomKV;
-import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterAware;
 import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;
 import mouse.hoi.tools.parser.impl.reader.inits.InitsReader;
 import org.springframework.stereotype.Service;
@@ -21,11 +20,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class EffectsReader implements InitsReader<Effects>, InterpreterAware {
+public class EffectsReader implements InitsReader<Effects> {
     private final EffectManager effectManager;
     private final CategoryAssigner categoryAssigner;
 
-    private InterpreterManager interpreterManager;
+    private final InterpreterManager interpreterManager;
     @Override
     public Class<Effects> forType() {
         return Effects.class;
@@ -104,8 +103,5 @@ public class EffectsReader implements InitsReader<Effects>, InterpreterAware {
         return domKV.key().val().stringValue();
     }
 
-    @Override
-    public void setInterpreter(InterpreterManager interpreterManager) {
-        this.interpreterManager = interpreterManager;
-    }
+
 }
