@@ -1,6 +1,7 @@
 package mouse.hoi.main.states.reader;
 
 import lombok.RequiredArgsConstructor;
+import mouse.hoi.main.states.data.Resources;
 import mouse.hoi.main.states.data.State;
 import mouse.hoi.main.states.data.StateHistory;
 import mouse.hoi.tools.parser.impl.dom.DomData;
@@ -33,6 +34,7 @@ public class StateReader implements DataReader<State> {
         query.onToken("state_category").string().setOrNull(state::setCategory);
         query.onToken("buildings_max_level_factor").doublev().setOrDefault(state::setBuildingsMaxLevelFactor, 1.0);
         query.onToken("history").object(StateHistory.class).setOrDefault(state::setStateHistory, new StateHistory());
+        query.onToken("resources").object(Resources.class).setOrDefault(state::setResources, new Resources());
         return state;
     }
 }

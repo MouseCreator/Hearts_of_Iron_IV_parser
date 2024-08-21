@@ -19,6 +19,7 @@ public class StateHistory {
 
     public StateHistory() {
         victoryPointList = new ArrayList<>();
+        claims = new ArrayList<>();
         cores = new ArrayList<>();
     }
 

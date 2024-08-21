@@ -23,8 +23,12 @@ public class ActiveObject {
     }
 
     public String getString(String key) {
-        DomSimple simple = getSimpleByKey(key);
-        return simple.val().stringValue();
+        try {
+            DomSimple simple = getSimpleByKey(key);
+            return simple.val().stringValue();
+        } catch (Exception e) {
+            throw new DomException("Cannot get string by key: " + key, e);
+        }
     }
 
     private DomSimple getSimpleByKey(String key) {

@@ -33,7 +33,7 @@ public class SpriteTypesSynchronizer {
         return synchronize(spriteTypesWrapper, baseDirectory, factory);
     }
     public SpriteTypesWrapper synchronize(SpriteTypesWrapper spriteTypesWrapper, String baseDirectory, Function<String, SpriteType> factory) {
-        List<String> strings = pathsLoader.allFiles(baseDirectory, false, true);
+        List<String> strings = pathsLoader.allFiles(baseDirectory, true, true);
         List<SpriteType> spriteTypeList = spriteTypesWrapper.merged().getSpriteTypeList();
         DistinctTypesResult distinct = distinctSpriteTypesManager.onDistinct(spriteTypeList, strings);
         return createWrapper(factory, spriteTypeList, distinct);

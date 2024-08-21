@@ -2,6 +2,7 @@ package mouse.hoi.tools.parser.impl.dom.query;
 
 import mouse.hoi.exception.DomException;
 import mouse.hoi.tools.parser.data.GameDate;
+import mouse.hoi.tools.parser.impl.dom.DomComplex;
 import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.DomList;
 import mouse.hoi.tools.parser.impl.dom.DomSimple;
@@ -137,5 +138,10 @@ public class DomQueryResult {
         DomData d = requireSingle();
         fillObject(object, d);
         return new GenericResultQuery<>(object);
+    }
+
+    public DomComplex complexValue() {
+        DomData domData = requireSingle();
+        return domData.complex();
     }
 }

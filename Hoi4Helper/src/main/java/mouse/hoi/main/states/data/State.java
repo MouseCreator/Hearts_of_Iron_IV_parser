@@ -14,6 +14,7 @@ public class State {
     private double localSupplies;
     private double buildingsMaxLevelFactor;
     private StateHistory stateHistory;
+    private Resources resources;
 
     public StateHistory historyOrInit() {
         if (stateHistory == null){

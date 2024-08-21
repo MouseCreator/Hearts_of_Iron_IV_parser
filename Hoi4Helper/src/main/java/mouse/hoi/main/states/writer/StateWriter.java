@@ -28,6 +28,7 @@ public class StateWriter implements DataWriter<State> {
         b.key("name").string(state::getName);
         b.key("manpower").integer(state::getManpower);
         b.key("state_category").string(state::getCategory);
+        b.key("resources").object(state::getResources);
         NotNull.supply(state::getStateHistory, h -> b.key("history").objectRaw(h));
         b.key("provinces").integerList(state::getProvinces, ListStyle.THREE_LINES);
         b.key("buildings_max_level_factor").dbl(state::getBuildingsMaxLevelFactor);

@@ -28,10 +28,10 @@ public class AnimationWriter implements DataWriter<Animation> {
         b.key("animationmaskfile").string(animation::getAnimationMaskFile, StringStyle.QUOTED);
         b.key("animationtexturefile").string(animation::getAnimationTextureFile, StringStyle.QUOTED);
         b.key("animationrotation").dbl(animation::getAnimationRotation, DoubleStyle.min(1));
-        b.key("animationmaskfile").bool(animation::isLooping);
-        b.key("animationmaskfile").dbl(animation::getAnimationTime);
-        b.key("animationmaskfile").dbl(animation::getDelaySeconds);
-        b.key("animationmaskfile").string(animation::getBlendMode, StringStyle.QUOTED);
+        b.key("animationlooping").bool(animation::isLooping);
+        b.key("animationtime").dbl(animation::getAnimationTime);
+        b.key("animationdelay").dbl(animation::getDelaySeconds);
+        b.key("animationblendmode").string(animation::getBlendMode, StringStyle.QUOTED);
         b.key("animationtype").string(animation::getType, StringStyle.QUOTED);
         b.key("animationrotationoffset").object(animation::getRotationOffset, ObjectStyle.ONE_LINE);
         b.key("animationtexturescale").object(animation::getTextureScale, ObjectStyle.ONE_LINE);

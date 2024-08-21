@@ -133,13 +133,11 @@ public class LeftRecursiveParser implements GameFileParser {
 
         Node rightValue = onRightValueExpected(tokenStream);
         keyValueNode.setValue(rightValue);
-
-        Optional<Token> lookahead = tokenStream.lookahead();
-        if (lookahead.isEmpty()) {
+        if (!tokenStream.hasTokens()) {
             return keyValueNode;
         }
-        Token tokenLookahead = lookahead.get();
-        if (tokenLookahead.is("{")){
+        Token token = tokenStream.currentToken();
+        if (token.is("{")){
             BlockNode block = createBlock(tokenStream);
             return new ComplexNode(keyValueNode, block);
         }

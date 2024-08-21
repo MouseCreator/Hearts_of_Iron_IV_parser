@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class IdeasSpriteTypesSynch implements Synchronizer {
 
     private final SpriteTypesSynchronizer spriteTypesSynchronizer;
-    private final PathManager pathManager;
+    private final CommonFactories commonFactories;
     @Override
     public GFXType forType() {
         return GFXType.IDEA;
@@ -26,16 +26,6 @@ public class IdeasSpriteTypesSynch implements Synchronizer {
         String directory = gfxProperties.getIdeasDirectory();
         NotNull.orThrow(file);
         NotNull.orThrow(directory);
-        spriteTypesSynchronizer.synchronizeAndWrite(file, directory, this::factory);
-    }
-    private SpriteType factory(String file) {
-        SpriteType spriteType = new SpriteType();
-        String name = pathManager.build(file).name().noExtension().get();
-        name = "GFX_" + name;
-        spriteType.setName(name);
-        String pathShort = pathManager.build(file).dir("gfx").get();
-        spriteType.setTextureFile(pathShort);
-        spriteType.setLegacyLazyLoad(true);
-        return spriteType;
+        spriteTypesSynchronizer.synchronizeAndWrite(file, directory, commonFactories::GFXPrefixedFactory);
     }
 }

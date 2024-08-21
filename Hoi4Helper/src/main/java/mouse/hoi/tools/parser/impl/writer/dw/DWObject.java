@@ -55,12 +55,11 @@ public class DWObject implements DWFieldList{
                 writer.write("}");
             }
             case EMBEDDED -> {
-                writer.incrementTabs().ln();
+                writer.ln();
                 for (DWField field : keyValuePairs) {
                     field.write(writer);
                     writer.ln();
                 }
-                writer.decrementTabs();
             }
             default -> throw new WriterException("Unknown object style: " + style);
         }

@@ -2,7 +2,9 @@ package mouse.hoi.main.common.data.effect.scoped;
 
 import lombok.Getter;
 import mouse.hoi.exception.EffectException;
+import mouse.hoi.main.common.data.effect.Effect;
 import mouse.hoi.main.common.data.effect.EffectMap;
+import mouse.hoi.main.common.data.effect.UseEffect;
 import mouse.hoi.main.common.data.effect.conditional.ConditionalEffects;
 import mouse.hoi.main.common.data.scope.Scope;
 import mouse.hoi.main.common.data.scope.Scoped;
@@ -50,6 +52,16 @@ public class Effects implements Scoped {
     public List<String> subKeysSorted() {
         Set<String> strings = subEffects.keySet();
         return strings.stream().sorted(Comparators.numberAwareComparator).toList();
+    }
+
+    public <T> List<T> ofType(Class<T> effectClass) {
+        String key = effectClass.getAnnotation(UseEffect.class).key();
+        List<Effect> effects = simpleEffects.getEffects(key);
+        List<T> result = new ArrayList<>();
+        for (Effect e : effects) {
+            result.add(effectClass.cast(e));
+        }
+        return result;
     }
 
     public Optional<Effects> getSubEffect(String subKey) {

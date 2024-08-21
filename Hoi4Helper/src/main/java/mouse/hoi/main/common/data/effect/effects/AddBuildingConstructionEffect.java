@@ -44,9 +44,9 @@ public class AddBuildingConstructionEffect extends SpecialEffect {
     }
     @Override
     public void read(ActiveObject activeObject) {
-        type = activeObject.getString("bunker");
+        type = activeObject.getString("type");
         level = activeObject.getInteger("level");
-        instant = activeObject.getBoolean("instant_build");
+        instant = activeObject.optionalBoolean("instant_build").orElse(false);
         Optional<ActiveObject> province = activeObject.optionalData("province");
         if (province.isPresent()) {
             ActiveObject provinceData = province.get();

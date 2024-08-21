@@ -6,17 +6,17 @@ import mouse.hoi.tools.parser.impl.writer.SpecialWriter;
 @Data
 public class DWComplex implements DWData {
     private final DWSimple simple;
-    private final DWObject object;
+    private final DWData data;
 
-    public DWComplex(DWSimple simple, DWObject object) {
+    public DWComplex(DWSimple simple, DWData data) {
         this.simple = simple;
-        this.object = object;
+        this.data = data;
     }
 
     @Override
     public void write(SpecialWriter writer) {
         simple.write(writer);
         writer.space();
-        object.write(writer);
+        data.write(writer);
     }
 }

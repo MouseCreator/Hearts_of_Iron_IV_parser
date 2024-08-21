@@ -1,6 +1,7 @@
 package mouse.hoi.tools.parser.impl.writer.style;
 
 import lombok.Getter;
+import mouse.hoi.tools.utils.Numbers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -34,10 +35,40 @@ public class DoubleStyle {
         BigDecimal bd = BigDecimal.valueOf(d).setScale(maxAfter, RoundingMode.DOWN);
         String[] parts = bd.toPlainString().split("\\.");
         String integerPart = parts[0];
-        StringBuilder decimalPart = new StringBuilder(parts.length > 1 ? parts[1] : "");
-
-        while (decimalPart.length() < minAfter) {
-            decimalPart.append("0");
+        StringBuilder decimalPart;
+        if (Numbers.dWhole(d)) {
+            decimalPart = new StringBuilder();
+            while (decimalPart.length() < minAfter) {
+                decimalPart.append("0");
+            }
+         } else {
+            decimalPart = new StringBuilder();
+            if (parts.length == 1) {
+                return integerPart;
+            }
+            String t = parts[1];
+            int c = 0;
+            while (decimalPart.length() < minAfter) {
+                if (c < t.length()) {
+                    decimalPart.append(t.charAt(c++));
+                } else {
+                    decimalPart.append("0");
+                }
+            }
+            StringBuilder reverseBuilder = new StringBuilder();
+            boolean nonZeroFound = false;
+            for (int i = maxAfter - 1; i >= minAfter; i--) {
+                char c1 = t.charAt(i);
+                if (nonZeroFound) {
+                    reverseBuilder.append(c1);
+                    continue;
+                }
+                if (c1 != '0') {
+                    nonZeroFound = true;
+                    reverseBuilder.append(c1);
+                }
+            }
+            decimalPart.append(reverseBuilder.reverse());
         }
 
         return (decimalPart.isEmpty()) ? integerPart : integerPart + "." + decimalPart;

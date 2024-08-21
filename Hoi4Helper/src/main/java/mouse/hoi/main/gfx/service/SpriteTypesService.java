@@ -4,6 +4,7 @@ import mouse.hoi.exception.InvalidInputException;
 import mouse.hoi.main.gfx.service.properties.GfxProperties;
 import mouse.hoi.main.gfx.service.properties.GFXType;
 import mouse.hoi.main.gfx.service.synch.Synchronizer;
+import mouse.hoi.tools.context.AppService;
 import mouse.hoi.tools.properties.FileProperties;
 import mouse.hoi.tools.properties.PropertiesHelper;
 import mouse.hoi.tools.properties.PropertyFiller;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class SpriteTypesService {
+public class SpriteTypesService implements AppService {
     private final Map<GFXType, Synchronizer> synchronizerMap;
     private final FileProperties fileProperties;
     private final PropertyFiller propertyFiller;
@@ -37,7 +38,7 @@ public class SpriteTypesService {
         return map;
     }
 
-    public void synchronize() {
+    public void start() {
         PropertyMap map = fileProperties.readProperties("src/main/resources/gfx/gfx.input");
         GfxProperties gfxProperties = propertyFiller.fillObject(map, GfxProperties::new);
         List<String> toSynchronize = getToSynchronize(gfxProperties);

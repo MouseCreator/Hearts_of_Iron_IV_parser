@@ -17,5 +17,9 @@ public class GfxProperties {
     private String ideasFile;
     @FromProperty("ideas_dir")
     private String ideasDirectory;
+    @FromProperty("leaders_dir")
+    private String charactersDirectory;
+    @FromProperty("leaders_file")
+    private String charactersFile;
 
 }

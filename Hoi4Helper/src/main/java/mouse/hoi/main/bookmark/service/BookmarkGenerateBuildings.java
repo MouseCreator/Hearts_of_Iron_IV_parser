@@ -1,11 +1,16 @@
 package mouse.hoi.main.bookmark.service;
 
+import lombok.RequiredArgsConstructor;
+import mouse.hoi.tools.dist.DistributionService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class BookmarkGenerateBuildings {
+
+    private final DistributionService ds;
     public Map<Integer, PreparedBuildings> generateBuildings(StateOwnersMap map, BuildingInputs inputs) {
         Set<String> keys = inputs.keys();
         Map<Integer, PreparedBuildings> buildingsMap = new HashMap<>();
@@ -23,7 +28,7 @@ public class BookmarkGenerateBuildings {
         int docs = def.getDocs();
         List<Double> weightsCoastal = weightsCoastal(stateBuildings);
         for (int i = 0; i < docs; i++) {
-            int index = getRandomElement(weightsCoastal);
+            int index = ds.weightedDistribution(weightsCoastal);
             StateBuildings buildings = stateBuildings.get(index);
             weightsCoastal.set(index, weightsCoastal.get(index)-1);
             buildings.freeSlots -= 1;
@@ -32,7 +37,7 @@ public class BookmarkGenerateBuildings {
         int civs = def.getCivs();
         for (int i = 0; i < civs; i++) {
             List<Double> weights = weights(stateBuildings);
-            int index = getRandomElement(weights);
+            int index = ds.weightedDistribution(weights);
             weights.set(index, weights.get(index)-1);
             StateBuildings buildings = stateBuildings.get(index);
             buildings.freeSlots -= 1;
@@ -41,7 +46,7 @@ public class BookmarkGenerateBuildings {
         int mils = def.getMils();
         for (int i = 0; i < mils; i++) {
             List<Double> weights = weights(stateBuildings);
-            int index = getRandomElement(weights);
+            int index = ds.weightedDistribution(weights);
             weights.set(index, weights.get(index)-1);
             StateBuildings buildings = stateBuildings.get(index);
             buildings.freeSlots -= 1;
@@ -113,23 +118,7 @@ public class BookmarkGenerateBuildings {
         private PreparedBuildings preparedBuilding;
     }
 
-    private int getRandomElement(List<Double> list) {
-        List<Double> cumulativeWeights = new ArrayList<>();
-        double cumulativeSum = 0;
 
-        for (double weight : list) {
-            cumulativeSum += weight;
-            cumulativeWeights.add(cumulativeSum);
-        }
-        double randomValue = Math.random() * cumulativeSum;
-        for (int i = 0; i < cumulativeWeights.size(); i++) {
-            if (randomValue <= cumulativeWeights.get(i)) {
-                return i;
-            }
-        }
-
-        return list.size() - 1;
-    }
 
     private List<StateHistoricalData> filterStates(List<StateHistoricalData> statesOwnedByCountry) {
         List<StateHistoricalData> result = new ArrayList<>();

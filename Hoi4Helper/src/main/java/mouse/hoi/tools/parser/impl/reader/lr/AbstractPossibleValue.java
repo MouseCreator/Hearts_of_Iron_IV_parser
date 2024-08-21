@@ -1,10 +1,11 @@
 package mouse.hoi.tools.parser.impl.reader.lr;
 
 
+import lombok.EqualsAndHashCode;
 import mouse.hoi.tools.parser.data.GameDate;
 import mouse.hoi.tools.parser.impl.ast.BlockNode;
 import mouse.hoi.tools.parser.impl.reader.subs.SubscriptObject;
-
+@EqualsAndHashCode
 public abstract class AbstractPossibleValue implements LeftValue, SimpleValue, RightValue{
     @Override
     public boolean isSubscript() {
