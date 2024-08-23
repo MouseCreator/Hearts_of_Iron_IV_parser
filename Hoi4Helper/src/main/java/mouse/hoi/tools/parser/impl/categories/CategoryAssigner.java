@@ -9,6 +9,7 @@ import mouse.hoi.tools.parser.impl.reader.lr.SimpleValue;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -41,8 +42,12 @@ public class CategoryAssigner {
         if (stringKey.equals("and") || stringKey.equals("or") || stringKey.equals("not")) {
             return TokenCategory.OPERATOR;
         }
+
         if (isCountryTag(stringKey)) {
             return TokenCategory.TAG;
+        }
+        if (isBuilding(stringKey)) {
+            return TokenCategory.BUILDING;
         }
         if (tester.isEffect(stringKey)) {
             return TokenCategory.EFFECT;
@@ -58,6 +63,27 @@ public class CategoryAssigner {
             return TokenCategory.VARIABLE;
         }
         return TokenCategory.NONE;
+    }
+
+    private boolean isBuilding(String key) {
+        //TODO:
+        return
+                Set.of(         "infrastructure",
+                                "industrial_complex",
+                                "arms_factory, bunker",
+                                "coastal_bunker",
+                                "radar",
+                                "air_base",
+                                "supply_node",
+                                "rail_way",
+                                "naval_base",
+                                "anti_air_building",
+                                "synthetic_refinery",
+                                "fuel_silo",
+                                "radar_station",
+                                "rocket_site",
+                                "nuclear_reactor")
+                        .contains(key);
     }
 
     private boolean isCountryTag(String stringKey) {
