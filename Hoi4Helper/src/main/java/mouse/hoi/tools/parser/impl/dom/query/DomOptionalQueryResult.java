@@ -157,4 +157,8 @@ public class DomOptionalQueryResult {
         fillObject(object, d);
         return DefaultableResultQuery.with(object);
     }
+
+    public ListedQueryPreprocessor forEach() {
+        return new ListedQueryPreprocessor(key, list, interpreterManager);
+    }
 }

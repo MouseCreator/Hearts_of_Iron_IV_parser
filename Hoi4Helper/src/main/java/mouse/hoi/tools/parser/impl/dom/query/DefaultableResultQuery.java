@@ -3,6 +3,7 @@ package mouse.hoi.tools.parser.impl.dom.query;
 import mouse.hoi.exception.DomException;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -60,5 +61,19 @@ public class DefaultableResultQuery<T> {
             throw new DomException("Unexpected empty value!");
         }
         consumer.accept(value);
+    }
+
+    public void pushOrSkip(Supplier<Collection<T>> collection) {
+        if (empty) {
+            return;
+        }
+        push(collection);
+    }
+
+    public Optional<T> optional() {
+        if (empty) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(value);
     }
 }

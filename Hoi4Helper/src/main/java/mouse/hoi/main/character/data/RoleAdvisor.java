@@ -3,6 +3,7 @@ package mouse.hoi.main.character.data;
 import lombok.Data;
 import mouse.hoi.main.common.data.trigger.Triggers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -24,4 +25,9 @@ public class RoleAdvisor implements CharacterRole{
     private Triggers allowed;
     private List<String> traits;
     private AiWillDo aiWillDo;
+
+    public RoleAdvisor() {
+        cost = 150;
+        traits = new ArrayList<>();
+    }
 }
