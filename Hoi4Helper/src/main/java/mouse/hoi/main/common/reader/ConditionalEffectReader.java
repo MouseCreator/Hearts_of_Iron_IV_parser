@@ -3,7 +3,7 @@ package mouse.hoi.main.common.reader;
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.common.data.effect.conditional.ConditionalEffect;
 import mouse.hoi.main.common.data.effect.scoped.Effects;
-import mouse.hoi.main.common.data.trigger.Triggers;
+import mouse.hoi.main.common.data.trigger.scoped.Triggers;
 import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.DomObject;
 import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;

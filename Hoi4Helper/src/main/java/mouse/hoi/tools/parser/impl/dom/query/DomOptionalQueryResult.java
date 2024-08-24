@@ -161,4 +161,8 @@ public class DomOptionalQueryResult {
     public ListedQueryPreprocessor forEach() {
         return new ListedQueryPreprocessor(key, list, interpreterManager);
     }
+
+    public DomMappedProcessor map() {
+        return new DomMappedProcessor(key, list);
+    }
 }

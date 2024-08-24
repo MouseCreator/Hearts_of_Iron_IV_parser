@@ -174,6 +174,10 @@ public class DWObjectBuilder {
             value(dwList);
         }
 
+        public void stringList(Supplier<List<String>> strings, ListStyle style) {
+            stringList(strings.get(), style);
+        }
+
 
         public void integerList(Supplier<List<Integer>> supplier, ListStyle style) {
             List<DWSimple> list = new ArrayList<>();

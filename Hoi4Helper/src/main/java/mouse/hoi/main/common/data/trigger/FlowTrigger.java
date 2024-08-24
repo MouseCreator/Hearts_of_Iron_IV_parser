@@ -1,21 +1,24 @@
 package mouse.hoi.main.common.data.trigger;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import mouse.hoi.main.common.data.scope.Scope;
-import mouse.hoi.main.common.data.scope.Scoped;
+import mouse.hoi.main.common.data.trigger.scoped.Triggers;
 
-public class FlowTrigger implements Scoped {
-    private final String key;
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class FlowTrigger extends AbstractTrigger {
     private final Scope scope;
     private final Triggers triggers;
 
     public FlowTrigger(String key, Scope scope) {
-        this.key = key;
+        this.cachedKey = key;
         this.scope = scope;
         triggers = new Triggers(scope);
     }
 
     @Override
-    public Scope getScope() {
-        return scope;
+    public String key() {
+        return cachedKey;
     }
 }

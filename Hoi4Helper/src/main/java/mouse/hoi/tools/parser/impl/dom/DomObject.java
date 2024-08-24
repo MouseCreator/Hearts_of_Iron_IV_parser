@@ -6,7 +6,6 @@ import mouse.hoi.exception.DomException;
 import java.util.*;
 
 public class DomObject implements DomData {
-
     private final Map<DomSimple, List<DomData>> map;
     private final Map<String, DomSimple> casesMap;
     private final List<DomKV> domKVS;

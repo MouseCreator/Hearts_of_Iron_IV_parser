@@ -65,6 +65,9 @@ public class LeftRecursiveParser implements GameFileParser {
         if (lookahead.is("=")) {
             return createKeyValue(tokenStream, leftCreated);
         }
+        if (lookahead.is("<") || lookahead.is(">")) {
+            return createComparison(tokenStream, leftCreated);
+        }
         if (lookahead.is("}")) {
             tokenStream.next();
             return leftCreated;
@@ -77,11 +80,26 @@ public class LeftRecursiveParser implements GameFileParser {
 
     }
 
+    private Node createComparison(TokenStream tokenStream, Node key) {
+        ComparisonNode comparisonNode = new ComparisonNode();
+        comparisonNode.setKey(key);
+
+        Optional<Token> operator = tokenStream.next();
+        SpecialToken special = (SpecialToken) operator.orElseThrow();
+        comparisonNode.setSign(special.val());
+        tokenStream.next();
+
+        Node rightValue = onRightValueExpected(tokenStream);
+        comparisonNode.setValue(rightValue);
+        return comparisonNode;
+    }
+
     private boolean isInfoToken(Token token) {
         return  token instanceof IdToken ||
                 token instanceof IntegerToken ||
                 token instanceof DoubleToken ||
-                token instanceof StringToken || token instanceof DateToken;
+                token instanceof StringToken ||
+                token instanceof DateToken;
     }
 
     private Node onRightValueExpected(TokenStream tokenStream) {

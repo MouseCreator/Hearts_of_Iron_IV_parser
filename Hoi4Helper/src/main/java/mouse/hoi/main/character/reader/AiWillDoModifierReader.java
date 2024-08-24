@@ -2,8 +2,9 @@ package mouse.hoi.main.character.reader;
 
 import lombok.RequiredArgsConstructor;
 import mouse.hoi.main.character.data.AiWillDoModifier;
+import mouse.hoi.main.character.data.AiWillDoOperator;
 import mouse.hoi.main.common.data.scope.CountryScope;
-import mouse.hoi.main.common.data.trigger.Triggers;
+import mouse.hoi.main.common.data.trigger.scoped.Triggers;
 import mouse.hoi.tools.parser.impl.dom.DomData;
 import mouse.hoi.tools.parser.impl.dom.DomObject;
 import mouse.hoi.tools.parser.impl.dom.interpreter.InterpreterManager;
@@ -32,13 +33,14 @@ public class AiWillDoModifierReader implements DataReader<AiWillDoModifier> {
     public AiWillDoModifier read(DomData domData) {
         AiWillDoModifier aiWillDoModifier = new AiWillDoModifier();
         domQueryService.validateObject(domData);
-        List<DomObject> split = splitService.split(domData.object(), List.of(SplitKeys.strings(List.of("factor"))));
+        List<DomObject> split = splitService.split(domData.object(), List.of(SplitKeys.strings(List.of("factor", "add"))));
         DomObject math = split.get(0);
         DomObject triggers = split.get(1);
         Triggers triggersObj = new Triggers(new CountryScope());
         interpreterManager.fillObject(triggers, triggersObj);
         DomObjectQuery query = domQueryService.validateAndQueryObject(math);
-        query.onToken("factor").doublev().setOrSkip(aiWillDoModifier::setFactor);
+        query.onToken("factor").map().doublev(d -> new AiWillDoOperator("factor", d)).pushOrSkip(aiWillDoModifier::getOperators);
+        query.onToken("add").map().doublev(d -> new AiWillDoOperator("add", d)).pushOrSkip(aiWillDoModifier::getOperators);
         aiWillDoModifier.setConditions(triggersObj);
         return aiWillDoModifier;
     }

@@ -4,7 +4,7 @@ import lombok.Data;
 import mouse.hoi.main.common.data.effect.scoped.Effects;
 import mouse.hoi.main.common.data.scope.Scope;
 import mouse.hoi.main.common.data.scope.Scoped;
-import mouse.hoi.main.common.data.trigger.Triggers;
+import mouse.hoi.main.common.data.trigger.scoped.Triggers;
 @Data
 public class ConditionalEffect implements Scoped {
     private Scope scope;

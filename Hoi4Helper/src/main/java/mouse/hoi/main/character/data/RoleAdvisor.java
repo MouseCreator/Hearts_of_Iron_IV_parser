@@ -1,7 +1,7 @@
 package mouse.hoi.main.character.data;
 
 import lombok.Data;
-import mouse.hoi.main.common.data.trigger.Triggers;
+import mouse.hoi.main.common.data.trigger.scoped.Triggers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,8 @@ public class RoleAdvisor implements CharacterRole{
     private String slot;
     private String ledger;
     private String token;
-    private Triggers allowed;
+    private List<String> allowed;
+    private List<String> available;
     private List<String> traits;
     private AiWillDo aiWillDo;
 

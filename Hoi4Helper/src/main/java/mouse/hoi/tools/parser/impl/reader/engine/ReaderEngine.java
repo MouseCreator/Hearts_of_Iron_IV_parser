@@ -16,8 +16,6 @@ public class ReaderEngine {
     public ReaderEngine(NodeMapper nodeMapper) {
         this.nodeMapper = nodeMapper;
     }
-
-
     private List<Node> processRoot(Node node) {
         List<Node> nodes;
         if (node instanceof BlockNode blockNode) {
@@ -77,22 +75,33 @@ public class ReaderEngine {
     private DomData createObject(List<Node> nodes) {
         DomObject domObject = new DomObject();
         for (Node node : nodes) {
-            if (node instanceof ComplexNode cn) {
-                Node key = cn.getKeyValueNode().getKey();
-                SimpleValue simpleKey = requiresSimpleKey(key);
-                DomSimple domSimple = new DomSimple(simpleKey);
-                DomComplex domComplex = onComplexValue(cn);
-                domObject.put(domSimple, domComplex);
-            }
-            else if (node instanceof KeyValueNode kv) {
-                Node key = kv.getKey();
-                Node value = kv.getValue();
-                SimpleValue simpleKey = requiresSimpleKey(key);
-                DomSimple domSimple = new DomSimple(simpleKey);
-                DomData target = readTarget(value);
-                domObject.put(domSimple, target);
-            } else {
-                throw new DomException("Unexpected node type for object: " + node);
+            switch (node) {
+                case ComplexNode cn -> {
+                    Node key = cn.getKeyValueNode().getKey();
+                    SimpleValue simpleKey = requiresSimpleKey(key);
+                    DomSimple domSimple = new DomSimple(simpleKey);
+                    DomComplex domComplex = onComplexValue(cn);
+                    domObject.put(domSimple, domComplex);
+                }
+                case KeyValueNode kv -> {
+                    Node key = kv.getKey();
+                    Node value = kv.getValue();
+                    SimpleValue simpleKey = requiresSimpleKey(key);
+                    DomSimple domSimple = new DomSimple(simpleKey);
+                    DomData target = readTarget(value);
+                    domObject.put(domSimple, target);
+                }
+                case ComparisonNode comparisonNode -> {
+                    Node key = comparisonNode.getKey();
+                    Node value = comparisonNode.getValue();
+                    SimpleValue k = requiresSimpleKey(key);
+                    DomObject comparisonObject = new DomObject();
+                    SimpleValue v = requiresSimpleKey(value);
+                    comparisonObject.put(new DomSimple(new StringValue("sign")), new DomSimple(new StringValue(comparisonNode.getSign())));
+                    comparisonObject.put(new DomSimple(new StringValue("value")), new DomSimple(v));
+                    domObject.put(new DomSimple(k), comparisonObject);
+                }
+                case null, default -> throw new DomException("Unexpected node type for object: " + node);
             }
         }
         return domObject;

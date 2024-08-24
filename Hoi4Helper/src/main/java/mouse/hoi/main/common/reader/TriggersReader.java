@@ -8,7 +8,7 @@ import mouse.hoi.tools.parser.impl.categories.TokenCategory;
 import mouse.hoi.main.common.data.scope.Scope;
 
 import mouse.hoi.main.common.data.trigger.Trigger;
-import mouse.hoi.main.common.data.trigger.Triggers;
+import mouse.hoi.main.common.data.trigger.scoped.Triggers;
 import mouse.hoi.main.common.data.trigger.conditional.ConditionalTrigger;
 import mouse.hoi.main.common.data.trigger.conditional.ConditionalTriggers;
 import mouse.hoi.main.common.framework.trigger.TriggerManager;

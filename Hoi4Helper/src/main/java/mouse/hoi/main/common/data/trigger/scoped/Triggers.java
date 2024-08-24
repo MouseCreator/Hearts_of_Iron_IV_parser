@@ -1,8 +1,10 @@
-package mouse.hoi.main.common.data.trigger;
+package mouse.hoi.main.common.data.trigger.scoped;
 
 import lombok.Getter;
 import mouse.hoi.main.common.data.scope.Scope;
 import mouse.hoi.main.common.data.scope.Scoped;
+import mouse.hoi.main.common.data.trigger.FlowTrigger;
+import mouse.hoi.main.common.data.trigger.Trigger;
 import mouse.hoi.main.common.data.trigger.conditional.ConditionalTriggers;
 
 import java.util.ArrayList;

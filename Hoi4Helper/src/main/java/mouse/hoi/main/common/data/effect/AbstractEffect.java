@@ -4,8 +4,6 @@ import mouse.hoi.exception.EffectException;
 
 public class AbstractEffect implements Effect{
     protected String cachedKey = null;
-
-
     @Override
     public String key() {
         if (cachedKey != null) {
